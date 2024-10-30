@@ -1,9 +1,4 @@
-package HMS.models;
-
-import java.time.LocalDateTime;
-import HMS.enums.BloodType;
-import HMS.enums.Gender;
-import HMS.enums.Role;  
+package HMS.models; 
 
 public class Medication {
 

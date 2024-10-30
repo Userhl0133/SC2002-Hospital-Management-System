@@ -1,4 +1,6 @@
-
+package HMS.models;
+import HMS.enums.Gender;
+import HMS.enums.Role;
 
 public class User {
     private int userId;

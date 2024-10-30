@@ -1,10 +1,13 @@
-public enum Gender {
-    MALE("Male"),
-    FEMALE("Female");
+package HMS.enums;
+
+public enum ServiceType {
+    CONSULTATION("Consultation"),
+    XRAY("X-ray"),
+    BLOOD_TEST("Blood Test");
 
     private final String displayName;
 
-    Gender(String displayName) {
+    ServiceType(String displayName) {
         this.displayName = displayName;
     }
 

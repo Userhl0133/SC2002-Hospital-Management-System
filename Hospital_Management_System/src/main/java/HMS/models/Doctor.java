@@ -1,5 +1,11 @@
+package HMS.models;
+
 import java.time.LocalDateTime;
+import HMS.enums.BloodType;
+import HMS.enums.Gender;
+import HMS.enums.Role;  
 import java.util.List;
+
 
 public class Doctor extends User{
 

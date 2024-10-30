@@ -1,3 +1,5 @@
+package HMS.enums;
+
 public enum Role {
     PATIENT("Patient"),
     DOCTOR("Doctor"),

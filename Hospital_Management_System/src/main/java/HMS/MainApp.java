@@ -33,14 +33,13 @@ public class MainApp {
     }
 
     public void initialiseData() {
-        List<Patient> patients = FileHelper.getPatientsData("src/main/java/HMS/data/Patient_Data.csv");
+        patients = FileHelper.getPatientsData("src/main/java/HMS/data/Patient_Data.csv");
         List<Object> staff = FileHelper.getStaffData("src/main/java/HMS/data/Staff_Data.csv");
-        List<Medication> medications = FileHelper.getMedicationsData("src/main/java/HMS/data/Medications_Data.csv");
+        medications = FileHelper.getMedicationsData("src/main/java/HMS/data/Medicine_Data.csv");
 
-        for (Patient patient : patients) {
-            System.out.println(patient.toString());
-        }
-
+        // The following code is commented out because the classes 
+        // constructor for Doctor, Pharmacist, and Administrator are not defined
+/*
         for (Object staffMember : staff) {
             if (staffMember instanceof Doctor) {
                 doctors.add((Doctor) staffMember);
@@ -50,10 +49,13 @@ public class MainApp {
                 administrators.add((Administrator) staffMember);
             }
         }
-
+*/
+// The following code is commented out because the Medication class constructor is not defined
+/*
         for (Medication medication : medications) {
             System.out.println(medication);
         }
+*/
     }
 
 }

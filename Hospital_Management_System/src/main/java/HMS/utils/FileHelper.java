@@ -64,25 +64,24 @@ public class FileHelper {
                 
                 String id = values[0];
                 String name = values[1];
-                LocalDate dob = LocalDate.parse(values[2], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
                 Gender gender = Gender.valueOf(values[3].toUpperCase());
-                String contactInfo = values[4];
-                String password = values[5];
-                Role role = Role.valueOf(values[6].toUpperCase());
+                String contactInfo = values[5];
+                String age = values[4];
+                Role role = Role.valueOf(values[2].toUpperCase());
 
                 switch (role) {
                     case DOCTOR:
-                        String specialization = values[7];
-                        Doctor doctor = new Doctor(id, password, gender, name, role, dob.atStartOfDay(), contactInfo, specialization);
-                        staff.add(doctor);
+                        //Doctor doctor = new Doctor();
+                        //staff.add(doctor);
                         break;
                     case ADMINISTRATOR:
-                        Administrator administrator = new Administrator(id, password, gender, name, role, dob.atStartOfDay(), contactInfo);
-                        staff.add(administrator);
+                        //Administrator administrator = new Administrator();
+                        //staff.add(administrator);
                         break;
                     case PHARMACIST:
-                        Pharmacist pharmacist = new Pharmacist(id, password, gender, name, role, dob.atStartOfDay(), contactInfo);
-                        staff.add(pharmacist);
+                        //Pharmacist pharmacist = new Pharmacist();
+                        //staff.add(pharmacist);
                         break;
                     default:
                         // Handle unknown role if necessary
@@ -106,16 +105,13 @@ public class FileHelper {
                 String[] values = line.split(",");
                 
                 String id = values[0];
-                String name = values[1];
-                String description = values[2];
-                double price = Double.parseDouble(values[3]);
-                int quantity = Integer.parseInt(values[4]);
                 
-                Medication medication = new Medication(id, name, description, price, quantity);
-                medications.add(medication);
+                //Medication medication = new Medication(id, name, description, price, quantity);
+                //medications.add(medication);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return medications;
     }
 }

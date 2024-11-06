@@ -6,17 +6,13 @@ public class ReplenishmentRequest {
   private String medicationName; 
   private int stockLevel; 
   private String status; 
-<<<<<<< Updated upstream
-  
+
   public ReplenishmentRequest(int pharmacistID, int administratorID, String medicationName, int stockLevel) { 
     this.pharmacistID = pharmacistID; 
     this.administratorID = administratorID; 
     this.medicationName = medicationName; 
     this.stockLevel = stockLevel; this.status = "Pending";
   } 
-=======
- 
->>>>>>> Stashed changes
   public void submitReplenishmentRequest() { 
     // Submit the replenishment request to the administrator 
     System.out.println("Replenishment request for " + medicationName + " submitted."); 

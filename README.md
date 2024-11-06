@@ -5,8 +5,8 @@
 
 ## Objective
 The goal of the assignment is to :
-- Apply the Object-Oriented (OO) concepts you have learnt in the course, 
-- To model, design and develop an hospital management system application. 
+- Apply the Object-Oriented (OO) concepts you have learnt in the course. 
+- To model, design and develop a hospital management system application. 
 - Gain familiarity with using Java as an object oriented programming language. 
 - Work collaboratively as a group to achieve a common goal.
 

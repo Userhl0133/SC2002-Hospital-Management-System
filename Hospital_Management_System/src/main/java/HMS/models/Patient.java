@@ -1,4 +1,8 @@
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Scanner;
+
+import HMS.models.Doctor;
 import src.enums.BloodType;
 import src.enums.Gender;
 import src.enums.Role;  
@@ -79,5 +83,65 @@ public class Patient extends User{
 
     public void setBloodType(BloodType bloodType) {
         this.bloodType = bloodType;
+    }
+
+    public void showMenu() {
+        int choice = 0;
+        System.out.println("-----Patient Menu-----");
+        System.out.println("1.View Medical Record");
+        System.out.println("2.Update Personal Information");
+        System.out.println("3.View Available Appointment Slots");
+        System.out.println("4.Schedule an Appointment");
+        System.out.println("5.Reschedule an Appointment");
+        System.out.println("6.Cancel an Appointment");
+        System.out.println("7.View Scheduled Appointments");
+        System.out.println("8.View Past Appointment Outcome Records");
+        System.out.println("9.Logout");
+        System.out.print("Please select an option: ");
+
+        Scanner sc = new Scanner(System.in);
+        while(choice != 9) {
+            choice = sc.nextInt();
+            switch(choice) {
+                case 1:
+                    // View Medical Record
+                    break;
+
+                case 2:
+                    // Update Personal Information
+                    break;
+
+                case 3:
+                    // View Available Appointment Slots
+                    break;
+
+                case 4:
+                    // Schedule an Appointment
+                    break;
+
+                case 5:
+                    // Reschedule an Appointment
+                    break;
+
+                case 6:
+                    // Cancel an Appointment
+                    break;
+
+                case 7:
+                    // View Scheduled Appointments
+                    break;
+
+                case 8:
+                    // View Past Appointment Outcome Records
+                    break;
+
+                case 9:
+                    // Logout
+                    break;
+
+                default:
+                    System.out.println("Invalid Option");
+            }
+        }
     }
 }

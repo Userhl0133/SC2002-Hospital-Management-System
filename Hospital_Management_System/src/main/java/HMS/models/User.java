@@ -1,4 +1,5 @@
-
+package HMS.models;
+import HMS.enums.*;
 
 public class User {
     private int userId;

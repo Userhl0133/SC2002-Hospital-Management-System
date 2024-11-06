@@ -1,7 +1,7 @@
 package HMS.models;
 import HMS.enums.*;
 
-public class User {
+public abstract class User {
     private String userId;
     private String password;
     private Gender gender;
@@ -86,4 +86,6 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public abstract void showMenu();
 }

@@ -1,3 +1,4 @@
+package HMS.models;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -143,6 +144,7 @@ public class Patient extends User {
 
                 case 9:
                     // Logout
+                    System.out.println("Logging out");
                     break;
 
                 default:

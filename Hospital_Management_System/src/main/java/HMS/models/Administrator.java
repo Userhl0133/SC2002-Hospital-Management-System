@@ -4,17 +4,16 @@ import java.io.*;
 import java.util.*;
 import HMS.enums.*;
 
-public class Administrator{
+public class Administrator extends User{
 
     // Constructor
-    public Administrator(int userId, String password, Gender gender, String name, Role role) {
+    public Administrator(String userId, String password, Gender gender, String name, Role role) {
         super(userId, password, gender, name, role);
     }
 
     // Methods
     public void addStaff(int userId, String password, Gender gender, String name, Role role) {
         // Implementation for adding a staff member
-
 
     }
 
@@ -103,6 +102,7 @@ public class Administrator{
 
                 case 9 :
                     // Logout
+                    System.out.println("Logging out");
                     break;
 
                 default :

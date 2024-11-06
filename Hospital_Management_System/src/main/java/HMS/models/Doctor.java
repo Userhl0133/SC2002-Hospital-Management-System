@@ -11,7 +11,7 @@ public class Doctor extends User{
     private List<LocalDateTime> availability;
 
     // Constructor
-    public Doctor(int userId, String password, Gender gender, String name, Role role, LocalDateTime DOB) {
+    public Doctor(String userId, String password, Gender gender, String name, Role role, LocalDateTime DOB) {
         super(userId, password, gender, name, role);  // Passing all required parameters to User
         this.availability = new ArrayList<LocalDateTime>();
     }
@@ -110,6 +110,7 @@ public class Doctor extends User{
 
                 case 8 :
                     // Logout
+                    System.out.println("Logging out");
                     break;
 
                 default :

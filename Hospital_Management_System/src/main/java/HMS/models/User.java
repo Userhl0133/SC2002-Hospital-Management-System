@@ -3,14 +3,14 @@ import HMS.enums.Gender;
 import HMS.enums.Role;
 
 public class User {
-    private int userId;
+    private String userId;
     private String password;
     private Gender gender;
     private String name;
     private Role role;
 
     // Constructor
-    public User(int userId, String password, Gender gender, String name, Role role) {
+    public User(String userId, String password, Gender gender, String name, Role role) {
         this.userId = userId;
         this.password = password;
         this.gender = gender;
@@ -25,7 +25,7 @@ public class User {
 
     // Method to login
     public void login(String userId, String password) {
-        if (this.userId == Integer.parseInt(userId) && this.password.equals(password)) {
+        if (this.userId == userId && this.password.equals(password)) {
             System.out.println("Login successful!");
         } else {
             System.out.println("Invalid credentials.");
@@ -48,11 +48,11 @@ public class User {
     }
 
     // Getters and Setters (optional, depending on need)
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

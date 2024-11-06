@@ -3,16 +3,16 @@ package HMS.models;
 import java.time.LocalDateTime;
 import HMS.enums.BloodType;
 import HMS.enums.Gender;
-import HMS.enums.Role;  
+import HMS.enums.Role;
 
-public class Patient extends User{
-    
+public class Patient extends User {
+
     private LocalDateTime DOB;
     private BloodType bloodType;
     private String contactInfo;
 
     // Constructor
-    public Patient(int userId, String password, Gender gender, String name, Role role, LocalDateTime DOB, BloodType bloodType, String contactInfo) {
+    public Patient(String userId, String password, Gender gender, String name, Role role, LocalDateTime DOB, BloodType bloodType, String contactInfo) {
         super(userId, password, gender, name, role);  // Passing all required parameters to User
         this.DOB = DOB;
         this.bloodType = bloodType;
@@ -42,7 +42,7 @@ public class Patient extends User{
     }
 
     // Getters
-    public int getPatientID() {
+    public String getPatientID() {
         return getUserId();
     }
 
@@ -76,5 +76,18 @@ public class Patient extends User{
 
     public void setBloodType(BloodType bloodType) {
         this.bloodType = bloodType;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{"
+                + "userId='" + getUserId() + '\''
+                + ", name='" + getName() + '\''
+                + ", gender=" + getGender()
+                + ", role=" + getRole()
+                + ", DOB=" + DOB
+                + ", bloodType=" + bloodType
+                + ", contactInfo='" + contactInfo + '\''
+                + '}';
     }
 }

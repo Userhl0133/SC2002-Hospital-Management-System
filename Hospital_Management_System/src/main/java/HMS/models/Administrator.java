@@ -5,7 +5,7 @@ import HMS.enums.BloodType;
 import HMS.enums.Gender;
 import HMS.enums.Role;  
 
-public class Administrator extends User{
+public class Administrator{
 
     // Constructor
     public Administrator() {
@@ -15,7 +15,7 @@ public class Administrator extends User{
     // Methods
     public void addStaff(int userId, String password, Gender gender, String name, Role role) {
         // Implementation for adding a staff member
-        super.User(int userId, String password, Gender gender, String name, Role role);
+       
     }
 
     public void updateStaff() {

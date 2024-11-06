@@ -1,9 +1,12 @@
+package HMS.models;
+
 public class ReplenishmentRequest { 
   private int pharmacistID; 
   private int administratorID; 
   private String medicationName; 
   private int stockLevel; 
   private String status; 
+<<<<<<< Updated upstream
   
   public ReplenishmentRequest(int pharmacistID, int administratorID, String medicationName, int stockLevel) { 
     this.pharmacistID = pharmacistID; 
@@ -11,6 +14,9 @@ public class ReplenishmentRequest {
     this.medicationName = medicationName; 
     this.stockLevel = stockLevel; this.status = "Pending";
   } 
+=======
+ 
+>>>>>>> Stashed changes
   public void submitReplenishmentRequest() { 
     // Submit the replenishment request to the administrator 
     System.out.println("Replenishment request for " + medicationName + " submitted."); 

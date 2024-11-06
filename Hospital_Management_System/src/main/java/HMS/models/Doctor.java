@@ -7,7 +7,7 @@ import HMS.enums.Role;
 import java.util.List;
 
 
-public class Doctor extends User{
+public class Doctor{
 
     // Attributes
     private List<LocalDateTime> availability;

@@ -24,4 +24,13 @@ public enum BloodType {
     public String toString() {
         return displayName;
     }
+    
+    public static BloodType fromDisplayName(String displayName) {
+        for (BloodType type : BloodType.values()) {
+            if (type.displayName.equalsIgnoreCase(displayName)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown blood type: " + displayName);
+    }
 }

@@ -17,6 +17,11 @@ Some of the features include:
 - Staff management system
 - Medication managment system
 
+## User role and capabilties 
+
+
+
+
 ## Future Enhancements
 
 

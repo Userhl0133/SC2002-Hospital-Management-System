@@ -8,6 +8,7 @@ import java.util.Scanner;
 import HMS.enums.Gender;
 import HMS.enums.Role;
 
+// Hashing and Login System
 public class TestingUser {
     private String userId;
     private String hashedPassword;

@@ -10,12 +10,12 @@ The goal of the assignment is to :
 - Gain familiarity with using Java as an object oriented programming language. 
 - Work collaboratively as a group to achieve a common goal.
 
-
-
 ## Features
-
-
-## Roles & Capabilties
+Some of the features include:
+- Patient management system
+- Appointment scheduling for doctors and patients
+- Staff management system
+- Medication managment system
 
 ## Future Enhancements
 

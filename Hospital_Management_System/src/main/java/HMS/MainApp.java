@@ -26,6 +26,9 @@ public class MainApp {
         for (Patient patient : patients) {
             System.out.println(patient);
         }
+        for (Medication medication : medications) {
+            System.out.println(medication.getMedicationName());
+        }
     }
 
     public static void initialiseData() {
@@ -44,12 +47,6 @@ public class MainApp {
             } else if (staffMember instanceof Administrator) {
                 administrators.add((Administrator) staffMember);
             }
-        }
-*/
-// The following code is commented out because the Medication class constructor is not defined
-/*
-        for (Medication medication : medications) {
-            System.out.println(medication);
         }
 */
     }

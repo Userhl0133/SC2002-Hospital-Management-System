@@ -24,13 +24,13 @@ public class FileHelper {
 
     public static List<Patient> getPatientsData(String filePath) {
         List<Patient> patients = new ArrayList<>();
-        
-          try {
+
+        try {
             List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
             for (int i = 2; i < lines.size(); i++) {  // Skip header
                 String line = lines.get(i);
                 String[] values = line.split(",");
-                
+
                 String id = values[0];
                 String name = values[1];
                 LocalDate dob = LocalDate.parse(values[2], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -38,7 +38,7 @@ public class FileHelper {
                 BloodType bloodType = BloodType.fromDisplayName(values[4].toUpperCase());
                 String contactInfo = values[5];
                 String password = values[6];
-                
+
                 // Set a default role, such as 'PATIENT'
                 Role role = Role.PATIENT;
 
@@ -55,16 +55,15 @@ public class FileHelper {
 
     public static List<Object> getStaffData(String filePath) {
         List<Object> staff = new ArrayList<>();
-        
+
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
             for (int i = 2; i < lines.size(); i++) {  // Skip header
                 String line = lines.get(i);
                 String[] values = line.split(",");
-                
+
                 String id = values[0];
                 String name = values[1];
-
                 Gender gender = Gender.valueOf(values[3].toUpperCase());
                 String contactInfo = values[5];
                 String age = values[4];
@@ -84,7 +83,6 @@ public class FileHelper {
                         //staff.add(pharmacist);
                         break;
                     default:
-                        // Handle unknown role if necessary
                         break;
                 }
             }
@@ -97,17 +95,20 @@ public class FileHelper {
 
     public static List<Medication> getMedicationsData(String filePath) {
         List<Medication> medications = new ArrayList<>();
-        
+
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
             for (int i = 2; i < lines.size(); i++) {  // Skip header
                 String line = lines.get(i);
                 String[] values = line.split(",");
-                
-                String id = values[0];
-                
-                //Medication medication = new Medication(id, name, description, price, quantity);
-                //medications.add(medication);
+
+                int id = i-1;
+                String name = values[0];
+                int initialStock = Integer.parseInt(values[1]);
+                int lowStockLevel = Integer.parseInt(values[2]);
+
+                Medication medication = new Medication(id, initialStock, lowStockLevel, name);
+                medications.add(medication);
             }
         } catch (IOException e) {
             e.printStackTrace();

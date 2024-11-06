@@ -9,7 +9,7 @@ public class ReplenishmentRequest {
     this.pharmacistID = pharmacistID; 
     this.administratorID = administratorID; 
     this.medicationName = medicationName; 
-    this.stockLevel = stockLevel; this.status = "Pending
+    this.stockLevel = stockLevel; this.status = "Pending"
   } 
   public void submitReplenishmentRequest() { 
     // Submit the replenishment request to the administrator 

@@ -1,6 +1,6 @@
 # SC2002-Hospital-Management-System
 ## Overview
-- Our Hospital Management System is an application that automates the management of a hospital operation. It provides efficiency to staff and doctor and streamline process adminstrative work.
+- Our Hospital Management System is an application that automates the management of a hospital operation. It provides efficiency to all staff such as doctor, pharmacist and adminstrator. Thsi system also helps to streamline process adminstrative work.
 
 
 ## Objective

@@ -1,4 +1,4 @@
-package HMS.models;
+package HMS.models; 
 
 public class Medication {
 

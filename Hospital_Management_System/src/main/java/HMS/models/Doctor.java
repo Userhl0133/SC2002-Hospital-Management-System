@@ -4,7 +4,6 @@ import HMS.enums.*;
 import java.util.*;
 import java.time.LocalDateTime;
 
-
 public class Doctor extends User{
 
     // Attributes
@@ -27,32 +26,26 @@ public class Doctor extends User{
 
     public void updatePatientParticular() {
         // Implementation for updating patient particulars
-        /////
     }
 
     public void viewUpcomingAppointment() {
         // Implementation for viewing upcoming appointments
-        /////
     }
 
     public void updateAppointmentOutcomeRecord() {
         // Implementation for updating appointment outcome records
-        /////
     }
 
     public void viewAppointmentOutcomeRecord() {
         // Implementation for viewing appointment outcome records
-        /////
     }
 
     public void createAppointmentOutcomeRecord() {
         // Implementation for creating an appointment outcome record
-        /////
     }
 
     public void cancelAppointment() {
         // Implementation for canceling an appointment
-        /////
     }
 
     public void setAvailability(LocalDateTime time) {

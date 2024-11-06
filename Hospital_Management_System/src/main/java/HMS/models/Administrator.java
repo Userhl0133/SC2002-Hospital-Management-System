@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.*;
 import HMS.enums.*;
 
-
-public class Administrator extends User{
+public class Administrator{
 
     // Constructor
     public Administrator(int userId, String password, Gender gender, String name, Role role) {
@@ -15,6 +14,7 @@ public class Administrator extends User{
     // Methods
     public void addStaff(int userId, String password, Gender gender, String name, Role role) {
         // Implementation for adding a staff member
+
 
     }
 
@@ -39,9 +39,8 @@ public class Administrator extends User{
         // Implementation for viewing inventory details
     }
 
-    public void updateMedicationStock(Medication medication, int quantity) {
+    public void updateMedicationStock() {
         // Implementation for updating medication stock levels
-
     }
 
     public void updateLowStockLevel() {

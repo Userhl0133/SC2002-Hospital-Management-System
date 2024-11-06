@@ -1,20 +1,18 @@
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Scanner;
 
-import HMS.models.Doctor;
-import src.enums.BloodType;
-import src.enums.Gender;
-import src.enums.Role;  
+import HMS.enums.BloodType;
+import HMS.enums.Gender;
+import HMS.enums.Role;
 
-public class Patient extends User{
-    
+public class Patient extends User {
+
     private LocalDateTime DOB;
     private BloodType bloodType;
     private String contactInfo;
 
     // Constructor
-    public Patient(int userId, String password, Gender gender, String name, Role role, LocalDateTime DOB, BloodType bloodType, String contactInfo) {
+    public Patient(String userId, String password, Gender gender, String name, Role role, LocalDateTime DOB, BloodType bloodType, String contactInfo) {
         super(userId, password, gender, name, role);  // Passing all required parameters to User
         this.DOB = DOB;
         this.bloodType = bloodType;
@@ -44,12 +42,12 @@ public class Patient extends User{
     }
 
     // Getters
-    public int getPatientID() {
-        return patientID;
+    public String getPatientID() {
+        return getUserId();
     }
 
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     public LocalDateTime getDOB() {
@@ -64,13 +62,8 @@ public class Patient extends User{
         return contactInfo;
     }
 
-    // Setters
-    public void setPatientID(int patientID) {
-        this.patientID = patientID;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public Role getRole() {
+        return super.getRole();
     }
 
     public void setDOB(LocalDateTime DOB) {
@@ -83,6 +76,19 @@ public class Patient extends User{
 
     public void setBloodType(BloodType bloodType) {
         this.bloodType = bloodType;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{"
+                + "userId='" + getUserId() + '\''
+                + ", name='" + getName() + '\''
+                + ", gender=" + getGender()
+                + ", role=" + getRole()
+                + ", DOB=" + DOB
+                + ", bloodType=" + bloodType
+                + ", contactInfo='" + contactInfo + '\''
+                + '}';
     }
 
     public void showMenu() {

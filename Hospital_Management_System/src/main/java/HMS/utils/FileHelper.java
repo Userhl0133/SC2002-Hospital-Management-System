@@ -98,7 +98,7 @@ public class FileHelper {
 
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
-            for (int i = 2; i < lines.size(); i++) {  // Skip header
+            for (int i = 1; i < lines.size(); i++) {  // Skip header
                 String line = lines.get(i);
                 String[] values = line.split(",");
 

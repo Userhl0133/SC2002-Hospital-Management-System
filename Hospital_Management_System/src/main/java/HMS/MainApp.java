@@ -13,26 +13,22 @@ import HMS.utils.FileHelper;
 
 public class MainApp {
 
-    private List<Patient> patients = new ArrayList<>();
-    private List<Doctor> doctors = new ArrayList<>();
-    private List<Pharmacist> pharmacists = new ArrayList<>();  
-    private List<Administrator> administrators = new ArrayList<>();
-    private List<Medication> medications = new ArrayList<>();
+    private static List<Patient> patients = new ArrayList<>();
+    private static List<Doctor> doctors = new ArrayList<>();
+    private static List<Pharmacist> pharmacists = new ArrayList<>();  
+    private static List<Administrator> administrators = new ArrayList<>();
+    private static List<Medication> medications = new ArrayList<>();
 
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        initialiseData();
 
-        // Create an instance of MainApp
-        MainApp app = new MainApp();
-        app.initialiseData();
-        
         // Print out patients
-        for (Patient patient : app.patients) {
+        for (Patient patient : patients) {
             System.out.println(patient);
         }
     }
 
-    public void initialiseData() {
+    public static void initialiseData() {
         patients = FileHelper.getPatientsData("src/main/java/HMS/data/Patient_Data.csv");
         List<Object> staff = FileHelper.getStaffData("src/main/java/HMS/data/Staff_Data.csv");
         medications = FileHelper.getMedicationsData("src/main/java/HMS/data/Medicine_Data.csv");

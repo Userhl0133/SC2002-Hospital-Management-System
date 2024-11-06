@@ -2,6 +2,7 @@ package HMS.models;
 
 public class Pharmacist  {
     private int id; private String name; 
+    private int i;
 
     public void viewAppointmentOutcomeRecord() {
         // Fetch and display the appointment outcome record 

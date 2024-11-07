@@ -26,18 +26,23 @@ public class Pharmacist extends User {
         System.out.println("Displaying current inventory."); 
     }
 
+    @Override
+    public String toString() {
+        return String.format("User ID: %s, Name: %s, Gender: %s, Role: %s",
+                super.getUserId(), super.getName(), super.getGender(), super.getRole());
+    }
+
     public void showMenu() {
         int choice = 0;
-        System.out.println("-----Pharmacist Menu-----");
-        System.out.println("1.View Appointment Outcome Record");
-        System.out.println("2.Update Prescription Status");
-        System.out.println("3.View Medication Inventory");
-        System.out.println("4.Submit Replenishment Request");
-        System.out.println("5.Logout");
-        System.out.print("Please select an option: ");
-
         Scanner sc = new Scanner(System.in);
         while(choice != 5) {
+            System.out.println("-----Pharmacist Menu-----");
+            System.out.println("1.View Appointment Outcome Record");
+            System.out.println("2.Update Prescription Status");
+            System.out.println("3.View Medication Inventory");
+            System.out.println("4.Submit Replenishment Request");
+            System.out.println("5.Logout");
+            System.out.print("Please select an option: ");
             choice = sc.nextInt();
             switch(choice) {
                 case 1:

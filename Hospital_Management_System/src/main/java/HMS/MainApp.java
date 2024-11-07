@@ -1,7 +1,13 @@
 package HMS;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import HMS.enums.Gender;
+import HMS.enums.Role;
 import HMS.models.Administrator;
 import HMS.models.Patient;
 import HMS.models.Pharmacist;
@@ -12,11 +18,11 @@ import HMS.utils.FileHelper;
 
 public class MainApp {
 
-    private static List<Patient> patients = new ArrayList<>();
-    private static List<Doctor> doctors = new ArrayList<>();
-    private static List<Pharmacist> pharmacists = new ArrayList<>();  
-    private static List<Administrator> administrators = new ArrayList<>();
-    private static List<Medication> medications = new ArrayList<>();
+    public static List<Patient> patients = new ArrayList<>();
+    public static List<Doctor> doctors = new ArrayList<>();
+    public static List<Pharmacist> pharmacists = new ArrayList<>();
+    public static List<Administrator> administrators = new ArrayList<>();
+    public static List<Medication> medications = new ArrayList<>();
 
     public static void main(String[] args) {
         initialiseData();
@@ -38,11 +44,10 @@ public class MainApp {
             // user.showMenu();
 
             // Test
-            /*
-            Patient user = patients.get(1);
-            user.showMenu();
+            // Patient user = patients.get(1);
+            // user.showMenu();
             break;
-             */
+
         }
 
     }

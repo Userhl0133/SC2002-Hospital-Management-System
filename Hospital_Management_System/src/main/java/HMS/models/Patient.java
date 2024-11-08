@@ -17,7 +17,7 @@ public class Patient extends User {
 
     // Constructor
     public Patient(String userId, String password, Gender gender, String name, Role role, LocalDateTime DOB, BloodType bloodType, String contactInfo) {
-        super(userId, password, gender, name, role);  // Passing all required parameters to User
+        super(userId, password, gender, name, role);  
         this.DOB = DOB;
         this.bloodType = bloodType;
         this.contactInfo = contactInfo;

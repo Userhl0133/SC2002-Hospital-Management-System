@@ -8,6 +8,7 @@ import java.util.List;
 
 import HMS.enums.Gender;
 import HMS.enums.Role;
+import HMS.models.User;
 import HMS.models.Administrator;
 import HMS.models.Patient;
 import HMS.models.Pharmacist;
@@ -48,10 +49,23 @@ public class MainApp {
         while (true) {
             System.out.println("-----Hospital Management System-----");
             System.out.println("Please log in");
-            // TODO: login system
-            // Login system shld return Administrator/Doctor/Patient/Pharmacist object
-            // user.showMenu();
 
+            User validatedUser = User.login(patients, doctors, pharmacists, administrators);
+
+            if (validatedUser instanceof Patient) {
+                Patient patient = (Patient) validatedUser;
+                patient.showMenu();
+            } else if (validatedUser instanceof Doctor) {
+                Doctor doctor = (Doctor) validatedUser;
+                doctor.showMenu();
+            } else if (validatedUser instanceof Pharmacist) {
+                Pharmacist pharmacist = (Pharmacist) validatedUser;
+                pharmacist.showMenu();
+            } else if (validatedUser instanceof Administrator) {
+                Administrator admin = (Administrator) validatedUser;
+                admin.showMenu();
+            }
+            // user.showMenu();
             // Test
             // Patient user = patients.get(1);
             // user.showMenu();

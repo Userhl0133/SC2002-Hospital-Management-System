@@ -1,20 +1,14 @@
 package HMS;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import HMS.enums.Gender;
-import HMS.enums.Role;
-import HMS.models.User;
 import HMS.models.Administrator;
-import HMS.models.Patient;
-import HMS.models.Pharmacist;
 import HMS.models.Doctor;
 import HMS.models.Medication;
-
+import HMS.models.Patient;
+import HMS.models.Pharmacist;
+import HMS.models.User;
 import HMS.utils.FileHelper;
 
 public class MainApp {
@@ -77,10 +71,10 @@ public class MainApp {
 
     // To load data from CSV files
     public static void initialiseData() {
-        patients = FileHelper.getPatientsData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Patient_Data.csv");
-        List<Object> staff = FileHelper.getStaffData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Staff_Data.csv");
-        medications = FileHelper.getMedicationsData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Medicine_Data.csv");
-
+        patients = FileHelper.getPatientsData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Patient_Data.csv");
+        List<Object> staff = FileHelper.getStaffData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Staff_Data.csv");
+        medications = FileHelper.getMedicationsData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Medicine_Data.csv");
+    
         for (Object staffMember : staff) {
             if (staffMember instanceof Doctor doctor) {
                 doctors.add(doctor);

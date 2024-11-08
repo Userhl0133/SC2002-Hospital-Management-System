@@ -1,12 +1,8 @@
 package HMS.models;
 
-import java.util.Scanner;
-
-import static HMS.MainApp.administrators;
-import static HMS.MainApp.doctors;
-import static HMS.MainApp.pharmacists;
-import HMS.enums.Gender;
-import HMS.enums.Role;
+import java.util.*;
+import HMS.enums.*;
+import static HMS.MainApp.*;
 public class Administrator extends User{
 
     private int age;
@@ -86,9 +82,7 @@ public class Administrator extends User{
         int choice = 0;
         Scanner sc = new Scanner(System.in);
         while (choice != 9) {
-            System.out.println("============================");
             System.out.println("-----Administrator Menu-----");
-            System.out.println("============================");
             System.out.println("1.View Staff");
             System.out.println("2.Add Staff");
             System.out.println("3.Update Staff");

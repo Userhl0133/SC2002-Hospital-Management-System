@@ -41,9 +41,7 @@ public class MainApp {
 
         // Menu
         while (true) {
-            System.out.println("====================================");
             System.out.println("-----Hospital Management System-----");
-            System.out.println("====================================");
             System.out.println("Please log in");
 
             User validatedUser = User.login(patients, doctors, pharmacists, administrators);

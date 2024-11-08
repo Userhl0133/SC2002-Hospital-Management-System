@@ -1,13 +1,8 @@
 package HMS.models;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
-import HMS.enums.Gender;
-import HMS.enums.Role;
+import HMS.enums.*;
+import java.util.*;
+import java.time.LocalDateTime;
 
 public class Doctor extends User{
 
@@ -91,9 +86,7 @@ public class Doctor extends User{
         int choice = 0;
         Scanner sc = new Scanner(System.in);
         while (choice != 8) {
-            System.out.println("=====================");
             System.out.println("-----Doctor Menu-----");
-            System.out.println("=====================");
             System.out.println("1.View Patient Medical Records");
             System.out.println("2.Update Patient Medical Records");
             System.out.println("3.View Personal Schedule");

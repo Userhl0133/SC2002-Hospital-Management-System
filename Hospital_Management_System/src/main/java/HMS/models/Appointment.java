@@ -28,13 +28,6 @@ public class Appointment {
         return appointmentID;
     }
 
-<<<<<<< Updated upstream
-    public void setAppointmentID(int appointmentID) {
-        this.appointmentID = appointmentID;
-    }
-
-=======
->>>>>>> Stashed changes
     public String getPatientID() {
         return patientID;
     }

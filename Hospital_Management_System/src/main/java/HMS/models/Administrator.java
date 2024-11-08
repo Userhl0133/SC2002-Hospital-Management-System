@@ -1,6 +1,8 @@
 package HMS.models;
 
 import java.util.*;
+
+import HMS.MainApp;
 import HMS.enums.*;
 import static HMS.MainApp.*;
 public class Administrator extends User{
@@ -43,34 +45,159 @@ public class Administrator extends User{
         }
     }
 
-    public void updateStaff(User staff) {
-        // Implementation for updating a staff member's details
+    private void updateStaff(User staff) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter new name: ");
+        staff.setName(scanner.nextLine());
 
+        System.out.print("Enter new password: ");
+        staff.changePassword(scanner.nextLine());
+
+        System.out.println("Staff updated successfully.");
     }
 
-    public void removeStaff() {
+    public void removeStaff(String userId) {
         // Implementation for removing a staff member
+        if (doctors.removeIf(d -> d.getUserId().equals(userId)) ||
+            pharmacists.removeIf(p -> p.getUserId().equals(userId))) {
+            System.out.println("Staff removed successfully.");
+        } else {
+            System.out.println("Staff not found.");
+        }
     }
 
     public void viewAppointments() {
-        // Implementation for viewing all appointments
+        // Implementation for displaying the list of appointments
+        System.out.println("\nList of Appointments:");
+    
+        // Iterate through all patients in the system
+        for (Patient patient : patients) {
+            System.out.println("\nPatient ID: " + patient.getUserId() + ", Name: " + patient.getName());
+    
+            // Access the list of appointments directly from the patient object
+            List<Appointment> patientAppointments = patient.getAppointments(); // Direct access
+    
+            // Check if the patient has appointments
+            if (patientAppointments == null || patientAppointments.isEmpty()) {
+                System.out.println("No appointments found for this patient.");
+                continue;
+            }
+    
+            // Iterate through each appointment for the patient
+            for (Appointment appointment : patientAppointments) {
+                System.out.println(appointment);
+    
+                // Check if the appointment is completed and has an outcome record
+                if (appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED && appointment.getAppointmentOutcomeRecord() != null) {
+                    AppointmentOutcomeRecord outcome = appointment.getAppointmentOutcomeRecord();
+    
+                    System.out.println("---- Appointment Outcome Record ----");
+                    System.out.println("Service Type: " + outcome.getServiceType());
+                    System.out.println("Consultation Notes: " + outcome.getConsultationNotes());
+    
+                    // Display prescribed medications if any
+                    if (outcome.getPrescribedMedications() != null && !outcome.getPrescribedMedications().isEmpty()) {
+                        System.out.println("Prescribed Medications:");
+                        for (Medication med : outcome.getPrescribedMedications()) {
+                            System.out.println("- " + med.getMedicationName());
+                        }
+                    } else {
+                        System.out.println("No medications prescribed.");
+                    }
+                    System.out.println("-----------------------------------");
+                }
+                System.out.println("-----------------------------------");
+            }
+        }
     }
+       
 
     public void viewInventory() {
-        // Implementation for viewing inventory details
+        for (Medication medication : medications) {
+            System.out.println("Medication: " + medication.getMedicationName() +
+                               ", Stock Level: " + medication.getStockLevel() +
+                               ", Low Stock Level: " + medication.getLowStockLevel());
+        }
     }
 
-    public void updateMedicationStock() {
-        // Implementation for updating medication stock levels
+    
+    public void addMedication(int medicationId, String name, int stockLevel, int lowStockLevel) {
+        // Add a New Medication
+        Medication newMedication = new Medication(medicationId, lowStockLevel, stockLevel, name);
+        medications.add(newMedication);
+        System.out.println("Medication " + name + " added successfully.");
     }
 
-    public void updateLowStockLevel() {
-        // Implementation for updating low stock level threshold
+    
+    public void removeMedication(int medicationId) {
+        // Remove a Medication
+        boolean found = medications.removeIf(med -> med.getMedicationId() == medicationId);
+        if (found) {
+            System.out.println("Medication removed successfully.");
+        } else {
+            System.out.println("Medication with ID " + medicationId + " not found.");
+        }
     }
 
-    public void approveReplenishmentRequest() {
-        // Implementation for approving a replenishment request
+
+    public void updateMedicationStock(String medicationName, int newStockLevel) {
+        for (Medication medication : medications) {
+            if (medication.getMedicationName().equalsIgnoreCase(medicationName)) {
+                medication.updateStock(newStockLevel);
+                System.out.println("Updated stock for " + medicationName);
+                return;
+            }
+        }
+        System.out.println("Medication not found.");
     }
+
+    public void updateLowStockLevel(int medicationId, int newLowStockLevel) {
+        // implementation for updating low stock level
+        for (Medication medication : medications) {
+            if (medication.getMedicationId() == medicationId) {
+                medication.updateLowStockLevel(newLowStockLevel);
+                System.out.println("Low stock alert level for " + medication.getMedicationName() + " updated to " + newLowStockLevel);
+                return;
+            }
+        }
+        System.out.println("Medication with ID " + medicationId + " not found.");
+    }
+    public void ApproveReplenishmentRequests(int adminId) {
+        System.out.println("\n--- Replenishment Requests ---");
+
+        for (ReplenishmentRequest request : ReplenishmentRequest.replenishmentRequests) {
+            if (request.getStatus().equalsIgnoreCase("Pending")) {
+                System.out.println("Pharmacist ID: " + request.getPharmacistID() +
+                        ", Medication: " + request.getMedicationName() +
+                        ", Requested Quantity: " + request.getStockLevel() +
+                        ", Status: " + request.getStatus());
+            }
+        }
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Pharmacist ID to approve: ");
+        int pharmacistId = sc.nextInt();
+
+        for (ReplenishmentRequest request : ReplenishmentRequest.replenishmentRequests) {
+            if (request.getPharmacistID() == pharmacistId && request.getStatus().equals("Pending")) {
+                Medication medication = MainApp.medications.stream()
+                        .filter(med -> med.getMedicationName().equalsIgnoreCase(request.getMedicationName()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (medication != null) {
+                    medication.updateStock(medication.getStockLevel() + request.getStockLevel());
+                    request.approveReplenishmentRequest(adminId);
+                    System.out.println("Replenishment approved for " + request.getMedicationName());
+                } else {
+                    System.out.println("Medication not found in inventory.");
+                }
+                return;
+            }
+        }
+        System.out.println("No pending request found for the given Pharmacist ID.");
+    }
+
 
     @Override
     public String toString() {
@@ -81,7 +208,7 @@ public class Administrator extends User{
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
-        while (choice != 9) {
+        while (choice != 11) {
             System.out.println("-----Administrator Menu-----");
             System.out.println("1.View Staff");
             System.out.println("2.Add Staff");
@@ -89,11 +216,14 @@ public class Administrator extends User{
             System.out.println("4.Remove Staff");
             System.out.println("5.View Appointments Details");
             System.out.println("6.View Medication Inventory");
-            System.out.println("7.Update Medication stock");
-            System.out.println("8.Approve Replenishment Request");
-            System.out.println("9.Logout");
+            System.out.println("7.Add Medication");
+            System.out.println("8.Remove Medication");
+            System.out.println("9.Update Medication stock");
+            System.out.println("10.Approve Replenishment Request");
+            System.out.println("11.Logout");
             System.out.print("Please select an option: ");
             choice = sc.nextInt();
+            sc.nextLine();
             switch(choice) {
                 case 1 :
                     // View Staff
@@ -142,29 +272,71 @@ public class Administrator extends User{
 
                 case 3 :
                     // Update Staff
+                    System.out.print("Enter User ID to update: ");
+                    String updateUserId = sc.nextLine();
+                    User userToUpdate = findUserById(patients, doctors, pharmacists, administrators);
+                    if (userToUpdate != null) {
+                        updateStaff(userToUpdate);
+                    } else {
+                        System.out.println("User not found.");
+                    }
                     break;
 
                 case 4 :
                     // Remove Staff
+                    System.out.print("Enter User ID to remove: ");
+                    String removeUserId = sc.nextLine();
+                    removeStaff(removeUserId);
                     break;
 
                 case 5 :
                     // View Appointments Details
+                    viewAppointments();
                     break;
 
                 case 6 :
                     // View Medication Inventory
+                    viewInventory();
                     break;
 
                 case 7 :
-                    // Update Medication stock
+                    // Add Medication
+                    System.out.print("Enter Medication ID: ");
+                    int medId = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter Medication Name: ");
+                    String medName = sc.nextLine();
+                    System.out.print("Enter Stock Level: ");
+                    int stockLevel = sc.nextInt();
+                    System.out.print("Enter Low Stock Level: ");
+                    int lowStockLevel = sc.nextInt();
+                    addMedication(medId, medName, stockLevel, lowStockLevel);
                     break;
-
+                
                 case 8 :
-                    // Approve Replenishment Request
+                    // Remove Medication
+                    System.out.print("Enter Medication ID to remove: ");
+                    int removeMedId = sc.nextInt();
+                    removeMedication(removeMedId);
                     break;
 
-                case 9 :
+                case 9:
+                    // Update Medication stock
+                    System.out.print("Enter Medication Name to update stock: ");
+                    String updateMedName = sc.nextLine();
+                    System.out.print("Enter new stock level: ");
+                    int newStockLevel = sc.nextInt();
+                    updateMedicationStock(updateMedName, newStockLevel);
+                    break;
+
+                case 10 :
+                    // Approve Replenishment Request
+                    System.out.print("Enter Administrator ID: ");
+                    int adminId = sc.nextInt();
+                    ApproveReplenishmentRequests(adminId);
+                    break;
+
+                case 11 :
                     // Logout
                     System.out.println("Logging out");
                     break;

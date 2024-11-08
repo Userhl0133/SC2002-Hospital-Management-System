@@ -1,12 +1,13 @@
 package HMS.models;
 
 import java.time.LocalDateTime;
+
 import HMS.enums.AppointmentStatus;
 
 public class Appointment {
     private int appointmentID;
-    private int patientID;
-    private int doctorID;
+    private String patientID;
+    private String doctorID;
     private LocalDateTime dateTime;
     private AppointmentStatus appointmentStatus;
     private AppointmentOutcomeRecord appointmentOutcomeRecord;
@@ -20,19 +21,19 @@ public class Appointment {
         this.appointmentID = appointmentID;
     }
 
-    public int getPatientID() {
+    public String getPatientID() {
         return patientID;
     }
 
-    public void setPatientID(int patientID) {
+    public void setPatientID(String patientID) {
         this.patientID = patientID;
     }
 
-    public int getDoctorID() {
+    public String getDoctorID() {
         return doctorID;
     }
 
-    public void setDoctorID(int doctorID) {
+    public void setDoctorID(String doctorID) {
         this.doctorID = doctorID;
     }
 

@@ -17,13 +17,20 @@ public class Pharmacist extends User {
         // Fetch and display the appointment outcome record 
         System.out.println("Viewing appointment outcome record for pharmacist " + super.getName() + ".");
     } 
+
     public void updatePrescriptionStatus(int prescriptionId, String status) { 
         // Update the status of a given prescription 
         System.out.println("Updated prescription " + prescriptionId + " to status '" + status + "'."); 
     } 
+
     public void viewInventory() { 
         // Display current inventory
         System.out.println("Displaying current inventory."); 
+    }
+
+    public void submitReplenishmentRequest(int medicationId, int quantity) {
+        // Submit a request to replenish a given medication
+        System.out.println("Replenishment request submitted for medication ID " + medicationId + " with quantity " + quantity + ".");
     }
 
     @Override
@@ -37,28 +44,39 @@ public class Pharmacist extends User {
         Scanner sc = new Scanner(System.in);
         while(choice != 5) {
             System.out.println("-----Pharmacist Menu-----");
-            System.out.println("1.View Appointment Outcome Record");
-            System.out.println("2.Update Prescription Status");
-            System.out.println("3.View Medication Inventory");
-            System.out.println("4.Submit Replenishment Request");
-            System.out.println("5.Logout");
+            System.out.println("1. View Appointment Outcome Record");
+            System.out.println("2. Update Prescription Status");
+            System.out.println("3. View Medication Inventory");
+            System.out.println("4. Submit Replenishment Request");
+            System.out.println("5. Logout");
             System.out.print("Please select an option: ");
             choice = sc.nextInt();
             switch(choice) {
                 case 1:
-                    // View Appointment Outcome Record
+                    viewAppointmentOutcomeRecord();
                     break;
 
                 case 2:
                     // Update Prescription Status
+                    System.out.print("Enter Prescription ID: ");
+                    int prescriptionId = sc.nextInt();
+                    sc.nextLine(); // consume newline
+                    System.out.print("Enter new status: ");
+                    String status = sc.nextLine();
+                    updatePrescriptionStatus(prescriptionId, status);
                     break;
 
                 case 3:
-                    // View Available Appointment Slots
+                    viewInventory();
                     break;
 
                 case 4:
                     // Submit Replenishment Request
+                    System.out.print("Enter Medication ID: ");
+                    int medicationId = sc.nextInt();
+                    System.out.print("Enter quantity: ");
+                    int quantity = sc.nextInt();
+                    submitReplenishmentRequest(medicationId, quantity);
                     break;
 
                 case 5:

@@ -122,7 +122,9 @@ public class Patient extends User {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
         while(choice != 9) {
+            System.out.println("======================");
             System.out.println("-----Patient Menu-----");
+            System.out.println("======================");
             System.out.println("1.View Medical Record");
             System.out.println("2.Update Personal Information");
             System.out.println("3.View Available Appointment Slots");

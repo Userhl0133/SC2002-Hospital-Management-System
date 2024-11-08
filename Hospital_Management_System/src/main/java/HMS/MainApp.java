@@ -45,7 +45,7 @@ public class MainApp {
         }
 
         // Menu
-        while(true) {
+        while (true) {
             System.out.println("-----Hospital Management System-----");
             System.out.println("Please log in");
             // TODO: login system
@@ -61,21 +61,19 @@ public class MainApp {
 
     }
 
+    // To load data from CSV files
     public static void initialiseData() {
-        patients = FileHelper.getPatientsData("src/main/java/HMS/data/Patient_Data.csv");
-        List<Object> staff = FileHelper.getStaffData("src/main/java/HMS/data/Staff_Data.csv");
-        medications = FileHelper.getMedicationsData("src/main/java/HMS/data/Medicine_Data.csv");
-
-        // The following code is commented out because the classes 
-        // constructor for Doctor, Pharmacist, and Administrator are not defined
+        patients = FileHelper.getPatientsData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Patient_Data.csv");
+        List<Object> staff = FileHelper.getStaffData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Staff_Data.csv");
+        medications = FileHelper.getMedicationsData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Medicine_Data.csv");
 
         for (Object staffMember : staff) {
-            if (staffMember instanceof Doctor) {
-                doctors.add((Doctor) staffMember);
-            } else if (staffMember instanceof Pharmacist) {
-                pharmacists.add((Pharmacist) staffMember);
-            } else if (staffMember instanceof Administrator) {
-                administrators.add((Administrator) staffMember);
+            if (staffMember instanceof Doctor doctor) {
+                doctors.add(doctor);
+            } else if (staffMember instanceof Pharmacist pharmacist) {
+                pharmacists.add(pharmacist);
+            } else if (staffMember instanceof Administrator administrator) {
+                administrators.add(administrator);
             }
         }
     }

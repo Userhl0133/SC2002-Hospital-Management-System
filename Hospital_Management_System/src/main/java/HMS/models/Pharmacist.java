@@ -71,18 +71,6 @@ public class Pharmacist extends User {
         }
     }
 
-    // Method to update inventory directly (set new quantity and update replenishment status)
-    public void updateInventory(int medicationId, int newQuantity) {
-        Medication medication = inventory.get(medicationId);
-        if (medication != null) {
-            medication.updateStock(newQuantity); // Set new stock level directly
-            medication.setReplenishmentStatus("replenished"); // Set status to "replenished" after inventory is updated
-            System.out.println("Updated inventory for medication ID " + medicationId + " to quantity " + newQuantity + ".");
-        } else {
-            System.out.println("Medication ID " + medicationId + " not found.");
-        }
-    }
-
     @Override
     public String toString() {
         return String.format("User ID: %s | Name: %s | Gender: %s | Role: %s",

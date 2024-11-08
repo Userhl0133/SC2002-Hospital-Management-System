@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import HMS.enums.AppointmentStatus;
 
 public class Appointment {
+    private static int nextAppointmentID = 1;
     private int appointmentID;
     private String patientID;
     private String doctorID;
@@ -12,15 +13,28 @@ public class Appointment {
     private AppointmentStatus appointmentStatus;
     private AppointmentOutcomeRecord appointmentOutcomeRecord;
 
+    // Constructor
+    public Appointment(String patientID, String doctorID, LocalDateTime dateTime, AppointmentStatus appointmentStatus, AppointmentOutcomeRecord appointmentOutcomeRecord) {
+        this.appointmentID = nextAppointmentID++; // Assume system data does not persist.
+        this.patientID = patientID;
+        this.doctorID = doctorID;
+        this.dateTime = dateTime;
+        this.appointmentStatus = appointmentStatus;
+        this.appointmentOutcomeRecord = appointmentOutcomeRecord;
+    }
+
     // Getters and Setters
     public int getAppointmentID() {
         return appointmentID;
     }
 
+<<<<<<< Updated upstream
     public void setAppointmentID(int appointmentID) {
         this.appointmentID = appointmentID;
     }
 
+=======
+>>>>>>> Stashed changes
     public String getPatientID() {
         return patientID;
     }

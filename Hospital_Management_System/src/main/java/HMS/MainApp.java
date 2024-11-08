@@ -34,6 +34,15 @@ public class MainApp {
         for (Medication medication : medications) {
             System.out.println(medication.getMedicationName());
         }
+        for (Doctor doctor : doctors) {
+            System.out.println(doctor);
+        }
+        for (Pharmacist pharmacist : pharmacists) {
+            System.out.println(pharmacist);
+        }
+        for (Administrator administrator : administrators) {
+            System.out.println(administrator);
+        }
 
         // Menu
         while(true) {
@@ -53,9 +62,9 @@ public class MainApp {
     }
 
     public static void initialiseData() {
-        patients = FileHelper.getPatientsData("Hospital_Management_System/src/main/java/HMS/data/Patient_Data.csv");
-        List<Object> staff = FileHelper.getStaffData("Hospital_Management_System/src/main/java/HMS/data/Staff_Data.csv");
-        medications = FileHelper.getMedicationsData("Hospital_Management_System/src/main/java/HMS/data/Medicine_Data.csv");
+        patients = FileHelper.getPatientsData("src/main/java/HMS/data/Patient_Data.csv");
+        List<Object> staff = FileHelper.getStaffData("src/main/java/HMS/data/Staff_Data.csv");
+        medications = FileHelper.getMedicationsData("src/main/java/HMS/data/Medicine_Data.csv");
 
         // The following code is commented out because the classes 
         // constructor for Doctor, Pharmacist, and Administrator are not defined

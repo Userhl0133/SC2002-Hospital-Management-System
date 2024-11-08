@@ -27,7 +27,7 @@ public class FileHelper {
 
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
-            for (int i = 2; i < lines.size(); i++) {  // Skip header
+            for (int i = 1; i < lines.size(); i++) {  // Skip header
                 String line = lines.get(i);
                 String[] values = line.split(",");
 
@@ -58,29 +58,29 @@ public class FileHelper {
 
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
-            for (int i = 2; i < lines.size(); i++) {  // Skip header
+            for (int i = 1; i < lines.size(); i++) {  // Skip header
                 String line = lines.get(i);
                 String[] values = line.split(",");
 
                 String id = values[0];
                 String name = values[1];
                 Gender gender = Gender.valueOf(values[3].toUpperCase());
-                String contactInfo = values[5];
+                String password = values[5];
                 String age = values[4];
                 Role role = Role.valueOf(values[2].toUpperCase());
 
                 switch (role) {
                     case DOCTOR:
-                        //Doctor doctor = new Doctor();
-                        //staff.add(doctor);
+                        Doctor doctor = new Doctor(id, password,gender, name, role);
+                        staff.add(doctor);
                         break;
                     case ADMINISTRATOR:
-                        //Administrator administrator = new Administrator();
-                        //staff.add(administrator);
+                        Administrator administrator = new Administrator(id, password, gender, name, role);
+                        staff.add(administrator);
                         break;
                     case PHARMACIST:
-                        //Pharmacist pharmacist = new Pharmacist();
-                        //staff.add(pharmacist);
+                        Pharmacist pharmacist = new Pharmacist(id, password, gender, name, role);
+                        staff.add(pharmacist);
                         break;
                     default:
                         break;

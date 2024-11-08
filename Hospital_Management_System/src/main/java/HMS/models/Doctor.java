@@ -10,11 +10,13 @@ public class Doctor extends User{
     // availability hashmap contains time slots where the doctor is unavailable, in 1 hour blocks
     // Key: Date in (DDMMYYYY) format, Value: Timeslot from int 1-9 (0900-1700)
     private Map<Integer, List<Integer>> availability;
+    private int age;
 
     // Constructor
-    public Doctor(String userId, String password, Gender gender, String name, Role role) {
+    public Doctor(String userId, String password, Gender gender, String name, Role role, int age) {
         super(userId, password, gender, name, role);  // Passing all required parameters to User
         this.availability = new HashMap<>();
+        this.age = age;
     }
 
     // Methods

@@ -6,16 +6,16 @@ import HMS.enums.Role;
 import java.util.Scanner;
 
 public class Pharmacist extends User {
-    private int id; private String name; 
-    private int i;
+    private int age;
 
-    public Pharmacist(String userId, String password, Gender gender, String name, Role role) {
+    public Pharmacist(String userId, String password, Gender gender, String name, Role role, int age) {
         super(userId, password, gender, name, role);
+        this.age = age;
     }
 
     public void viewAppointmentOutcomeRecord() {
         // Fetch and display the appointment outcome record 
-        System.out.println("Viewing appointment outcome record for pharmacist " + name + "."); 
+        System.out.println("Viewing appointment outcome record for pharmacist " + super.getName() + ".");
     } 
     public void updatePrescriptionStatus(int prescriptionId, String status) { 
         // Update the status of a given prescription 

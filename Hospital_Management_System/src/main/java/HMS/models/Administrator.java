@@ -5,9 +5,12 @@ import HMS.enums.*;
 import static HMS.MainApp.*;
 public class Administrator extends User{
 
+    private int age;
+
     // Constructor
-    public Administrator(String userId, String password, Gender gender, String name, Role role) {
+    public Administrator(String userId, String password, Gender gender, String name, Role role, int age) {
         super(userId, password, gender, name, role);
+        this.age = age;
     }
 
     // Methods
@@ -24,18 +27,18 @@ public class Administrator extends User{
         }
     }
 
-    public void addStaff(String userId, String password, Gender gender, String name, Role role) {
+    public void addStaff(String userId, String password, Gender gender, String name, Role role, int age) {
         // Implementation for adding a staff member
         if (role == Role.DOCTOR) {
-            Doctor doctor = new Doctor(userId, password, gender, name, role);
+            Doctor doctor = new Doctor(userId, password, gender, name, role, age);
             doctors.add(doctor);
         }
         else if (role == Role.ADMINISTRATOR) {
-            Administrator administrator = new Administrator(userId, password, gender, name, role);
+            Administrator administrator = new Administrator(userId, password, gender, name, role, age);
             administrators.add(administrator);
         }
         else if (role == Role.PHARMACIST) {
-            Pharmacist pharmacist = new Pharmacist(userId, password, gender, name, role);
+            Pharmacist pharmacist = new Pharmacist(userId, password, gender, name, role, age);
             pharmacists.add(pharmacist);
         }
     }
@@ -131,7 +134,10 @@ public class Administrator extends User{
                         }
                     }
 
-                    addStaff(userId, password, gender, name, role);
+                    System.out.print("Enter Age: ");
+                    int age = scanner.nextInt();
+
+                    addStaff(userId, password, gender, name, role, age);
                     break;
 
                 case 3 :

@@ -66,20 +66,20 @@ public class FileHelper {
                 String name = values[1];
                 Gender gender = Gender.valueOf(values[3].toUpperCase());
                 String password = values[5];
-                String age = values[4];
+                int age = Integer.parseInt(values[4]);
                 Role role = Role.valueOf(values[2].toUpperCase());
 
                 switch (role) {
                     case DOCTOR:
-                        Doctor doctor = new Doctor(id, password,gender, name, role);
+                        Doctor doctor = new Doctor(id, password,gender, name, role, age);
                         staff.add(doctor);
                         break;
                     case ADMINISTRATOR:
-                        Administrator administrator = new Administrator(id, password, gender, name, role);
+                        Administrator administrator = new Administrator(id, password, gender, name, role, age);
                         staff.add(administrator);
                         break;
                     case PHARMACIST:
-                        Pharmacist pharmacist = new Pharmacist(id, password, gender, name, role);
+                        Pharmacist pharmacist = new Pharmacist(id, password, gender, name, role, age);
                         staff.add(pharmacist);
                         break;
                     default:

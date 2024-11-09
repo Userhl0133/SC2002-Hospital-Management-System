@@ -5,6 +5,7 @@ public class ReplenishmentRequest {
     private int administratorID; 
     private String medicationName; 
     private int stockLevel; 
+    private int quantity;
     private String status; 
 
     // Constructor
@@ -40,9 +41,17 @@ public class ReplenishmentRequest {
         return status;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     // Setters and Getters for other fields
     public int getPharmacistID() { 
         return pharmacistID; 
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     public void setPharmacistID(int pharmacistID) { 

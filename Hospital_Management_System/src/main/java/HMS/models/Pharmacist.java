@@ -51,20 +51,29 @@ public class Pharmacist extends User {
         }
     }
 
-    // Modified Method to submit a replenishment request
-    public void submitReplenishmentRequest(String pharmacistId, int medicationId, int quantity) {
+    public void submitReplenishmentRequest(String pharmacistId, int medicationId, int quantity, Administrator admin) {
         // Validate if the entered pharmacist ID matches the actual pharmacist's userId
         if (!pharmacistId.equals(super.getUserId())) {
             System.out.println("Invalid Pharmacist ID. Replenishment request cannot be processed.");
             return;
         }
-
+    
         Medication medication = inventory.get(medicationId);
         if (medication != null) {
-            // Update the stock by adding the requested quantity
+            // Create a replenishment request object
+            ReplenishmentRequest request = new ReplenishmentRequest(
+                    Integer.parseInt(pharmacistId), 
+                    Integer.parseInt(admin.getUserId()), // Administrator ID
+                    medication.getMedicationName(),
+                    quantity
+            );
+            // Submit to administrator's list
+            admin.addReplenishmentRequest(request);
+    
+            // Update stock and set replenishment status
             medication.updateStock(medication.getStockLevel() + quantity);
             medication.setReplenishmentStatus("in-progress"); // Set status to "in-progress" when replenishment is requested
-            System.out.println("Replenishment request submitted by Pharmacist ID: " + pharmacistId + " for medication ID: " + medicationId );
+            System.out.println("Replenishment request submitted by Pharmacist ID: " + pharmacistId + " for medication ID: " + medicationId);
         } else {
             System.out.println("Medication ID: " + medicationId + " not found.");
         }
@@ -76,6 +85,7 @@ public class Pharmacist extends User {
     }
 
     // Show menu for pharmacist
+    @Override
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);

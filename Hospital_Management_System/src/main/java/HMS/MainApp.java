@@ -29,23 +29,6 @@ public class MainApp {
     public static void main(String[] args) {
         initialiseData();
 
-        // Print out patients
-        for (Patient patient : patients) {
-            System.out.println(patient);
-        }
-        for (Medication medication : medications) {
-            System.out.println(medication.getMedicationName());
-        }
-        for (Doctor doctor : doctors) {
-            System.out.println(doctor);
-        }
-        for (Pharmacist pharmacist : pharmacists) {
-            System.out.println(pharmacist);
-        }
-        for (Administrator administrator : administrators) {
-            System.out.println(administrator);
-        }
-
         // Menu
         while (true) {
             System.out.println("====================================");
@@ -56,13 +39,18 @@ public class MainApp {
             User validatedUser = User.login(patients, doctors, pharmacists, administrators);
             validatedUser.showMenu();
         }
+
     }
 
     // To load data from CSV files
     public static void initialiseData() {
-        patients = FileHelper.getPatientsData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Patient_Data.csv");
-        List<Object> staff = FileHelper.getStaffData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Staff_Data.csv");
-        medications = FileHelper.getMedicationsData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Medicine_Data.csv");
+        //patients = FileHelper.getPatientsData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Patient_Data.csv");
+        //List<Object> staff = FileHelper.getStaffData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Staff_Data.csv");
+        //medications = FileHelper.getMedicationsData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Medicine_Data.csv");
+
+        patients = FileHelper.getPatientsData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Patient_Data.csv");
+        List<Object> staff = FileHelper.getStaffData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Staff_Data.csv");
+        medications = FileHelper.getMedicationsData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Medicine_Data.csv");
 
         for (Object staffMember : staff) {
             if (staffMember instanceof Doctor doctor) {

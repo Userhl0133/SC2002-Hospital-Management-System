@@ -39,8 +39,13 @@ public class Doctor extends User{
     }
 
     public Map<Integer, List<Integer>> getAvailability() {
-        return availability;
+         Map<Integer, List<Integer>> copy = new HashMap<>();
+        for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
+            copy.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+        }
+        return copy;
     }
+
 
     // Methods
     public void viewPersonalSchedule() {

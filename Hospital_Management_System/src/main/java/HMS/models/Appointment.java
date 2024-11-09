@@ -81,7 +81,7 @@ public class Appointment {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String formattedDateTime = dateTime.format(formatter);
         Doctor doctor = new Doctor();
-        doctor.getDoctorById(doctorID);
+        doctor = doctor.getDoctorById(doctorID);
         return String.format("Appointment ID: %d\nDoctor: %s %s\nStatus: %s\nDate & Time: %s\nAppointment Outcome: %s",
                 appointmentID, doctorID, doctor.getName() , appointmentStatus, formattedDateTime, appointmentOutcomeRecord);
     }

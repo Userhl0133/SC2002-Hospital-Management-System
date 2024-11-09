@@ -4,6 +4,9 @@ import HMS.enums.*;
 import java.util.*;
 import java.time.LocalDateTime;
 
+import static HMS.MainApp.administrators;
+import static HMS.MainApp.*;
+
 public class Doctor extends User{
 
     // Attributes
@@ -21,8 +24,19 @@ public class Doctor extends User{
 
     // Methods
     public void viewPersonalSchedule() {
-        // Implementation for viewing the personal schedule
-
+        // Viewing upcoming appointments
+        System.out.println("Upcoming appointments:");
+        for (Patient patient : patients){
+            for (Appointment appointment : patient.getAppointments()) {
+                if(appointment.getDoctorID() == super.getUserId()){
+                    System.out.println("Appointment " + appointment.getAppointmentID());
+                    System.out.println("Patient: " + patient.getName());
+                    System.out.println("Date and Time: " + appointment.getDateTime().toString());
+                    System.out.println("Status: " + appointment.getAppointmentStatus());
+                    System.out.println();
+                }
+            }
+        }
     }
 
     public void updatePatientParticular() {
@@ -108,6 +122,7 @@ public class Doctor extends User{
 
                 case 3 :
                     // View Personal Schedule
+                    viewPersonalSchedule();
                     break;
 
                 case 4 :

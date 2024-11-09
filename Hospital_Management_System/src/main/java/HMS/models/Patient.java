@@ -93,6 +93,10 @@ public class Patient extends User {
         return super.getRole();
     }
 
+    public ArrayList<Appointment> getAppointments() {
+        return appointments;
+    }
+
     public void setDOB(LocalDateTime DOB) {
         this.DOB = DOB;
     }

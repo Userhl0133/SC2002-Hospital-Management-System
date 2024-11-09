@@ -56,19 +56,6 @@ public class Pharmacist extends User {
         System.out.println("This feature is currently not implemented.");
     }
 
-    // View Medication Inventory - Displaying Medication ID
-    public void viewInventory() {
-        System.out.println("\nCurrent Medication Inventory:\n");
-        // Iterate over medications and display the details
-        for (Medication medication : medications) {
-            System.out.println("Medication ID: " + medication.getMedicationId());
-            System.out.println("Medication Name: " + medication.getMedicationName());
-            System.out.println("Current Stock Level: " + medication.getStockLevel());
-            System.out.println("Low Stock Level Alert: " + medication.getLowStockLevel());
-            System.out.println("Replenishment Status: " + medication.getReplenishmentStatus());
-            System.out.println("-------------------------------");
-        }
-    }
 
     public void submitReplenishmentRequest() {
         Scanner sc = new Scanner(System.in);
@@ -158,7 +145,7 @@ public class Pharmacist extends User {
 
                 case 3:
                     // View Medication Inventory - Linked to the Medication class
-                    viewInventory(); // Method for viewing inventory
+                    Medication.viewInventory(); // Method for viewing inventory
                     break;
 
                 case 4:

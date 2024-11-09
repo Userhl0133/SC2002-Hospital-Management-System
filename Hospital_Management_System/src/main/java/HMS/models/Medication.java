@@ -1,5 +1,9 @@
 package HMS.models;
 
+import java.util.List;
+
+import HMS.MainApp;
+
 public class Medication {
 
     // Attributes
@@ -59,5 +63,26 @@ public class Medication {
 
     public void setMedicationName(String medicationName) {
         this.medicationName = medicationName;
+    }
+
+    // Static method to view the inventory of all medications
+    public static void viewInventory() {
+        System.out.println("\nCurrent Medication Inventory:\n");
+        List<Medication> medications = MainApp.medications;  // Access the static list of medications in MainApp
+
+        // Check if medications list is empty
+        if (medications.isEmpty()) {
+            System.out.println("No medications available in the inventory.");
+            return;
+        }
+
+        // Iterate over medications and display the details
+        for (Medication medication : medications) {
+            System.out.println("Medication ID: " + medication.getMedicationId());
+            System.out.println("Medication Name: " + medication.getMedicationName());
+            System.out.println("Current Stock Level: " + medication.getStockLevel());
+            System.out.println("Low Stock Level Alert: " + medication.getLowStockLevel());
+            System.out.println("-------------------------------");
+        }
     }
 }

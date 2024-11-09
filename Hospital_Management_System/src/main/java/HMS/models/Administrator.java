@@ -6,7 +6,6 @@ import HMS.MainApp;
 import HMS.enums.*;
 import static HMS.MainApp.*;
 import java.util.Scanner;
-
 import static HMS.MainApp.administrators;
 import static HMS.MainApp.doctors;
 import static HMS.MainApp.pharmacists;
@@ -37,21 +36,24 @@ public class Administrator extends User {
         }
     }
 
-    public void addStaff(String userId, String password, Gender gender, String name, Role role, int age) {
-        // Implementation for adding a staff member
+     public void addStaff(String userId, String password, Gender gender, String name, Role role, int age) {
+        // Implementation for adding a staff member (but change to auto running number, not input)
         if (role == Role.DOCTOR) {
             Doctor doctor = new Doctor(userId, password, gender, name, role, age);
             doctors.add(doctor);
-        } else if (role == Role.ADMINISTRATOR) {
+        }
+        else if (role == Role.ADMINISTRATOR) {
             Administrator administrator = new Administrator(userId, password, gender, name, role, age);
             administrators.add(administrator);
-        } else if (role == Role.PHARMACIST) {
+        }
+        else if (role == Role.PHARMACIST) {
             Pharmacist pharmacist = new Pharmacist(userId, password, gender, name, role, age);
             pharmacists.add(pharmacist);
         }
     }
 
     private void updateStaff(User staff) {
+        //implementation for updating staff (not working)
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter new name: ");
         staff.setName(scanner.nextLine());
@@ -63,14 +65,15 @@ public class Administrator extends User {
     }
 
     public void removeStaff(String userId) {
-        // Implementation for removing a staff member
-        if (doctors.removeIf(d -> d.getUserId().equals(userId))
-                || pharmacists.removeIf(p -> p.getUserId().equals(userId))) {
+        // Implementation for removing a staff member (not working)
+        if (doctors.removeIf(d -> d.getUserId().equals(userId)) ||
+            pharmacists.removeIf(p -> p.getUserId().equals(userId))) {
             System.out.println("Staff removed successfully.");
         } else {
             System.out.println("Staff not found.");
         }
     }
+
 
     public void viewAppointments() {
         // Implementation for displaying the list of appointments
@@ -131,7 +134,7 @@ public class Administrator extends User {
     public void updateMedicationStock(String medicationName, int newStockLevel) {
         for (Medication medication : medications) {
             if (medication.getMedicationName().equalsIgnoreCase(medicationName)) {
-                medication.updateStock(newStockLevel);
+                medication.updateStock(medication.getLowStockLevel() + newStockLevel);
                 System.out.println("Updated stock for " + medicationName);
                 return;
             }
@@ -139,11 +142,11 @@ public class Administrator extends User {
         System.out.println("Medication not found.");
     }
 
-    public void updateLowStockLevel(int medicationId, int newLowStockLevel) {
+    public void updateLowStockLevel(int medicationId, int newStockLevel) {
         // implementation for updating low stock level
         for (Medication medication : medications) {
             if (medication.getMedicationId() == medicationId) {
-                medication.updateLowStockLevel(newLowStockLevel);
+                medication.updateLowStockLevel(medication.getLowStockLevel() + newStockLevel);
                 System.out.println("Low stock alert level for " + medication.getMedicationName() + " updated to " + newLowStockLevel);
                 return;
             }
@@ -151,15 +154,16 @@ public class Administrator extends User {
         System.out.println("Medication with ID " + medicationId + " not found.");
     }
 
+
     public void ApproveReplenishmentRequests(int adminId) {
         System.out.println("\n--- Replenishment Requests ---");
 
         for (ReplenishmentRequest request : ReplenishmentRequest.replenishmentRequests) {
             if (request.getStatus().equalsIgnoreCase("Pending")) {
-                System.out.println("Pharmacist ID: " + request.getPharmacistID()
-                        + ", Medication: " + request.getMedicationName()
-                        + ", Requested Quantity: " + request.getStockLevel()
-                        + ", Status: " + request.getStatus());
+                System.out.println("Pharmacist ID: " + request.getPharmacistID() +
+                        ", Medication: " + request.getMedicationName() +
+                        ", Requested Quantity: " + request.getStockLevel() +
+                        ", Status: " + request.getStatus());
             }
         }
 
@@ -186,6 +190,7 @@ public class Administrator extends User {
         }
         System.out.println("No pending request found for the given Pharmacist ID.");
     }
+
 
     @Override
     public String toString() {
@@ -262,14 +267,7 @@ public class Administrator extends User {
 
                 case 3:
                     // Update Staff
-                    System.out.print("Enter User ID to update: ");
-                    String updateUserId = sc.nextLine();
-                    User userToUpdate = findUserById(patients, doctors, pharmacists, administrators);
-                    if (userToUpdate != null) {
-                        updateStaff(userToUpdate);
-                    } else {
-                        System.out.println("User not found.");
-                    }
+                    
                     break;
 
                 case 4:

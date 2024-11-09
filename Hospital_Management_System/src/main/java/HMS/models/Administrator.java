@@ -1,10 +1,20 @@
 package HMS.models;
 
+<<<<<<< HEAD
 import java.util.*;
 
 import HMS.MainApp;
 import HMS.enums.*;
 import static HMS.MainApp.*;
+=======
+import java.util.Scanner;
+
+import static HMS.MainApp.administrators;
+import static HMS.MainApp.doctors;
+import static HMS.MainApp.pharmacists;
+import HMS.enums.Gender;
+import HMS.enums.Role;
+>>>>>>> parent of 33b6315 (Revert "Merge branch 'main' of https://github.com/Userhl0133/SC2002-Hospital-Management-System")
 public class Administrator extends User{
 
     private int age;
@@ -208,8 +218,14 @@ public class Administrator extends User{
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
+<<<<<<< HEAD
         while (choice != 11) {
+=======
+        while (choice != 9) {
+            System.out.println("============================");
+>>>>>>> parent of 33b6315 (Revert "Merge branch 'main' of https://github.com/Userhl0133/SC2002-Hospital-Management-System")
             System.out.println("-----Administrator Menu-----");
+            System.out.println("============================");
             System.out.println("1.View Staff");
             System.out.println("2.Add Staff");
             System.out.println("3.Update Staff");

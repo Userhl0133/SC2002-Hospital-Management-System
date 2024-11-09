@@ -3,6 +3,7 @@ package HMS.models;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -535,11 +536,10 @@ public class Patient extends User {
         return super.getRole();
     }
 
-    public ArrayList<Appointment> getAppointments() {
+    public List<Appointment> getAppointments() {
         return appointments;
     }
 
-    public void setDOB(LocalDateTime DOB) {
     public void setDOB(LocalDate DOB) {
         this.DOB = DOB;
     }

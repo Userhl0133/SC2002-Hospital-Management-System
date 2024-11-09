@@ -45,7 +45,7 @@ public class Doctor extends User{
     // Methods
     public void viewPersonalSchedule() {
         // Viewing upcoming appointments
-        System.out.println("Upcoming appointments:");
+        System.out.println("Personal Schedule:");
         for (Patient patient : patients){
             for (Appointment appointment : patient.getAppointments()) {
                 if(appointment.getDoctorID() == super.getUserId()){
@@ -57,6 +57,8 @@ public class Doctor extends User{
                 }
             }
         }
+
+        //TODO: personal availability
     }
 
     public void updatePatientParticular() {
@@ -66,6 +68,15 @@ public class Doctor extends User{
 
     public void viewUpcomingAppointment() {
         // Implementation for viewing upcoming appointments
+        System.out.println("\nUpcoming appointments:");
+        for (Patient patient : patients){
+            for (Appointment appointment : patient.getAppointments()) {
+                if(appointment.getDoctorID() == super.getUserId()){
+                    System.out.println(appointment);
+                    System.out.println();
+                }
+            }
+        }
     }
 
     public void updateAppointmentOutcomeRecord() {
@@ -84,25 +95,25 @@ public class Doctor extends User{
         // Implementation for canceling an appointment
     }
 
-    // Returns -1 if time slot removed, 1 if added
-    public int setAvailability(int date, int time) {
-        // If timing exists in availability list, remove the time slot
+    // Returns false if time slot removed, true if added
+    public boolean setAvailability(int date, int time) {
+        // If date exists
         if (this.availability.containsKey(date)) {
             if (this.availability.get(date).contains(time)) {
                 this.availability.get(date).remove(Integer.valueOf(time));
-                return -1;
+                return false;
             }
             else{
                 this.availability.get(date).add(time);
-                return 1;
+                return true;
             }
         }
-        // If timing does not exist, add time slot
+        // If date does not exist
         else{
             List<Integer> timeSlots = new ArrayList<>();
             timeSlots.add(time);
             this.availability.put(date, timeSlots);
-            return 1;
+            return true;
         }
     }
 
@@ -118,6 +129,7 @@ public class Doctor extends User{
 
     public void showMenu() {
         int choice = 0;
+        boolean notFound = true;
         Scanner sc = new Scanner(System.in);
         while (choice != 8) {
             System.out.println("=====================");
@@ -136,10 +148,23 @@ public class Doctor extends User{
             switch(choice) {
                 case 1 :
                     // View Patient Medical Records
+                    for (Patient patient : patients) {
+                        for (Appointment appointment : patient.getAppointments()) {
+                            if (appointment.getDoctorID() == super.getUserId()) {
+                                System.out.println(patient);
+                                for (Appointment appointment1 : patient.getAppointments()) {
+                                    System.out.println(appointment1);
+                                }
+                                System.out.println();
+                                break;
+                            }
+                        }
+                    }
                     break;
 
                 case 2 :
                     // Update Patient Medical Records
+
                     break;
 
                 case 3 :
@@ -171,7 +196,7 @@ public class Doctor extends User{
                         break;
                     }
 
-                    if (setAvailability(date, time) == 1) {
+                    if (setAvailability(date, time)) {
                         System.out.println(date + " " + (time+8)*100 + " set as unavailable");
                     }
                     else {
@@ -181,16 +206,113 @@ public class Doctor extends User{
 
                 case 5 :
                     // Accept or Decline Appointment Requests
+
+                    // Display pending appointments
+                    System.out.println("\nPending appointments: ");
+                    for (Patient patient : patients) {
+                        for (Appointment appointment : patient.getAppointments()) {
+                            if(appointment.getDoctorID() == super.getUserId()){
+                                if(appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
+                                    System.out.println(appointment);
+                                    System.out.println();
+                                }
+                            }
+                        }
+                    }
+                    // Accept or decline
+                    notFound = true;
+                    while (notFound) {
+                        System.out.println("Enter appointment ID to accept or decline: ");
+                        int id = sc.nextInt();
+                        for (Patient patient : patients) {
+                            for (Appointment appointment : patient.getAppointments()) {
+                                if (appointment.getAppointmentID() == id) {
+                                    System.out.println("Accept appointment " + id + "? (Y/N): ");
+                                    String answer = sc.next();
+                                    if (answer.equalsIgnoreCase("Y")) {
+                                        appointment.setAppointmentStatus(AppointmentStatus.CONFIRMED);
+                                        System.out.println("Appointment " + id + " is confirmed\n");
+                                        notFound = false;
+                                    }
+                                    else if (answer.equalsIgnoreCase("N")) {
+                                        appointment.setAppointmentStatus(AppointmentStatus.DECLINED);
+                                        System.out.println("Appointment " + id + " is declined.\n");
+                                        notFound = false;
+                                    }
+                                }
+                            }
+                        }
+                        if (notFound) {
+                            System.out.println("Invalid input. Please try again");
+                        }
+                    }
+
                     break;
 
                 case 6 :
                     // View Upcoming Appointments
-
+                    viewUpcomingAppointment();
                     break;
 
                 case 7 :
                     // Record Appointment Outcome
 
+                    System.out.println("\n Appointments:");
+                    for (Patient patient : patients){
+                        for (Appointment appointment : patient.getAppointments()) {
+                            if(appointment.getDoctorID() == super.getUserId()){
+                                System.out.println(appointment);
+                                System.out.println();
+                            }
+                        }
+                    }
+
+                    notFound = true;
+                    while (notFound) {
+                        System.out.println("\nEnter appointment ID:  ");
+                        int id = sc.nextInt();
+                        for (Patient patient : patients) {
+                            for (Appointment appointment : patient.getAppointments()) {
+                                if (appointment.getAppointmentID() == id) {
+
+                                    // Service type
+                                    int i = 1;
+                                    System.out.println("Enter service type [1/2/3]:  ");
+                                    for (ServiceType serviceType : ServiceType.values()) {
+                                        System.out.println("[" + i + "] " + serviceType);
+                                    }
+                                    int serviceTypeIndex = sc.nextInt();
+                                    ServiceType serviceType = ServiceType.values()[serviceTypeIndex];
+
+
+                                    // Prescribed medications
+                                    i = 1;
+                                    for (Medication medication : medications) {
+                                        System.out.println("[" + i + "] " + medication.getMedicationName());
+                                    }
+                                    System.out.println("Enter prescribed medication(s), separated by comma [eg. 1,2,3]:  ");
+                                    String inputMedications = sc.nextLine();
+                                    String[] medicationsIndex = inputMedications.split(",");
+                                    List<Medication> medicationsList = new ArrayList<>();
+                                    for (String index : medicationsIndex) {
+                                        medicationsList.add(medications.get(Integer.parseInt(index)));
+                                    }
+
+                                    // Consultation Notes
+                                    System.out.println("Enter consultation notes: ");
+                                    String inputConsultationNotes = sc.nextLine();
+
+                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, medicationsList, inputConsultationNotes);
+                                    appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
+                                    notFound = false;
+
+                                }
+                            }
+                        }
+                        if (notFound) {
+                            System.out.println("Invalid input. Please try again");
+                        }
+                    }
                     break;
 
                 case 8 :

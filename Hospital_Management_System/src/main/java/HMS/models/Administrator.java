@@ -228,7 +228,7 @@ public class Administrator extends User {
         // Prompt for pharmacist ID
         Scanner sc = new Scanner(System.in);
         System.out.print("\nEnter Pharmacist ID to process the request: ");
-        int pharmacistId = sc.nextInt();
+        String pharmacistId = sc.next();
     
         // Find the matching request
         ReplenishmentRequest selectedRequest = findRequestByPharmacistId(pharmacistId);
@@ -251,7 +251,7 @@ public class Administrator extends User {
         }
     }
     
-    private ReplenishmentRequest findRequestByPharmacistId(int pharmacistId) {
+    private ReplenishmentRequest findRequestByPharmacistId(String pharmacistId) {
         for (ReplenishmentRequest request : replenishmentRequests) {
             if (request.getPharmacistID() == pharmacistId && request.getStatus() == ReplenishmentStatus.PENDING) {
                 return request;

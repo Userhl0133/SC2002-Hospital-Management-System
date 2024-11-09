@@ -56,7 +56,6 @@ public class MainApp {
             User validatedUser = User.login(patients, doctors, pharmacists, administrators);
             validatedUser.showMenu();
         }
-
     }
 
     // To load data from CSV files

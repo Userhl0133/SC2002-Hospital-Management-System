@@ -69,8 +69,13 @@ public class Appointment {
     public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord appointmentOutcomeRecord) {
         this.appointmentOutcomeRecord = appointmentOutcomeRecord;
     }
-
     public LocalDateTime getAppointmentDateTime() {
         return this.dateTime;
+
+    @Override
+    public String toString() {
+        return String.format("Appointment ID: %d, Patient ID: %s, Doctor ID: %s, Status: %s, Date & Time: %s",
+                appointmentID, patientID, doctorID, appointmentStatus, dateTime);
+
     }
 }

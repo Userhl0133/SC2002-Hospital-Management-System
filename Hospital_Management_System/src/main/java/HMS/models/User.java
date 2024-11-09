@@ -41,7 +41,7 @@ public abstract class User {
     public static User login(List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter User ID: ");
+        System.out.print("Enter Hospital ID: ");
         String inputUserId = scanner.nextLine();
 
         // Search for the user in all lists

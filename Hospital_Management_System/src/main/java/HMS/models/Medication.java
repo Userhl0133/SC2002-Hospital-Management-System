@@ -1,4 +1,4 @@
-package HMS.models; 
+package HMS.models;
 
 public class Medication {
 
@@ -7,6 +7,7 @@ public class Medication {
     private int lowStockLevel;
     private int stockLevel;
     private String medicationName;
+    private String replenishmentStatus; // Replenishment status (e.g., "pending", "replenished", "in-progress")
 
     // Constructor
     public Medication(int medicationId, int lowStockLevel, int stockLevel, String medicationName) {
@@ -14,20 +15,28 @@ public class Medication {
         this.lowStockLevel = lowStockLevel;
         this.stockLevel = stockLevel;
         this.medicationName = medicationName;
+        this.replenishmentStatus = "pending"; // Default status is "pending" when a medication is created
     }
 
-    // Methods
+    // Methods to update stock and low stock level
     public void updateLowStockLevel(int newLowStockLevel) {
-        // Update the low stock level with the provided value
         this.lowStockLevel = newLowStockLevel;
     }
 
     public void updateStock(int newStockLevel) {
-        // Update the stock level with the provided value
         this.stockLevel = newStockLevel;
     }
 
-    // Getters and Setters (optional, depending on needs)
+    // Getter and Setter for Replenishment Status
+    public String getReplenishmentStatus() {
+        return replenishmentStatus;
+    }
+
+    public void setReplenishmentStatus(String replenishmentStatus) {
+        this.replenishmentStatus = replenishmentStatus;
+    }
+
+    // Getters and Setters for other attributes
     public int getMedicationId() {
         return medicationId;
     }

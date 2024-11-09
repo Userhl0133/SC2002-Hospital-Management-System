@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import HMS.models.Administrator;
+import HMS.models.Appointment;
+import HMS.models.Patient;
+import HMS.models.Pharmacist;
+
 import HMS.models.Doctor;
 import HMS.models.Medication;
 import HMS.models.Patient;
@@ -18,6 +22,7 @@ public class MainApp {
     public static List<Pharmacist> pharmacists = new ArrayList<>();
     public static List<Administrator> administrators = new ArrayList<>();
     public static List<Medication> medications = new ArrayList<>();
+    public static List<Appointment> appointments = new ArrayList<>();
 
     public static void main(String[] args) {
         initialiseData();
@@ -50,6 +55,7 @@ public class MainApp {
 
             if (validatedUser instanceof Patient) {
                 Patient patient = (Patient) validatedUser;
+                System.out.println(patient);
                 patient.showMenu();
             } else if (validatedUser instanceof Doctor) {
                 Doctor doctor = (Doctor) validatedUser;
@@ -60,13 +66,9 @@ public class MainApp {
             } else if (validatedUser instanceof Administrator) {
                 Administrator admin = (Administrator) validatedUser;
                 admin.showMenu();
+            } else {
+                System.out.println("User not found.");
             }
-            // user.showMenu();
-            // Test
-            // Patient user = patients.get(1);
-            // user.showMenu();
-            break;
-
         }
 
     }

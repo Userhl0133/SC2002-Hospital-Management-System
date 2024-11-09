@@ -44,65 +44,64 @@ public class Pharmacist extends User {
         }
     }
 
-    // Submit Replenishment Request
     public void submitReplenishmentRequest() {
         Scanner sc = new Scanner(System.in);
-
-        // Ask for the pharmacist ID
+    
+        // Get the logged-in pharmacist's userId directly from the validated user
+        String loggedInPharmacistId = super.getUserId(); // This is a String
+    
+        // Ask for the pharmacist's ID (String input)
         System.out.print("Enter your Pharmacist ID: ");
-        int enteredPharmacistId = sc.nextInt();
-
+        String enteredPharmacistId = sc.nextLine(); // Read as a string
+    
         // Validate if the entered ID matches the currently logged-in pharmacist's ID
-        int pharmacistId = Integer.parseInt(super.getUserId()); // Assuming User ID is the same as pharmacist ID
-        if (enteredPharmacistId != pharmacistId) {
+        if (!enteredPharmacistId.equals(loggedInPharmacistId)) {
             System.out.println("The entered Pharmacist ID does not match the logged-in Pharmacist ID.");
             return; // Exit if the ID does not match
         }
-
+    
         // Ask for the medication ID
         System.out.print("Enter Medication ID to request replenishment: ");
         int medicationId = sc.nextInt();
         sc.nextLine();  // Clear the buffer
-
+    
         // Find the medication by its ID
         Medication medication = medications.stream()
                 .filter(med -> med.getMedicationId() == medicationId)
                 .findFirst()
                 .orElse(null);
-
+    
         if (medication == null) {
             System.out.println("Medication with ID " + medicationId + " not found in inventory.");
             return; // Exit if medication is not found
         }
-
+    
         // Ask for the replenishment quantity
         System.out.print("Enter quantity to request: ");
         int quantity = sc.nextInt();
-
+    
         // Get current stock level of the medication
         int currentStock = medication.getStockLevel();
         System.out.println("Current stock level for " + medication.getMedicationName() + ": " + currentStock);
-
-        // Create a new ReplenishmentRequest
+    
         // Create a new ReplenishmentRequest
         ReplenishmentRequest request = new ReplenishmentRequest(
-            String.valueOf(enteredPharmacistId),  // Convert the int to String
+            loggedInPharmacistId,  // Pharmacist ID (now a String)
             medication.getMedicationName(),  // Medication Name
             quantity,  // Requested Quantity
             currentStock,  // Current Stock Level
             ReplenishmentStatus.PENDING // Set the status as PENDING
         );
-
-
+    
         // Add the request to the global list of replenishment requests
         MainApp.replenishmentRequests.add(request);
-
-
+    
         // Update the replenishment status of the medication to "PENDING"
         medication.setReplenishmentStatus("PENDING");
-
+    
         System.out.println("Replenishment request submitted for " + medication.getMedicationName() + " with quantity " + quantity + ".");
     }
+    
 
     // Show the Pharmacist Menu
     public void showMenu() {

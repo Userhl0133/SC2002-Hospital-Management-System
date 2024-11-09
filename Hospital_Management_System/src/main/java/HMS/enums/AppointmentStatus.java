@@ -4,7 +4,8 @@ public enum AppointmentStatus {
     PENDING("Pending"),
     CONFIRMED("Confirmed"),
     DECLINED("Declined"),
-    COMPLETED("Completed");
+    COMPLETED("Completed"),
+    CANCELLED("Cancelled");
 
     private final String displayName;
 

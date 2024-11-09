@@ -86,6 +86,19 @@ public class Patient extends User {
         System.out.println("");
     }
 
+    public String showDoctorAvailability() {
+        String availability = "";
+        for (Doctor doctor : MainApp.doctors) {
+            availability += "Doctor: " + doctor.getName() + "\n";
+            Map<Integer, List<Integer>> doctorAvailability = doctor.getAvailability();
+            for (Map.Entry<Integer, List<Integer>> entry : doctorAvailability.entrySet()) {
+                availability += "Date: " + entry.getKey() + " Slots: " + entry.getValue() + "\n";
+            }
+            System.out.println("");
+        }
+        return availability;
+    }
+
     public void scheduleAppointment(Scanner sc) {
         System.out.println("Scheduling appointment for patient: " + getName());
 
@@ -312,13 +325,21 @@ public class Patient extends User {
     public Doctor selectDoctor(Scanner sc) {
         while (true) {
             int counter = 1;
-            System.out.println("Available Doctors: ");
+            System.out.println("Available Doctors:");
+
+            // Display all doctors with their availability status
             for (Doctor doctor : MainApp.doctors) {
-                System.out.println(counter + ": " + doctor.getUserId() + " " + doctor.getName());
+                if (doctor.getAvailability().isEmpty()) {
+                    // Display "Unavailable" if no slots are available
+                    System.out.println(counter + ": " + doctor.getUserId() + " " + doctor.getName() + " - Unavailable");
+                } else {
+                    System.out.println(counter + ": " + doctor.getUserId() + " " + doctor.getName());
+                }
                 counter++;
             }
+
             System.out.println("-1: Exit");
-            System.out.println("Enter the ID of the doctor you want to schedule an appointment with:");
+            System.out.print("Enter the ID of the doctor you want to schedule an appointment with: ");
             String doctorID = sc.nextLine();
 
             // Exit if the user enters -1
@@ -335,7 +356,6 @@ public class Patient extends User {
                 }
             }
             System.out.println("Invalid Doctor ID. Please try again.");
-            System.out.println("");
         }
     }
 
@@ -343,13 +363,13 @@ public class Patient extends User {
         Map<Integer, List<Integer>> availability = doctor.getAvailability();
         if (availability.isEmpty()) {
             System.out.println("No available slots for Dr. " + doctor.getName() + ".");
-            System.out.println("");
         } else {
             System.out.println("Available Appointment Slots for Dr. " + doctor.getName() + ":");
             for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
                 System.out.println("Date: " + entry.getKey() + " Slots: " + entry.getValue());
             }
         }
+        System.out.println("");
     }
 
     public void viewAllAppointments() {
@@ -443,22 +463,50 @@ public class Patient extends User {
     }
 
     public int cancelAppointment(Scanner sc) {
-        // This would contain logic to cancel an appointment
         System.out.println("Cancelling appointment for patient: " + getName());
-        System.out.println("Select an appointment to cancel: ");
-        viewScheduledAppointments();
-        System.out.print("Enter the appointment ID: ");
-        int appointmentID = sc.nextInt();
 
+        // Step 1: Display scheduled appointments
+        viewScheduledAppointments();
+
+        // Step 2: Prompt user to enter the appointment ID to cancel
+        System.out.print("Enter the appointment ID to cancel or -1 to exit: ");
+        int appointmentID;
+
+        try {
+            appointmentID = sc.nextInt();
+            sc.nextLine(); // Consume the newline character
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter a valid appointment ID.");
+            sc.nextLine(); // Clear the buffer
+            return -1;
+        }
+
+        // Step 3: Exit if the user enters -1
+        if (appointmentID == -1) {
+            System.out.println("Cancellation process aborted.");
+            return -1;
+        }
+
+        // Step 4: Find the appointment with the given ID
         for (Appointment appointment : this.appointments) {
             if (appointment.getAppointmentID() == appointmentID) {
-                appointments.remove(appointment);
-                MainApp.appointments.remove(appointment);
-                System.out.println("Appointment cancelled successfully.");
+                // Update the status to "Canceled"
+                appointment.setAppointmentStatus(AppointmentStatus.CANCELLED);
+
+                // Update the appointment in the main list
+                for (Appointment mainAppAppointment : MainApp.appointments) {
+                    if (mainAppAppointment.getAppointmentID() == appointmentID) {
+                        mainAppAppointment.setAppointmentStatus(AppointmentStatus.CANCELLED);
+                        break;
+                    }
+                }
+
+                System.out.println("Appointment canceled successfully.");
                 return appointmentID;
             }
         }
 
+        // If appointment is not found
         System.out.println("Appointment not found.");
         return -1;
     }
@@ -549,13 +597,7 @@ public class Patient extends User {
 
                 case 3:
                     // View Available Appointment Slots
-                    while (true) {
-                        Doctor selectedDoctor = selectDoctor(sc);
-                        if (selectedDoctor == null) {
-                            break;
-                        }
-                        displayDoctorAvailability(selectedDoctor);
-                    }
+                    showDoctorAvailability();
                     break;
 
                 case 4:

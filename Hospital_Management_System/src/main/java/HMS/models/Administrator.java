@@ -147,9 +147,9 @@ public class Administrator extends User {
         //implementation for displaying the list of medications (done)
         for (Medication medication : medications) {
             System.out.println("Medication ID: " + medication.getMedicationId()
-                    + "Medication: " + medication.getMedicationName()
-                    + ", Stock Level: " + medication.getStockLevel()
-                    + ", Low Stock Level: " + medication.getLowStockLevel());
+                    + " Medication: " + medication.getMedicationName()
+                    + ", Current Stock Level: " + medication.getStockLevel()
+                    + ", Low Stock Level Alert: " + medication.getLowStockLevel());
         }
     }
 
@@ -356,7 +356,7 @@ public class Administrator extends User {
 
                 case 4:
                     // Remove Staff
-                    System.out.print("Enter User ID to remove: ");
+                    System.out.print("Enter Hospital ID to remove: ");
                     String removeUserId = sc.nextLine();
                     removeStaff(removeUserId);
                     break;
@@ -380,7 +380,7 @@ public class Administrator extends User {
                     String medName = sc.nextLine();
                     System.out.print("Enter Stock Level: ");
                     int stockLevel = sc.nextInt();
-                    System.out.print("Enter Low Stock Level: ");
+                    System.out.print("Enter Low Stock Level Alert: ");
                     int lowStockLevel = sc.nextInt();
                     addMedication(medId, medName, stockLevel, lowStockLevel);
                     break;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import HMS.models.Administrator;
 import HMS.models.Appointment;
+import HMS.models.AppointmentOutcomeRecord;
 import HMS.models.Doctor;
 import HMS.models.Medication;
 import HMS.models.Patient;
@@ -22,6 +23,8 @@ public class MainApp {
     public static List<Medication> medications = new ArrayList<>();
     public static List<Appointment> appointments = new ArrayList<>();
     public static List<ReplenishmentRequest> replenishmentRequests = new ArrayList<>();
+    public static List<AppointmentOutcomeRecord> appointmentOutcomeRecords = new ArrayList<>();
+
 
     public static void main(String[] args) {
         initialiseData();

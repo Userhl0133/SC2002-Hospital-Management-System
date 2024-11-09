@@ -18,10 +18,36 @@ public class Pharmacist extends User {
         this.age = age;
     }
 
-    // View Appointment Outcome Record (Placeholder)
     public void viewAppointmentOutcomeRecord() {
-        // Placeholder code
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.print("Enter the Appointment ID to view outcome record: ");
+        int appointmentId = sc.nextInt();
+        sc.nextLine();  // Clear the buffer
+        
+        // Find the appointment by ID
+        Appointment appointment = MainApp.appointments.stream()
+                .filter(a -> a.getAppointmentID() == appointmentId)
+                .findFirst()
+                .orElse(null);
+        
+        if (appointment == null) {
+            System.out.println("Appointment not found.");
+            return;
+        }
+        
+        // Check if the appointment has an outcome record
+        AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
+        
+        if (outcomeRecord != null) {
+            System.out.println("Appointment Outcome Record: ");
+            System.out.println(outcomeRecord);
+        } else {
+            System.out.println("No outcome record available for this appointment.");
+        }
     }
+
+    
 
     // Update Prescription Status (Placeholder method)
     public void updatePrescriptionStatus() {
@@ -32,7 +58,7 @@ public class Pharmacist extends User {
 
     // View Medication Inventory - Displaying Medication ID
     public void viewInventory() {
-        System.out.println("\nCurrent Medication Inventory");
+        System.out.println("\nCurrent Medication Inventory:\n");
         // Iterate over medications and display the details
         for (Medication medication : medications) {
             System.out.println("Medication ID: " + medication.getMedicationId());

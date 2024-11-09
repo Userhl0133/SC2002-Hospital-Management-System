@@ -1,15 +1,16 @@
 package HMS.models;
 
-import java.util.List; 
+import java.util.List;
+
 import HMS.enums.ServiceType;
 
 public class AppointmentOutcomeRecord {
-    private int recordID;
-    private ServiceType serviceType;
-    private List<Medication> prescribedMedications;
-    private String consultationNotes;
+    private int recordID;  // Unique ID for the record
+    private ServiceType serviceType;  // Type of the medical service provided
+    private List<Medication> prescribedMedications;  // Medications prescribed during the appointment
+    private String consultationNotes;  // Notes from the consultation
 
-    // Constructor
+    // Constructor to initialize all fields
     public AppointmentOutcomeRecord(int recordID, ServiceType serviceType, List<Medication> prescribedMedications, String consultationNotes) {
         this.recordID = recordID;
         this.serviceType = serviceType;
@@ -37,29 +38,49 @@ public class AppointmentOutcomeRecord {
         this.consultationNotes = consultationNotes;
     }
 
-    // Getters and setters for other fields can be added as needed
+    // Getter for recordID
     public int getRecordID() {
         return recordID;
     }
 
+    // Setter for recordID
     public void setRecordID(int recordID) {
         this.recordID = recordID;
     }
 
+    // Getter for prescribedMedications
     public List<Medication> getPrescribedMedications() {
         return prescribedMedications;
     }
 
+    // Setter for prescribedMedications
     public void setPrescribedMedications(List<Medication> prescribedMedications) {
-        this.prescribedMedications = prescribedMedications;
+        if (prescribedMedications != null) {
+            this.prescribedMedications = prescribedMedications;
+        } else {
+            // Handle null scenario, e.g., throw an exception or log a warning
+            System.out.println("Error: prescribedMedications list cannot be null.");
+        }
     }
 
+    // Override toString() to provide a meaningful representation of AppointmentOutcomeRecord
     @Override
     public String toString() {
-        return """
-               AppointmentOutcomeRecord: 
-               , serviceType=""" + serviceType + "\n" +
-                ", prescribedMedications=" + prescribedMedications + "\n" +
-                ", consultationNotes='" + consultationNotes;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Appointment Outcome Record: \n");
+        sb.append("Record ID: ").append(recordID).append("\n");
+        sb.append("Service Type: ").append(serviceType).append("\n");
+        sb.append("Consultation Notes: ").append(consultationNotes).append("\n");
+
+        if (prescribedMedications != null && !prescribedMedications.isEmpty()) {
+            sb.append("Prescribed Medications: \n");
+            for (Medication med : prescribedMedications) {
+                sb.append(" - ").append(med.getMedicationName()).append(" (Stock Level: ").append(med.getStockLevel()).append(")\n");
+            }
+        } else {
+            sb.append("No medications prescribed.\n");
+        }
+
+        return sb.toString();
     }
 }

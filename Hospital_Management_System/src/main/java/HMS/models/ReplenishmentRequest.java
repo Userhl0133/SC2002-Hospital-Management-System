@@ -1,8 +1,14 @@
 package HMS.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import HMS.enums.ReplenishmentStatus;
 
 public class ReplenishmentRequest {
+
+    public static List<ReplenishmentRequest> replenishmentRequests = new ArrayList<>(); // Static list to store requests
+
     private int pharmacistID;
     private int administratorID;
     private String medicationName;

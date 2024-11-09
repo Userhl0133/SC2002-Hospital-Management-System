@@ -1,10 +1,10 @@
 package HMS.models;
 
-import HMS.MainApp;
-import HMS.enums.*;
-import java.util.*;
-import static HMS.MainApp.*;
-import static HMS.MainApp.pharmacists;
+import java.util.Scanner;
+
+import static HMS.MainApp.medications;
+import HMS.enums.Gender;
+import HMS.enums.Role;
 
 public class Pharmacist extends User {
 
@@ -16,107 +16,128 @@ public class Pharmacist extends User {
         this.age = age;
     }
 
-    // Methods
+    // View Appointment Outcome Record (Placeholder)
+    public void viewAppointmentOutcomeRecord() {
+      
+    }
+
+    // Update Prescription Status (Placeholder method)
+    public void updatePrescriptionStatus() {
+        System.out.println("\n--- Update Prescription Status ---");
+        // Placeholder implementation where the pharmacist can update the prescription status
+        System.out.println("This feature is currently not implemented.");
+    }
+
+    // View Medication Inventory - Displaying Medication ID
     public void viewInventory() {
-        // Implementation for displaying the list of medications
+        System.out.println("\nCurrent Medication Inventory");
+        // Iterate over medications and display the details
         for (Medication medication : medications) {
-            System.out.println("Medication: " + medication.getMedicationName() + ", Stock Level: " + medication.getStockLevel() + ", Low Stock Level: " + medication.getLowStockLevel());
+            System.out.println("Medication ID: " + medication.getMedicationId());
+            System.out.println("Medication Name: " + medication.getMedicationName());
+            System.out.println("Current Stock Level: " + medication.getStockLevel());
+            System.out.println("Low Stock Level Alert: " + medication.getLowStockLevel());
+            System.out.println("Replenishment Status: " + medication.getReplenishmentStatus());
+            System.out.println("-------------------------------");
         }
     }
 
-    public void updateMedicationStock(String medicationName, int newStockLevel) {
-        for (Medication medication : medications) {
-            if (medication.getMedicationName().equalsIgnoreCase(medicationName)) {
-                medication.updateStock(medication.getLowStockLevel() + newStockLevel);
-                System.out.println("Updated stock for " + medicationName);
-                return;
-            }
-        }
-        System.out.println("Medication not found.");
-    }
-
-    public void approveReplenishmentRequests(int pharmacistId) {
-        System.out.println("\n--- Replenishment Requests ---");
-        
-        for (ReplenishmentRequest request : ReplenishmentRequest.replenishmentRequests) {
-            if (request.getStatus().equalsIgnoreCase("Pending")) {
-                System.out.println("Administrator ID: " + request.getAdministratorID() + ", Medication: " + request.getMedicationName() + ", Requested Quantity: " + request.getStockLevel() + ", Status: " + request.getStatus());
-            }
-        }
-
+    // Submit Replenishment Request
+    public void submitReplenishmentRequest() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter Administrator ID to approve: ");
-        int adminId = sc.nextInt();
 
-        for (ReplenishmentRequest request : ReplenishmentRequest.replenishmentRequests) {
-            if (request.getAdministratorID() == adminId && request.getStatus().equals("Pending")) {
-                Medication medication = medications.stream()
-                        .filter(med -> med.getMedicationName().equalsIgnoreCase(request.getMedicationName()))
-                        .findFirst()
-                        .orElse(null);
+        // Ask for the pharmacist ID
+        System.out.print("Enter your Pharmacist ID: ");
+        int enteredPharmacistId = sc.nextInt();
 
-                if (medication != null) {
-                    medication.updateStock(medication.getStockLevel() + request.getStockLevel());
-                    request.approveReplenishmentRequest(adminId);
-                    System.out.println("Replenishment approved for " + request.getMedicationName());
-                } else {
-                    System.out.println("Medication not found in inventory.");
-                }
-                return;
-            }
+        // Validate if the entered ID matches the currently logged-in pharmacist's ID
+        int pharmacistId = Integer.parseInt(super.getUserId()); // Assuming User ID is the same as pharmacist ID
+        if (enteredPharmacistId != pharmacistId) {
+            System.out.println("The entered Pharmacist ID does not match the logged-in Pharmacist ID.");
+            return; // Exit if the ID does not match
         }
-        System.out.println("No pending request found for the given Administrator ID.");
+
+        // Ask for the medication ID
+        System.out.print("Enter Medication ID to request replenishment: ");
+        int medicationId = sc.nextInt();
+        sc.nextLine();  // Clear the buffer
+
+        // Find the medication by its ID
+        Medication medication = medications.stream()
+                .filter(med -> med.getMedicationId() == medicationId)
+                .findFirst()
+                .orElse(null);
+
+        if (medication == null) {
+            System.out.println("Medication with ID " + medicationId + " not found in inventory.");
+            return; // Exit if medication is not found
+        }
+
+        // Ask for the replenishment quantity
+        System.out.print("Enter quantity to request: ");
+        int quantity = sc.nextInt();
+
+        // Get current stock level of the medication
+        int currentStock = medication.getStockLevel();
+        System.out.println("Current stock level for " + medication.getMedicationName() + ": " + currentStock);
+
+        // Create a new ReplenishmentRequest
+        int administratorId = 1; // Placeholder: ideally, fetch this dynamically from the admin system
+        ReplenishmentRequest request = new ReplenishmentRequest(pharmacistId, enteredPharmacistId, medication.getMedicationName(), currentStock, quantity);
+
+        // Add the request to the replenishment request list
+        ReplenishmentRequest.replenishmentRequests.add(request);
+
+        // Update the replenishment status of the medication to "PENDING"
+        medication.setReplenishmentStatus("pending");
+
+        System.out.println("Replenishment request submitted for " + medication.getMedicationName() + " with quantity " + quantity + ".");
     }
 
-    @Override
-    public String toString() {
-        return String.format("User ID: %s, Name: %s, Gender: %s, Role: %s", super.getUserId(), super.getName(), super.getGender(), super.getRole());
-    }
-
+    // Show the Pharmacist Menu
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
-        while (choice != 7) {
+        while (choice != 5) { // Option 5 will be the logout option
             System.out.println("============================");
-            System.out.println("-----Pharmacist Menu--------");
+            System.out.println("----- Pharmacist Menu -------");
             System.out.println("============================");
-            System.out.println("1.View Medication Inventory");
-            System.out.println("2.Update Medication stock");
-            System.out.println("3.Approve Replenishment Request");
-            System.out.println("4.Logout");
+            System.out.println("1. View Appointment Outcome Record");
+            System.out.println("2. Update Prescription Status");
+            System.out.println("3. View Medication Inventory");
+            System.out.println("4. Submit Replenishment Request");
+            System.out.println("5. Logout");
             System.out.print("Please select an option: ");
             choice = sc.nextInt();
-            sc.nextLine();
+            sc.nextLine(); // Clear the buffer after nextInt()
             switch (choice) {
                 case 1:
-                    // View Medication Inventory
-                    System.out.println("Medication Inventory:");
-                    viewInventory();
+                    // View Appointment Outcome Record
+                    viewAppointmentOutcomeRecord();
                     break;
 
                 case 2:
-                    // Update Medication stock
-                    System.out.print("Enter Medication Name to update stock: ");
-                    String updateMedName = sc.nextLine();
-                    System.out.print("Enter new stock level: ");
-                    int newStockLevel = sc.nextInt();
-                    updateMedicationStock(updateMedName, newStockLevel);
+                    // Update Prescription Status (Placeholder message)
+                    updatePrescriptionStatus();
                     break;
 
                 case 3:
-                    // Approve Replenishment Request
-                    System.out.print("Enter Pharmacist ID to approve replenishment request: ");
-                    int pharmacistId = sc.nextInt();
-                    approveReplenishmentRequests(pharmacistId);
+                    // View Medication Inventory - Linked to the Medication class
+                    viewInventory(); // Method for viewing inventory
                     break;
 
                 case 4:
+                    // Submit Replenishment Request
+                    submitReplenishmentRequest();
+                    break;
+
+                case 5:
                     // Logout
                     System.out.println("Logging out...");
                     break;
 
                 default:
-                    System.out.println("Invalid Option");
+                    System.out.println("Invalid Option, please try again.");
             }
         }
     }

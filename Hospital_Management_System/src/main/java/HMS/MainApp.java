@@ -9,6 +9,7 @@ import HMS.models.Doctor;
 import HMS.models.Medication;
 import HMS.models.Patient;
 import HMS.models.Pharmacist;
+import HMS.models.ReplenishmentRequest;
 import HMS.models.User;
 import HMS.utils.FileHelper;
 
@@ -20,6 +21,7 @@ public class MainApp {
     public static List<Administrator> administrators = new ArrayList<>();
     public static List<Medication> medications = new ArrayList<>();
     public static List<Appointment> appointments = new ArrayList<>();
+    public static List<ReplenishmentRequest> replenishmentRequests = new ArrayList<>();
 
     public static void main(String[] args) {
         initialiseData();

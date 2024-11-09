@@ -2,9 +2,11 @@ package HMS.models;
 
 import java.util.Scanner;
 
+import HMS.MainApp;  // Access to global variables in MainApp
 import static HMS.MainApp.medications;
 import HMS.enums.Gender;
-import HMS.enums.Role;
+import HMS.enums.ReplenishmentStatus;
+import HMS.enums.Role; // Added import for ReplenishmentStatus
 
 public class Pharmacist extends User {
 
@@ -18,7 +20,7 @@ public class Pharmacist extends User {
 
     // View Appointment Outcome Record (Placeholder)
     public void viewAppointmentOutcomeRecord() {
-      
+        // Placeholder code
     }
 
     // Update Prescription Status (Placeholder method)
@@ -82,14 +84,22 @@ public class Pharmacist extends User {
         System.out.println("Current stock level for " + medication.getMedicationName() + ": " + currentStock);
 
         // Create a new ReplenishmentRequest
-        int administratorId = 1; // Placeholder: ideally, fetch this dynamically from the admin system
-        ReplenishmentRequest request = new ReplenishmentRequest(pharmacistId, enteredPharmacistId, medication.getMedicationName(), currentStock, quantity);
+        // Create a new ReplenishmentRequest
+        ReplenishmentRequest request = new ReplenishmentRequest(
+            String.valueOf(enteredPharmacistId),  // Convert the int to String
+            medication.getMedicationName(),  // Medication Name
+            quantity,  // Requested Quantity
+            currentStock,  // Current Stock Level
+            ReplenishmentStatus.PENDING // Set the status as PENDING
+        );
 
-        // Add the request to the replenishment request list
-        ReplenishmentRequest.replenishmentRequests.add(request);
+
+        // Add the request to the global list of replenishment requests
+        MainApp.replenishmentRequests.add(request);
+
 
         // Update the replenishment status of the medication to "PENDING"
-        medication.setReplenishmentStatus("pending");
+        medication.setReplenishmentStatus("PENDING");
 
         System.out.println("Replenishment request submitted for " + medication.getMedicationName() + " with quantity " + quantity + ".");
     }

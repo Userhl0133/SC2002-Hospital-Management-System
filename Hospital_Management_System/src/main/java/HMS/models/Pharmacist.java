@@ -7,6 +7,9 @@ import java.util.Scanner;
 import HMS.enums.Gender;
 import HMS.enums.Role;
 
+import HMS.models.ReplenishmentRequest;  // Correct import for ReplenishmentRequest
+
+
 public class Pharmacist extends User {
     private int age;
     // Map to store Medication objects (Medication ID -> Medication)

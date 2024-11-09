@@ -7,6 +7,7 @@ import javax.xml.crypto.Data;
 import HMS.enums.AppointmentStatus;
 
 public class Appointment {
+
     private static int nextAppointmentID = 1;
     private int appointmentID;
     private String patientID;
@@ -69,8 +70,10 @@ public class Appointment {
     public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord appointmentOutcomeRecord) {
         this.appointmentOutcomeRecord = appointmentOutcomeRecord;
     }
+
     public LocalDateTime getAppointmentDateTime() {
         return this.dateTime;
+    }
 
     @Override
     public String toString() {

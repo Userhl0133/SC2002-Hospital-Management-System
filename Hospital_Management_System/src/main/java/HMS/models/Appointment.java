@@ -1,6 +1,7 @@
 package HMS.models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.xml.crypto.Data;
 
@@ -77,8 +78,11 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return String.format("Appointment ID: %d, Patient ID: %s, Doctor ID: %s, Status: %s, Date & Time: %s",
-                appointmentID, patientID, doctorID, appointmentStatus, dateTime);
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = dateTime.format(formatter);
+        Doctor doctor = new Doctor();
+        doctor.getDoctorById(doctorID);
+        return String.format("Appointment ID: %d\nDoctor: %s %s\nStatus: %s\nDate & Time: %s\nAppointment Outcome: %s",
+                appointmentID, doctorID, doctor.getName() , appointmentStatus, formattedDateTime, appointmentOutcomeRecord);
     }
 }

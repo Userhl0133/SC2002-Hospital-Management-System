@@ -151,6 +151,7 @@ public class Administrator extends User {
         System.out.println("Medication with ID " + medicationId + " not found.");
     }
 
+/*
     public void ApproveReplenishmentRequests(int adminId) {
         System.out.println("\n--- Replenishment Requests ---");
 
@@ -187,6 +188,7 @@ public class Administrator extends User {
         System.out.println("No pending request found for the given Pharmacist ID.");
     }
 
+*/
     @Override
     public String toString() {
         return String.format("User ID: %s, Name: %s, Gender: %s, Role: %s",
@@ -264,7 +266,7 @@ public class Administrator extends User {
                     // Update Staff
                     System.out.print("Enter User ID to update: ");
                     String updateUserId = sc.nextLine();
-                    User userToUpdate = findUserById(patients, doctors, pharmacists, administrators);
+                    User userToUpdate = User.findUserById(updateUserId, patients, doctors, pharmacists, administrators);
                     if (userToUpdate != null) {
                         updateStaff(userToUpdate);
                     } else {
@@ -323,7 +325,7 @@ public class Administrator extends User {
                     // Approve Replenishment Request
                     System.out.print("Enter Administrator ID: ");
                     int adminId = sc.nextInt();
-                    ApproveReplenishmentRequests(adminId);
+                    //ApproveReplenishmentRequests(adminId);
                     break;
 
                 case 11:

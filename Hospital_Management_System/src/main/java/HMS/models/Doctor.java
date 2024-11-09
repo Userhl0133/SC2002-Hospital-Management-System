@@ -44,6 +44,10 @@ public class Doctor extends User {
         return null;
     }
 
+    public String getName() {
+        return super.getName();
+    }
+
     public Map<Integer, List<Integer>> getAvailability() {
         return availability;
     }

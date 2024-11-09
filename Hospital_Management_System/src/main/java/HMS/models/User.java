@@ -78,7 +78,7 @@ public abstract class User {
     }
 
 // Method to find a user by userId from different lists
-    private static  User findUserById(String userId, List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
+    public static  User findUserById(String userId, List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
         for (Patient patient : patients) {
             if (patient.getUserId().equals(userId)) {
                 return patient;

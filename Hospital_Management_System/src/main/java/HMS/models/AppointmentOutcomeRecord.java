@@ -53,4 +53,13 @@ public class AppointmentOutcomeRecord {
     public void setPrescribedMedications(List<Medication> prescribedMedications) {
         this.prescribedMedications = prescribedMedications;
     }
+
+    @Override
+    public String toString() {
+        return """
+               AppointmentOutcomeRecord: 
+               , serviceType=""" + serviceType + "\n" +
+                ", prescribedMedications=" + prescribedMedications + "\n" +
+                ", consultationNotes='" + consultationNotes;
+    }
 }

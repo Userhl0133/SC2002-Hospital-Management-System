@@ -632,6 +632,10 @@ public class Patient extends User {
         return super.getRole();
     }
 
+    public ArrayList<Appointment> getAppointments() {
+        return appointments;
+    }
+
     public void setDOB(LocalDate DOB) {
         this.DOB = DOB;
     }

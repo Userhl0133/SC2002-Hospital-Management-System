@@ -1,10 +1,13 @@
 package HMS.models;
 
 import HMS.enums.*;
+
 import java.util.*;
 import java.time.LocalDateTime;
 
-public class Doctor extends User{
+import HMS.MainApp;
+
+public class Doctor extends User {
 
     // Attributes
     // availability hashmap contains time slots where the doctor is unavailable, in 1 hour blocks
@@ -12,11 +15,27 @@ public class Doctor extends User{
     private Map<Integer, List<Integer>> availability;
     private int age;
 
+    public Doctor() {
+    }
+
     // Constructor
     public Doctor(String userId, String password, Gender gender, String name, Role role, int age) {
         super(userId, password, gender, name, role);  // Passing all required parameters to User
         this.availability = new HashMap<>();
         this.age = age;
+    }
+
+    public Doctor getDoctorById(String doctorId) {
+        for (Doctor doctor : MainApp.doctors) {
+            if (doctor.getUserId().equals(doctorId)) {
+                return doctor;
+            }
+        }
+        return null;
+    }
+
+    public Map<Integer, List<Integer>> getAvailability() {
+        return availability;
     }
 
     // Methods
@@ -57,14 +76,12 @@ public class Doctor extends User{
             if (this.availability.get(date).contains(time)) {
                 this.availability.get(date).remove(Integer.valueOf(time));
                 return -1;
-            }
-            else{
+            } else {
                 this.availability.get(date).add(time);
                 return 1;
             }
-        }
-        // If timing does not exist, add time slot
-        else{
+        } // If timing does not exist, add time slot
+        else {
             List<Integer> timeSlots = new ArrayList<>();
             timeSlots.add(time);
             this.availability.put(date, timeSlots);
@@ -97,20 +114,20 @@ public class Doctor extends User{
             System.out.println("8.Logout");
             System.out.print("Please select an option: ");
             choice = sc.nextInt();
-            switch(choice) {
-                case 1 :
+            switch (choice) {
+                case 1:
                     // View Patient Medical Records
                     break;
 
-                case 2 :
+                case 2:
                     // Update Patient Medical Records
                     break;
 
-                case 3 :
+                case 3:
                     // View Personal Schedule
                     break;
 
-                case 4 :
+                case 4:
                     System.out.println("Set unavailable timeslot");
                     System.out.println("Enter date (DDMMYYYY): ");
                     int date = sc.nextInt();
@@ -135,33 +152,32 @@ public class Doctor extends User{
                     }
 
                     if (setAvailability(date, time) == 1) {
-                        System.out.println(date + " " + (time+8)*100 + " set as unavailable");
-                    }
-                    else {
-                        System.out.println(date + " " + (time+8)*100 + " set as available");
+                        System.out.println(date + " " + (time + 8) * 100 + " set as unavailable");
+                    } else {
+                        System.out.println(date + " " + (time + 8) * 100 + " set as available");
                     }
                     break;
 
-                case 5 :
+                case 5:
                     // Accept or Decline Appointment Requests
                     break;
 
-                case 6 :
+                case 6:
                     // View Upcoming Appointments
 
                     break;
 
-                case 7 :
+                case 7:
                     // Record Appointment Outcome
 
                     break;
 
-                case 8 :
+                case 8:
                     // Logout
                     System.out.println("Logging out");
                     break;
 
-                default :
+                default:
                     System.out.println("Invalid Option");
             }
         }

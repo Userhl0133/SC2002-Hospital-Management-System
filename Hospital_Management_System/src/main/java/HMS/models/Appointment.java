@@ -2,6 +2,8 @@ package HMS.models;
 
 import java.time.LocalDateTime;
 
+import javax.xml.crypto.Data;
+
 import HMS.enums.AppointmentStatus;
 
 public class Appointment {
@@ -66,5 +68,9 @@ public class Appointment {
 
     public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord appointmentOutcomeRecord) {
         this.appointmentOutcomeRecord = appointmentOutcomeRecord;
+    }
+
+    public LocalDateTime getAppointmentDateTime() {
+        return this.dateTime;
     }
 }

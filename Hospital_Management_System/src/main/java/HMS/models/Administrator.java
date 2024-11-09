@@ -1,19 +1,31 @@
 package HMS.models;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import HMS.MainApp;
-import HMS.enums.*;
-import static HMS.MainApp.*;
+import static HMS.MainApp.administrators;
+import static HMS.MainApp.appointments;
+import static HMS.MainApp.doctors;
+import static HMS.MainApp.medications;
+import static HMS.MainApp.pharmacists;
+import HMS.enums.AppointmentStatus;
+import HMS.enums.Gender;
+import HMS.enums.ReplenishmentStatus;
+import HMS.enums.Role;
+
+
 
 public class Administrator extends User {
 
     private int age;
-
+    private List<ReplenishmentRequest> replenishmentRequests;
     // Constructor
     public Administrator(String userId, String password, Gender gender, String name, Role role, int age) {
         super(userId, password, gender, name, role);
         this.age = age;
+        replenishmentRequests = new ArrayList<>();
     }
 
     // Methods
@@ -169,45 +181,105 @@ public class Administrator extends User {
         }
         System.out.println("Medication with ID " + medicationId + " not found.");
     }
+    public void viewReplenishmentRequests() {
+        System.out.println("Viewing Replenishment Requests:");
+        for (ReplenishmentRequest request : replenishmentRequests) {
+            System.out.println("Pharmacist ID: " + request.getPharmacistID() +
+                    " | Medication: " + request.getMedicationName() +
+                    " | Requested Quantity: " + request.getQuantity() +
+                    " | Current Stock Level: " + request.getStockLevel() +
+                    " | Status: " + request.getStatus());
+        }
+    }
 
+    // Method to add a replenishment request (called by Pharmacist)
+    public void addReplenishmentRequest(ReplenishmentRequest request) {
+        if (replenishmentRequests == null) {
+            replenishmentRequests = new ArrayList<>();
+        }
+        replenishmentRequests.add(request);
+        System.out.println("Replenishment request added for " + request.getMedicationName());
+    }
 
-    public void ApproveReplenishmentRequests(int adminId) {
-        //implementation for approving replenishment requests
+    public void approveReplenishmentRequests(String adminId) {
+        if (replenishmentRequests == null || replenishmentRequests.isEmpty()) {
+            System.out.println("No replenishment requests available.");
+            return;
+        }
+    
         System.out.println("\n--- Replenishment Requests ---");
-
-        for (ReplenishmentRequest request : ReplenishmentRequest.replenishmentRequests) {
-            if (request.getStatus().equalsIgnoreCase("Pending")) {
+        boolean hasPendingRequests = false;
+        for (ReplenishmentRequest request : replenishmentRequests) {
+            if (request.getStatus() == ReplenishmentStatus.PENDING) {
                 System.out.println("Pharmacist ID: " + request.getPharmacistID() +
                         ", Medication: " + request.getMedicationName() +
-                        ", Requested Quantity: " + request.getStockLevel() +
+                        ", Requested Quantity: " + request.getQuantity() +
+                        ", Current Stock Level: " + request.getStockLevel() +
                         ", Status: " + request.getStatus());
+                hasPendingRequests = true;
             }
         }
-
+    
+        if (!hasPendingRequests) {
+            System.out.println("No pending replenishment requests available.");
+            return;
+        }
+    
+        // Prompt for pharmacist ID
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter Pharmacist ID to approve: ");
+        System.out.print("\nEnter Pharmacist ID to process the request: ");
         int pharmacistId = sc.nextInt();
-
-        for (ReplenishmentRequest request : ReplenishmentRequest.replenishmentRequests) {
-            if (request.getPharmacistID() == pharmacistId && request.getStatus().equals("Pending")) {
-                Medication medication = MainApp.medications.stream()
-                        .filter(med -> med.getMedicationName().equalsIgnoreCase(request.getMedicationName()))
-                        .findFirst()
-                        .orElse(null);
-
-                if (medication != null) {
-                    medication.updateStock(medication.getStockLevel() + request.getStockLevel());
-                    request.approveReplenishmentRequest(adminId);
-                    System.out.println("Replenishment approved for " + request.getMedicationName());
-                    System.out.println("Stock updated for " + request.getMedicationName() + " to " + medication.getStockLevel());
-                } else {
-                    System.out.println("Medication not found in inventory.");
-                }
-                return;
+    
+        // Find the matching request
+        ReplenishmentRequest selectedRequest = findRequestByPharmacistId(pharmacistId);
+    
+        if (selectedRequest == null) {
+            System.out.println("No pending request found for the given Pharmacist ID.");
+            return;
+        }
+    
+        // Confirm with the administrator whether to approve the request
+        System.out.print("Do you want to approve this request? (yes/no): ");
+        String decision = sc.next().toLowerCase();
+    
+        if (decision.equals("yes")) {
+            // Approve the request
+            approveRequest(selectedRequest, adminId);
+        } else {
+            selectedRequest.setStatus(ReplenishmentStatus.REJECTED);
+            System.out.println("Replenishment request for " + selectedRequest.getMedicationName() + " rejected.");
+        }
+    }
+    
+    private ReplenishmentRequest findRequestByPharmacistId(int pharmacistId) {
+        for (ReplenishmentRequest request : replenishmentRequests) {
+            if (request.getPharmacistID() == pharmacistId && request.getStatus() == ReplenishmentStatus.PENDING) {
+                return request;
             }
         }
-        System.out.println("No pending request found for the given Pharmacist ID.");
+        return null;
     }
+    
+    private void approveRequest(ReplenishmentRequest request, String adminId) {
+        // Find the medication in the inventory
+        Medication medication = MainApp.medications.stream()
+                .filter(med -> med.getMedicationName().equalsIgnoreCase(request.getMedicationName()))
+                .findFirst()
+                .orElse(null);
+    
+        if (medication != null) {
+            // Update stock level if approved
+            medication.updateStock(medication.getStockLevel() + request.getQuantity());
+            request.setAdministratorID(adminId);
+            request.setStatus(ReplenishmentStatus.APPROVED);
+            System.out.println("Replenishment approved for " + request.getMedicationName());
+            System.out.println("Stock updated for " + request.getMedicationName() +
+                               " to " + medication.getStockLevel());
+        } else {
+            System.out.println("Medication not found in inventory.");
+        }
+    }
+
 
 
     @Override
@@ -330,10 +402,27 @@ public class Administrator extends User {
                     break;
 
                 case 10:
-                    // Approve Replenishment Request
-                    System.out.print("Enter Administrator ID: ");
-                    int adminId = sc.nextInt();
-                    ApproveReplenishmentRequests(adminId);
+                    // Check if there are any pending replenishment requests
+                    if (replenishmentRequests == null || replenishmentRequests.isEmpty()) {
+                        System.out.println("No replenishment requests available. Returning to the main menu...");
+                        break;
+                    }
+                    // Display the list of replenishment requests
+                    viewReplenishmentRequests();
+                    // Ask if the user wants to view the pending requests
+                    System.out.print("Do you want to view the pending replenishment requests? (yes/no): ");
+                    String viewDecision = sc.nextLine().toLowerCase();
+
+                    if (viewDecision.equals("yes")) {
+                        // Prompt for administrator ID to continue with the approval process
+                        System.out.print("Enter Administrator ID to proceed: ");
+                        String adminId = sc.nextLine();
+
+                        // Call the method to approve replenishment requests
+                        approveReplenishmentRequests(adminId);
+                    }else {
+                        System.out.println("Returning to the main menu...");
+                    }
                     break;
 
                 case 11:

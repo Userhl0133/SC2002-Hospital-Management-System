@@ -35,22 +35,40 @@ public class Patient extends User {
     public void updateParticular(Scanner sc) {
         System.out.println("Updating patient details for: " + getName());
 
-        // Loop until the user enters a valid date
+        LocalDate newDOB = null;
+        String newContactInfo = null;
+
+        // Step 1: Get a valid Date of Birth or exit
         while (true) {
-            System.out.print("Enter new Date of Birth (yyyy-MM-dd): ");
+            System.out.print("Enter new Date of Birth (yyyy-MM-dd) or (-1) to cancel: ");
             String dobInput = sc.nextLine();
+
+            // Check if the user wants to exit
+            if (dobInput.equals("-1")) {
+                System.out.println("Update canceled. No changes were made.");
+                return;
+            }
+
             try {
-                LocalDate newDOB = LocalDate.parse(dobInput);
-                this.setDOB(newDOB);
-                break; // Exit the loop if date is valid
+                newDOB = LocalDate.parse(dobInput);
+                break; // Exit the loop if a valid date is entered
             } catch (Exception e) {
                 System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
             }
         }
 
-        // Prompt for new contact info
-        System.out.print("Enter new Contact Info: ");
-        this.setContactInfo(sc.nextLine());
+        // Step 2: Get new contact info or exit
+        System.out.print("Enter new Contact Info or (-1) to cancel: ");
+        newContactInfo = sc.nextLine();
+        if (newContactInfo.equals("-1")) {
+            System.out.println("Update canceled. No changes were made.");
+            System.out.println("");
+            return;
+        }
+
+        // Step 3: If all inputs are collected successfully, update the details
+        this.setDOB(newDOB);
+        this.setContactInfo(newContactInfo);
 
         System.out.println("Your details have been updated successfully.");
         viewParticular();
@@ -317,6 +335,7 @@ public class Patient extends User {
                 }
             }
             System.out.println("Invalid Doctor ID. Please try again.");
+            System.out.println("");
         }
     }
 

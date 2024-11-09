@@ -5,12 +5,6 @@ import java.util.*;
 import HMS.MainApp;
 import HMS.enums.*;
 import static HMS.MainApp.*;
-import java.util.Scanner;
-import static HMS.MainApp.administrators;
-import static HMS.MainApp.doctors;
-import static HMS.MainApp.pharmacists;
-import HMS.enums.Gender;
-import HMS.enums.Role;
 
 public class Administrator extends User {
 
@@ -24,7 +18,7 @@ public class Administrator extends User {
 
     // Methods
     public void viewStaff() {
-        // Implementation for displaying the list of staff members
+        // Implementation for displaying the list of staff members (done)
         for (Administrator administrator : administrators) {
             System.out.println(administrator);
         }
@@ -35,20 +29,30 @@ public class Administrator extends User {
             System.out.println(pharmacist);
         }
     }
-
-     public void addStaff(String userId, String password, Gender gender, String name, Role role, int age) {
-        // Implementation for adding a staff member (but change to auto running number, not input)
+    public void addStaff(Gender gender, String name, Role role, int age) {
+        //implementation for adding a staff member (done)
+        // Generate a unique userId based on the role
+        String userId;
+        String password = "password"; // Default password
+    
+        // Generate userId based on the role and the size of the respective list
         if (role == Role.DOCTOR) {
+            userId = "D" + String.format("%03d", doctors.size() + 1); // Example: D001, D002, etc.
             Doctor doctor = new Doctor(userId, password, gender, name, role, age);
             doctors.add(doctor);
-        }
-        else if (role == Role.ADMINISTRATOR) {
+            System.out.println("Doctor added with User ID: " + userId);
+        } else if (role == Role.ADMINISTRATOR) {
+            userId = "A" + String.format("%03d", administrators.size() + 1); // Example: A001, A002, etc.
             Administrator administrator = new Administrator(userId, password, gender, name, role, age);
             administrators.add(administrator);
-        }
-        else if (role == Role.PHARMACIST) {
+            System.out.println("Administrator added with User ID: " + userId);
+        } else if (role == Role.PHARMACIST) {
+            userId = "P" + String.format("%03d", pharmacists.size() + 1); // Example: P001, P002, etc.
             Pharmacist pharmacist = new Pharmacist(userId, password, gender, name, role, age);
             pharmacists.add(pharmacist);
+            System.out.println("Pharmacist added with User ID: " + userId);
+        } else {
+            System.out.println("Invalid role specified.");
         }
     }
 
@@ -65,18 +69,39 @@ public class Administrator extends User {
     }
 
     public void removeStaff(String userId) {
-        // Implementation for removing a staff member (not working)
-        if (doctors.removeIf(d -> d.getUserId().equals(userId)) ||
-            pharmacists.removeIf(p -> p.getUserId().equals(userId))) {
-            System.out.println("Staff removed successfully.");
-        } else {
-            System.out.println("Staff not found.");
+        //implementation for removing a staff member (done)
+        // Check if the userId belongs to a Doctor
+        if (userId.startsWith("D")) {
+            if (doctors.removeIf(doctor -> doctor.getUserId().equals(userId))) {
+                System.out.println("Doctor with User ID " + userId + " removed successfully.");
+                return;
+            }
         }
+
+        // Check if the userId belongs to an Administrator
+        else if (userId.startsWith("A")) {
+            if (administrators.removeIf(admin -> admin.getUserId().equals(userId))) {
+                System.out.println("Administrator with User ID " + userId + " removed successfully.");
+                return;
+            }
+        }
+
+        // Check if the userId belongs to a Pharmacist
+        else if (userId.startsWith("P")) {
+            if (pharmacists.removeIf(pharmacist -> pharmacist.getUserId().equals(userId))) {
+                System.out.println("Pharmacist with User ID " + userId + " removed successfully.");
+                return;
+            }
+        }
+
+        // If not found in any list
+        System.out.println("Staff member with User ID " + userId + " not found.");
     }
 
 
+
     public void viewAppointments() {
-        // Implementation for displaying the list of appointments
+        // Implementation for displaying the list of appointments (done but haven't try)
         System.out.println("\nList of Appointments:");
 
         // Iterate through each appointment for the patient
@@ -107,22 +132,24 @@ public class Administrator extends User {
     }
 
     public void viewInventory() {
+        //implementation for displaying the list of medications (done)
         for (Medication medication : medications) {
-            System.out.println("Medication: " + medication.getMedicationName()
+            System.out.println("Medication ID: " + medication.getMedicationId()
+                    + "Medication: " + medication.getMedicationName()
                     + ", Stock Level: " + medication.getStockLevel()
                     + ", Low Stock Level: " + medication.getLowStockLevel());
         }
     }
 
     public void addMedication(int medicationId, String name, int stockLevel, int lowStockLevel) {
-        // Add a New Medication
+        // Add a New Medication (done)
         Medication newMedication = new Medication(medicationId, lowStockLevel, stockLevel, name);
         medications.add(newMedication);
         System.out.println("Medication " + name + " added successfully.");
     }
 
     public void removeMedication(int medicationId) {
-        // Remove a Medication
+        // Remove a Medication (done)
         boolean found = medications.removeIf(med -> med.getMedicationId() == medicationId);
         if (found) {
             System.out.println("Medication removed successfully.");
@@ -131,23 +158,12 @@ public class Administrator extends User {
         }
     }
 
-    public void updateMedicationStock(String medicationName, int newStockLevel) {
-        for (Medication medication : medications) {
-            if (medication.getMedicationName().equalsIgnoreCase(medicationName)) {
-                medication.updateStock(medication.getLowStockLevel() + newStockLevel);
-                System.out.println("Updated stock for " + medicationName);
-                return;
-            }
-        }
-        System.out.println("Medication not found.");
-    }
-
     public void updateLowStockLevel(int medicationId, int newStockLevel) {
-        // implementation for updating low stock level
+        // implementation for updating low stock level (done)
         for (Medication medication : medications) {
             if (medication.getMedicationId() == medicationId) {
-                medication.updateLowStockLevel(medication.getLowStockLevel() + newStockLevel);
-                System.out.println("Low stock alert level for " + medication.getMedicationName() + " updated to " + newLowStockLevel);
+                medication.updateLowStockLevel(newStockLevel);
+                System.out.println("Low stock alert level for " + medication.getMedicationName() + " updated to " + newStockLevel);
                 return;
             }
         }
@@ -156,6 +172,7 @@ public class Administrator extends User {
 
 
     public void ApproveReplenishmentRequests(int adminId) {
+        //implementation for approving replenishment requests
         System.out.println("\n--- Replenishment Requests ---");
 
         for (ReplenishmentRequest request : ReplenishmentRequest.replenishmentRequests) {
@@ -182,6 +199,7 @@ public class Administrator extends User {
                     medication.updateStock(medication.getStockLevel() + request.getStockLevel());
                     request.approveReplenishmentRequest(adminId);
                     System.out.println("Replenishment approved for " + request.getMedicationName());
+                    System.out.println("Stock updated for " + request.getMedicationName() + " to " + medication.getStockLevel());
                 } else {
                     System.out.println("Medication not found in inventory.");
                 }
@@ -213,7 +231,7 @@ public class Administrator extends User {
             System.out.println("6.View Medication Inventory");
             System.out.println("7.Add Medication");
             System.out.println("8.Remove Medication");
-            System.out.println("9.Update Medication stock");
+            System.out.println("9.Update Medication Low Stock Level Alert");
             System.out.println("10.Approve Replenishment Request");
             System.out.println("11.Logout");
             System.out.print("Please select an option: ");
@@ -229,12 +247,6 @@ public class Administrator extends User {
                 case 2:
                     // Add Staff
                     Scanner scanner = new Scanner(System.in);
-
-                    System.out.print("Enter User ID: ");
-                    String userId = scanner.nextLine();
-
-                    System.out.print("Enter Password: ");
-                    String password = scanner.nextLine();
 
                     System.out.print("Enter Name: ");
                     String name = scanner.nextLine();
@@ -262,7 +274,7 @@ public class Administrator extends User {
                     System.out.print("Enter Age: ");
                     int age = scanner.nextInt();
 
-                    addStaff(userId, password, gender, name, role, age);
+                    addStaff(gender, name, role, age);
                     break;
 
                 case 3:
@@ -309,12 +321,12 @@ public class Administrator extends User {
                     break;
 
                 case 9:
-                    // Update Medication stock
-                    System.out.print("Enter Medication Name to update stock: ");
-                    String updateMedName = sc.nextLine();
-                    System.out.print("Enter new stock level: ");
-                    int newStockLevel = sc.nextInt();
-                    updateMedicationStock(updateMedName, newStockLevel);
+                    // Update Medication Low Stock Level Alert
+                    System.out.print("Enter Medication ID to update low stock level alert: ");
+                    int medicationID = sc.nextInt();
+                    System.out.print("Enter new stock level alert: ");
+                    int newStockLevelalert = sc.nextInt();
+                    updateLowStockLevel(medicationID, newStockLevelalert); 
                     break;
 
                 case 10:

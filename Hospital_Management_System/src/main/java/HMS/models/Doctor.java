@@ -53,7 +53,7 @@ public class Doctor extends User{
         System.out.println("Personal Schedule:");
         for (Patient patient : patients){
             for (Appointment appointment : patient.getAppointments()) {
-                if(appointment.getDoctorID() == super.getUserId()){
+                if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
                     System.out.println("Appointment " + appointment.getAppointmentID());
                     System.out.println("Patient: " + patient.getName());
                     System.out.println("Date and Time: " + appointment.getDateTime().toString());
@@ -128,8 +128,8 @@ public class Doctor extends User{
 
     @Override
     public String toString() {
-        return String.format("User ID: %s, Name: %s, Gender: %s, Role: %s",
-                super.getUserId(), super.getName(), super.getGender(), super.getRole());
+        return String.format("User ID: %s, Name: %s, Gender: %s, Role: %s, Age: %s",
+                super.getUserId(), super.getName(), super.getGender(), super.getRole(), age);
     }
 
     public void showMenu() {
@@ -155,11 +155,9 @@ public class Doctor extends User{
                     // View Patient Medical Records
                     for (Patient patient : patients) {
                         for (Appointment appointment : patient.getAppointments()) {
-                            if (appointment.getDoctorID() == super.getUserId()) {
-                                System.out.println(patient);
-                                for (Appointment appointment1 : patient.getAppointments()) {
-                                    System.out.println(appointment1);
-                                }
+                            if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
+                                patient.viewParticular();
+                                patient.viewCompletedAppointments();
                                 System.out.println();
                                 break;
                             }
@@ -216,7 +214,7 @@ public class Doctor extends User{
                     System.out.println("\nPending appointments: ");
                     for (Patient patient : patients) {
                         for (Appointment appointment : patient.getAppointments()) {
-                            if(appointment.getDoctorID() == super.getUserId()){
+                            if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
                                 if(appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
                                     System.out.println(appointment);
                                     System.out.println();
@@ -265,7 +263,7 @@ public class Doctor extends User{
                     System.out.println("\n Appointments:");
                     for (Patient patient : patients){
                         for (Appointment appointment : patient.getAppointments()) {
-                            if(appointment.getDoctorID() == super.getUserId()){
+                            if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
                                 System.out.println(appointment);
                                 System.out.println();
                             }

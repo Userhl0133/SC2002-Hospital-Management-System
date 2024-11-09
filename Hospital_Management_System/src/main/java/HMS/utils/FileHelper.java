@@ -43,7 +43,7 @@ public class FileHelper {
                 Role role = Role.PATIENT;
 
                 // Create Patient object
-                Patient patient = new Patient(id, password, gender, name, role, dob.atStartOfDay(), bloodType, contactInfo);
+                Patient patient = new Patient(id, password, gender, name, role, dob, bloodType, contactInfo);
                 patients.add(patient);
             }
         } catch (IOException e) {

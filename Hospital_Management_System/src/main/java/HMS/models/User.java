@@ -41,7 +41,7 @@ public abstract class User {
     public static User login(List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter User ID: ");
+        System.out.print("Enter Hospital ID: ");
         String inputUserId = scanner.nextLine();
 
         // Search for the user in all lists
@@ -78,7 +78,7 @@ public abstract class User {
     }
 
 // Method to find a user by userId from different lists
-    private static  User findUserById(String userId, List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
+    public static  User findUserById(String userId, List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
         for (Patient patient : patients) {
             if (patient.getUserId().equals(userId)) {
                 return patient;

@@ -15,11 +15,31 @@ public class Doctor extends User{
     private Map<Integer, List<Integer>> availability;
     private int age;
 
+    public Doctor() {
+    }
+
     // Constructor
     public Doctor(String userId, String password, Gender gender, String name, Role role, int age) {
         super(userId, password, gender, name, role);  // Passing all required parameters to User
         this.availability = new HashMap<>();
         this.age = age;
+    }
+
+    public Doctor getDoctorById(String doctorId) {
+        for (Doctor doctor : doctors) {
+            if (doctor.getUserId().equals(doctorId)) {
+                return doctor;
+            }
+        }
+        return null;
+    }
+
+    public String getName() {
+        return super.getName();
+    }
+
+    public Map<Integer, List<Integer>> getAvailability() {
+        return availability;
     }
 
     // Methods
@@ -100,7 +120,9 @@ public class Doctor extends User{
         int choice = 0;
         Scanner sc = new Scanner(System.in);
         while (choice != 8) {
+            System.out.println("=====================");
             System.out.println("-----Doctor Menu-----");
+            System.out.println("=====================");
             System.out.println("1.View Patient Medical Records");
             System.out.println("2.Update Patient Medical Records");
             System.out.println("3.View Personal Schedule");

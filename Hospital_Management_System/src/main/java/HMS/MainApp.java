@@ -1,20 +1,16 @@
 package HMS;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import HMS.enums.Gender;
-import HMS.enums.Role;
-import HMS.models.User;
 import HMS.models.Administrator;
-import HMS.models.Patient;
-import HMS.models.Pharmacist;
+import HMS.models.Appointment;
 import HMS.models.Doctor;
 import HMS.models.Medication;
-
+import HMS.models.Patient;
+import HMS.models.Pharmacist;
+import HMS.models.ReplenishmentRequest;
+import HMS.models.User;
 import HMS.utils.FileHelper;
 
 public class MainApp {
@@ -24,6 +20,8 @@ public class MainApp {
     public static List<Pharmacist> pharmacists = new ArrayList<>();
     public static List<Administrator> administrators = new ArrayList<>();
     public static List<Medication> medications = new ArrayList<>();
+    public static List<Appointment> appointments = new ArrayList<>();
+    public static List<ReplenishmentRequest> replenishmentRequests = new ArrayList<>();
 
     public static void main(String[] args) {
         initialiseData();
@@ -47,12 +45,15 @@ public class MainApp {
 
         // Menu
         while (true) {
+            System.out.println("====================================");
             System.out.println("-----Hospital Management System-----");
+            System.out.println("====================================");
             System.out.println("Please log in");
 
             User validatedUser = User.login(patients, doctors, pharmacists, administrators);
             validatedUser.showMenu();
         }
+
     }
 
     // To load data from CSV files

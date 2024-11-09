@@ -1,10 +1,14 @@
 package HMS.models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.xml.crypto.Data;
 
 import HMS.enums.AppointmentStatus;
 
 public class Appointment {
+
     private static int nextAppointmentID = 1;
     private int appointmentID;
     private String patientID;
@@ -66,5 +70,19 @@ public class Appointment {
 
     public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord appointmentOutcomeRecord) {
         this.appointmentOutcomeRecord = appointmentOutcomeRecord;
+    }
+
+    public LocalDateTime getAppointmentDateTime() {
+        return this.dateTime;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = dateTime.format(formatter);
+        Doctor doctor = new Doctor();
+        doctor.getDoctorById(doctorID);
+        return String.format("Appointment ID: %d\nDoctor: %s %s\nStatus: %s\nDate & Time: %s\nAppointment Outcome: %s",
+                appointmentID, doctorID, doctor.getName() , appointmentStatus, formattedDateTime, appointmentOutcomeRecord);
     }
 }

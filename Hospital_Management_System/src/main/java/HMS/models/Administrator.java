@@ -31,6 +31,7 @@ public class Administrator extends User {
     // Methods
     public void viewStaff() {
         // Implementation for displaying the list of staff members (done)
+        System.out.println("List of Staff:");
         for (Administrator administrator : administrators) {
             System.out.println(administrator);
         }
@@ -132,7 +133,7 @@ public class Administrator extends User {
             // Check if the appointment is completed and has an outcome record
             if (appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED && appointment.getAppointmentOutcomeRecord() != null) {
                 AppointmentOutcomeRecord outcome = appointment.getAppointmentOutcomeRecord();
-
+                // wait for the System.out.println(outcome);
                 System.out.println("---- Appointment Outcome Record ----");
                 System.out.println("Service Type: " + outcome.getServiceType());
                 System.out.println("Consultation Notes: " + outcome.getConsultationNotes());
@@ -184,12 +185,7 @@ public class Administrator extends User {
     public void viewAllReplenishmentRequests() {
         System.out.println("---- Viewing All Replenishment Requests ----");
         for (ReplenishmentRequest request : replenishmentRequests) {
-            System.out.println("Request ID: " + request.getRequestID() +
-                    " | Pharmacist ID: " + request.getPharmacistID() +
-                    " | Medication: " + request.getMedicationName() +
-                    " | Requested Quantity: " + request.getQuantity() +
-                    " | Current Stock Level: " + request.getStockLevel() +
-                    " | Status: " + request.getStatus());
+            System.out.print(request);
         }
     }
 
@@ -203,12 +199,7 @@ public class Administrator extends User {
         boolean hasPendingRequests = false;
         for (ReplenishmentRequest request : replenishmentRequests) {
             if (request.getStatus() == ReplenishmentStatus.PENDING) {
-                System.out.println("\nRequest ID: " + request.getRequestID() +
-                        "| Pharmacist ID: " + request.getPharmacistID() +
-                        "| Medication: " + request.getMedicationName() +
-                        "| Requested Quantity: " + request.getQuantity() +
-                        "| Current Stock Level: " + request.getStockLevel() +
-                        "| Status: " + request.getStatus());
+                System.out.println(request);
                 hasPendingRequests = true;
             }
         }
@@ -283,7 +274,7 @@ public class Administrator extends User {
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
-        while (choice != 11) {
+        while (choice != 12) {
             System.out.println("============================");
             System.out.println("-----Administrator Menu-----");
             System.out.println("============================");
@@ -296,15 +287,15 @@ public class Administrator extends User {
             System.out.println("7.Add Medication");
             System.out.println("8.Remove Medication");
             System.out.println("9.Update Medication Low Stock Level Alert");
-            System.out.println("10.Approve Replenishment Request");
-            System.out.println("11.Logout");
+            System.out.println("10.View All Replenishment Request"); // change
+            System.out.println("11.Approve Replenishment Request"); // change
+            System.out.println("12.Logout");
             System.out.print("Please select an option: ");
             choice = sc.nextInt();
             sc.nextLine();
             switch (choice) {
                 case 1:
                     // View Staff
-                    System.out.println("List of Staff:");
                     viewStaff();
                     break;
 
@@ -339,6 +330,7 @@ public class Administrator extends User {
                     int age = scanner.nextInt();
 
                     addStaff(gender, name, role, age);
+                    viewStaff();
                     break;
 
                     case 3:
@@ -357,15 +349,18 @@ public class Administrator extends User {
                         updateStaff(staffToUpdate);
                     } else {
                         System.out.println("Staff member with User ID " + userIdToUpdate + " not found.");
-                    }                    
+                    }       
+                    viewStaff();             
                     
                     break;
 
                 case 4:
                     // Remove Staff
+                    viewStaff();
                     System.out.print("Enter User ID to remove: ");
                     String removeUserId = sc.nextLine();
                     removeStaff(removeUserId);
+                    viewStaff();
                     break;
 
                 case 5:
@@ -387,22 +382,27 @@ public class Administrator extends User {
                     System.out.print("Enter Low Stock Level Alert: ");
                     int lowStockLevel = sc.nextInt();
                     addMedication(medName, stockLevel, lowStockLevel);
+                    Medication.viewInventory();
                     break;
 
                 case 8:
                     // Remove Medication
+                    Medication.viewInventory();
                     System.out.print("Enter Medication ID to remove: ");
                     int removeMedId = sc.nextInt();
                     removeMedication(removeMedId);
+                    Medication.viewInventory();
                     break;
 
                 case 9:
                     // Update Medication Low Stock Level Alert
+                    Medication.viewInventory();
                     System.out.print("Enter Medication ID to update low stock level alert: ");
                     int medicationID = sc.nextInt();
                     System.out.print("Enter new stock level alert: ");
                     int newStockLevelalert = sc.nextInt();
                     updateLowStockLevel(medicationID, newStockLevelalert); 
+                    Medication.viewInventory();
                     break;
 
                 case 10:

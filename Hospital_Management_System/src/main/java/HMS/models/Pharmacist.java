@@ -1,9 +1,12 @@
 package HMS.models;
 
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import HMS.MainApp;  // Access to global variables in MainApp
 import static HMS.MainApp.medications;
+import HMS.enums.AppointmentStatus;
 import HMS.enums.Gender;
 import HMS.enums.ReplenishmentStatus;
 import HMS.enums.Role; // Added import for ReplenishmentStatus
@@ -25,33 +28,31 @@ public class Pharmacist extends User {
                 super.getUserId(), super.getName(), super.getGender(), super.getRole(), age);
     }
 
-    // Method to view appointment outcome record
-    public void viewAppointmentOutcomeRecord() {
-        Scanner sc = new Scanner(System.in);
-        
-        System.out.print("Enter the Appointment ID to view outcome record: ");
-        int appointmentId = sc.nextInt();
-        sc.nextLine();  // Clear the buffer
-        
-        // Find the appointment by ID
-        Appointment appointment = MainApp.appointments.stream()
-                .filter(a -> a.getAppointmentID() == appointmentId)
-                .findFirst()
-                .orElse(null);
-        
-        if (appointment == null) {
-            System.out.println("Appointment not found.");
+    public void viewCompletedAppointmentOutcomeRecords() {
+        // Get all appointments with status COMPLETED
+        List<Appointment> completedAppointments = MainApp.appointments.stream()
+                .filter(a -> a.getAppointmentStatus() == AppointmentStatus.COMPLETED)
+                .collect(Collectors.toList());
+
+        if (completedAppointments.isEmpty()) {
+            System.out.println("No completed appointments found.");
             return;
         }
-        
-        // Check if the appointment has an outcome record
-        AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
-        
-        if (outcomeRecord != null) {
-            System.out.println("Appointment Outcome Record: ");
-            System.out.println(outcomeRecord);
-        } else {
-            System.out.println("No outcome record available for this appointment.");
+
+        // Display outcome record for each completed appointment
+        System.out.println("\n--- Completed Appointment Outcome Records ---");
+        for (Appointment appointment : completedAppointments) {
+            AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
+            if (outcomeRecord != null) {
+                System.out.println("Appointment ID: " + appointment.getAppointmentID());
+                System.out.println("Doctor ID: " + appointment.getDoctorID());
+                System.out.println("Patient ID: " + appointment.getPatientID());
+                System.out.println("Outcome Record: " + outcomeRecord);
+                System.out.println("===============================================");
+            } else {
+                System.out.println("Appointment ID: " + appointment.getAppointmentID() + " - No outcome record available.");
+                System.out.println("===============================================");
+            }
         }
     }
 
@@ -142,7 +143,7 @@ public class Pharmacist extends User {
             switch (choice) {
                 case 1:
                     // View Appointment Outcome Record
-                    viewAppointmentOutcomeRecord();
+                    viewCompletedAppointmentOutcomeRecords();
                     break;
 
                 case 2:

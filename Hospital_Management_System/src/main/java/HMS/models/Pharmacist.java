@@ -120,7 +120,7 @@ public class Pharmacist extends User {
         // Update the replenishment status of the medication to "PENDING"
         medication.setReplenishmentStatus("PENDING");
     
-        System.out.println("Replenishment request submitted for " + medication.getMedicationName() + "by Pharmacist:" + loggedInPharmacistId + " with quantity " + quantity + ".");
+        System.out.println("Replenishment request submitted for " + medication.getMedicationName() + " by Pharmacist:" + loggedInPharmacistId + " with quantity " + quantity + ".");
     }
 
     // Show the Pharmacist Menu

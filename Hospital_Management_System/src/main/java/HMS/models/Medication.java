@@ -67,7 +67,9 @@ public class Medication {
 
     // Static method to view the inventory of all medications
     public static void viewInventory() {
-        System.out.println("\nCurrent Medication Inventory:\n");
+        System.out.println("=============================");
+        System.out.println("Current Medication Inventory:");
+        System.out.println("=============================");
         List<Medication> medications = MainApp.medications;  // Access the static list of medications in MainApp
 
         // Check if medications list is empty

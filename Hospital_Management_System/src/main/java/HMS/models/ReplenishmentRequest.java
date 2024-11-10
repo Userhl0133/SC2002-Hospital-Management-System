@@ -79,13 +79,11 @@ public class ReplenishmentRequest {
     // Updated toString method to include requestID
     @Override
     public String toString() {
-        return "ReplenishmentRequest{" +
-                "requestID=" + requestID +  // Include requestID in the output
-                ", pharmacistID='" + pharmacistID + '\'' +
-                ", medicationName='" + medicationName + '\'' +
-                ", quantity=" + quantity +
-                ", stockLevel=" + stockLevel +
-                ", status=" + status +
-                '}';
+        return  "Request ID: " + this.getRequestID() +
+        "\nPharmacist ID: " + this.getPharmacistID() +
+        "\nMedication: " + this.getMedicationName() +
+        "\nRequested Quantity: " + this.getQuantity() +
+        "\nCurrent Stock Level: " + this.getStockLevel() +
+        "\nStatus: " + this.getStatus() +'\n';
     }
 }

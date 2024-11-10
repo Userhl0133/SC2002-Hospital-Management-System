@@ -495,10 +495,11 @@ public class Patient extends User {
         System.out.println("");
     }
 
-    public void viewScheduledAppointments() {
+    public int viewScheduledAppointments() {
         System.out.println("Scheduled Appointments for " + getName() + ":");
         System.out.println("-------------------------------");
 
+        int counter = 0;
         boolean hasAppointments = false;
 
         for (Appointment appointment : appointments) {
@@ -508,22 +509,29 @@ public class Patient extends User {
 
                 System.out.println(appointment); // Assumes Appointment has a proper toString() implementation
                 hasAppointments = true;
+                counter++;
             }
         }
 
         if (!hasAppointments) {
             System.out.println("No scheduled appointments.");
+            return 0;
         }
 
         System.out.println("-------------------------------");
         System.out.println("");
+        return counter;
     }
 
     public void rescheduleAppointment(Scanner sc) {
         // This would contain logic to reschedule an appointment
         System.out.println("Rescheduling appointment for patient: " + getName());
         System.out.println("");
-        viewScheduledAppointments();
+        if(viewScheduledAppointments() == 0) {
+            System.out.println("No appointments to reschedule.");
+            System.out.println("");
+            return;
+        }
         System.out.print("Enter the appointment ID to reschedule: ");
         int appointmentID = sc.nextInt();
         sc.nextLine(); // Consume newline character

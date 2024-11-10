@@ -2,16 +2,17 @@ package HMS.models;
 
 import java.util.List;
 
+import HMS.enums.PrescriptionStatus;
 import HMS.enums.ServiceType;
 
 public class AppointmentOutcomeRecord {
     private int recordID;  // Unique ID for the record
     private ServiceType serviceType;  // Type of the medical service provided
-    private List<Medication> prescribedMedications;  // Medications prescribed during the appointment
+    private List<Prescription> prescribedMedications;  // Medications prescribed during the appointment
     private String consultationNotes;  // Notes from the consultation
 
     // Constructor to initialize all fields
-    public AppointmentOutcomeRecord(int recordID, ServiceType serviceType, List<Medication> prescribedMedications, String consultationNotes) {
+    public AppointmentOutcomeRecord(int recordID, ServiceType serviceType, List<Prescription> prescribedMedications, String consultationNotes) {
         this.recordID = recordID;
         this.serviceType = serviceType;
         this.prescribedMedications = prescribedMedications;
@@ -49,12 +50,12 @@ public class AppointmentOutcomeRecord {
     }
 
     // Getter for prescribedMedications
-    public List<Medication> getPrescribedMedications() {
+    public List<Prescription> getPrescribedMedications() {
         return prescribedMedications;
     }
 
     // Setter for prescribedMedications
-    public void setPrescribedMedications(List<Medication> prescribedMedications) {
+    public void setPrescribedMedications(List<Prescription> prescribedMedications) {
         if (prescribedMedications != null) {
             this.prescribedMedications = prescribedMedications;
         } else {
@@ -74,8 +75,8 @@ public class AppointmentOutcomeRecord {
 
         if (prescribedMedications != null && !prescribedMedications.isEmpty()) {
             sb.append("Prescribed Medications: \n");
-            for (Medication med : prescribedMedications) {
-                sb.append(" - ").append(med.getMedicationName()).append(" (Stock Level: ").append(med.getStockLevel()).append(")\n");
+            for (Prescription prescription : prescribedMedications) {
+                sb.append(" - ").append(prescription.getMedication().getMedicationName()).append(" (Stock Level: ").append(prescription.getMedication().getStockLevel()).append(")\n");
             }
         } else {
             sb.append("No medications prescribed.\n");

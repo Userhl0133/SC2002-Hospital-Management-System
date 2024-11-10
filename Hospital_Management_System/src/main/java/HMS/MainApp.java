@@ -47,7 +47,7 @@ public class MainApp {
         patients = FileHelper.getPatientsData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Patient_Data.csv");
         List<Object> staff = FileHelper.getStaffData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Staff_Data.csv");
         medications = FileHelper.getMedicationsData(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Medicine_Data.csv");
-//
+
 //        patients = FileHelper.getPatientsData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Patient_Data.csv");
 //        List<Object> staff = FileHelper.getStaffData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Staff_Data.csv");
 //        medications = FileHelper.getMedicationsData(System.getProperty("user.dir") + "/src/main/java/HMS/data/Medicine_Data.csv");

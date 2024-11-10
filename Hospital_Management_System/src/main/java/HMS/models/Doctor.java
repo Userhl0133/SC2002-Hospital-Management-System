@@ -293,7 +293,7 @@ public class Doctor extends User{
                                     int i = 1;
                                     System.out.println("Enter service type [1/2/3]:  ");
                                     for (ServiceType serviceType : ServiceType.values()) {
-                                        System.out.println("[" + i + "] " + serviceType);
+                                        System.out.println("[" + i++ + "] " + serviceType);
                                     }
                                     int serviceTypeIndex = sc.nextInt();
                                     ServiceType serviceType = ServiceType.values()[serviceTypeIndex];
@@ -302,21 +302,23 @@ public class Doctor extends User{
                                     // Prescribed medications
                                     i = 1;
                                     for (Medication medication : medications) {
-                                        System.out.println("[" + i + "] " + medication.getMedicationName());
+                                        System.out.println("[" + i++ + "] " + medication.getMedicationName());
                                     }
+
                                     System.out.println("Enter prescribed medication(s), separated by comma [eg. 1,2,3]:  ");
-                                    String inputMedications = sc.nextLine();
+                                    String inputMedications = sc.next();
                                     String[] medicationsIndex = inputMedications.split(",");
-                                    List<Medication> medicationsList = new ArrayList<>();
+                                    List<Prescription> prescriptionList = new ArrayList<>();
                                     for (String index : medicationsIndex) {
-                                        medicationsList.add(medications.get(Integer.parseInt(index)));
+                                        Prescription prescription = new Prescription(medications.get(Integer.parseInt(index)), PrescriptionStatus.PENDING);
+                                        prescriptionList.add(prescription);
                                     }
 
                                     // Consultation Notes
                                     System.out.println("Enter consultation notes: ");
-                                    String inputConsultationNotes = sc.nextLine();
+                                    String inputConsultationNotes = sc.next();
 
-                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, medicationsList, inputConsultationNotes);
+                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList, inputConsultationNotes);
                                     appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
                                     appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
                                     notFound = false;

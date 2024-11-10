@@ -141,8 +141,8 @@ public class Administrator extends User {
                 // Display prescribed medications if any
                 if (outcome.getPrescribedMedications() != null && !outcome.getPrescribedMedications().isEmpty()) {
                     System.out.println("Prescribed Medications: ");
-                    for (Medication med : outcome.getPrescribedMedications()) {
-                        System.out.println("- " + med.getMedicationName());
+                    for (Prescription prescription : outcome.getPrescribedMedications()) {
+                        System.out.println("- " + prescription.getMedication().getMedicationName());
                     }
                 } else {
                     System.out.println("No medications prescribed.");

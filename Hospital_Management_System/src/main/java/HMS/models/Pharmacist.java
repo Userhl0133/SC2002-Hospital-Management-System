@@ -1,6 +1,7 @@
 package HMS.models;
 
 import java.util.Scanner;
+
 import HMS.MainApp;  // Access to global variables in MainApp
 import static HMS.MainApp.medications;
 import HMS.enums.Gender;
@@ -119,7 +120,7 @@ public class Pharmacist extends User {
         // Update the replenishment status of the medication to "PENDING"
         medication.setReplenishmentStatus("PENDING");
     
-        System.out.println("Replenishment request submitted for " + medication.getMedicationName() + " with quantity " + quantity + ".");
+        System.out.println("Replenishment request submitted for " + medication.getMedicationName() + "by Pharmacist:" + loggedInPharmacistId + " with quantity " + quantity + ".");
     }
 
     // Show the Pharmacist Menu
@@ -127,9 +128,9 @@ public class Pharmacist extends User {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
         while (choice != 5) { // Option 5 will be the logout option
-            System.out.println("============================");
+            System.out.println("=============================");
             System.out.println("----- Pharmacist Menu -------");
-            System.out.println("============================");
+            System.out.println("=============================");
             System.out.println("1. View Appointment Outcome Record");
             System.out.println("2. Update Prescription Status");
             System.out.println("3. View Medication Inventory");

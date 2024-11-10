@@ -1,8 +1,8 @@
+
 package HMS.models;
 
 import java.util.List;
 
-import HMS.enums.PrescriptionStatus;
 import HMS.enums.ServiceType;
 
 public class AppointmentOutcomeRecord {
@@ -67,21 +67,17 @@ public class AppointmentOutcomeRecord {
     // Override toString() to provide a meaningful representation of AppointmentOutcomeRecord
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Appointment Outcome Record: \n");
-        sb.append("Record ID: ").append(recordID).append("\n");
-        sb.append("Service Type: ").append(serviceType).append("\n");
-        sb.append("Consultation Notes: ").append(consultationNotes).append("\n");
+        StringBuilder builder = new StringBuilder();
+        builder.append("Service Type: ").append(serviceType).append("\n");
+        builder.append("Consultation Notes: ").append(consultationNotes).append("\n");
+        builder.append("Prescribed Medications:\n");
 
-        if (prescribedMedications != null && !prescribedMedications.isEmpty()) {
-            sb.append("Prescribed Medications: \n");
-            for (Prescription prescription : prescribedMedications) {
-                sb.append(" - ").append(prescription.getMedication().getMedicationName()).append(" (Stock Level: ").append(prescription.getMedication().getStockLevel()).append(")\n");
-            }
-        } else {
-            sb.append("No medications prescribed.\n");
+        // Loop through medications and print without stock level
+        for (Prescription prescription : prescribedMedications) {
+            builder.append(" - ").append(prescription.getMedication().getMedicationName()) // Assuming the Medication class has `getMedicationName()`
+                   .append(" (Status: ").append(prescription.getStatus()).append(")\n"); // Display status of the prescription
         }
 
-        return sb.toString();
+        return builder.toString();
     }
 }

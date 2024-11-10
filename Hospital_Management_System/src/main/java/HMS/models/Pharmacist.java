@@ -37,19 +37,18 @@ public class Pharmacist extends User {
                 .collect(Collectors.toList());
     
         if (completedAppointments.isEmpty()) {
-            System.out.println("No completed appointments found.\n");
+            System.out.println("No completed appointments found.");
         } else {
             completedAppointments.forEach(appointment -> {
                 System.out.println("Appointment ID: " + appointment.getAppointmentID());
                 System.out.println("Doctor ID: " + appointment.getDoctorID());
                 System.out.println("Patient ID: " + appointment.getPatientID());
-                System.out.println("Outcome Record: " + appointment.getAppointmentOutcomeRecord());
-                System.out.println("===============================");
+                System.out.println( appointment.getAppointmentOutcomeRecord());
             });
         }
     
-        // After displaying records, return to the menu
-        return;
+        // Ensure the program does not loop over and over again. Simply return to the menu after displaying
+        return;  // This return is important to stop further execution
     }
     
 

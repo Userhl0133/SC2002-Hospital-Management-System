@@ -181,8 +181,8 @@ public class Administrator extends User {
         }
         System.out.println("Medication with ID " + medicationId + " not found.");
     }
-    public void viewReplenishmentRequests() {
-        System.out.println("---- Viewing Replenishment Requests ----");
+    public void viewAllReplenishmentRequests() {
+        System.out.println("---- Viewing All Replenishment Requests ----");
         for (ReplenishmentRequest request : replenishmentRequests) {
             System.out.println("Request ID: " + request.getRequestID() +
                     " | Pharmacist ID: " + request.getPharmacistID() +
@@ -412,7 +412,7 @@ public class Administrator extends User {
                         break;
                     }
                     // Display the list of replenishment requests
-                    viewReplenishmentRequests();
+                    viewAllReplenishmentRequests();
                     // Ask if the user wants to view the pending requests
                     System.out.print("Do you want to view the pending replenishment requests? (yes/no): ");
                     String viewDecision = sc.nextLine().toLowerCase();

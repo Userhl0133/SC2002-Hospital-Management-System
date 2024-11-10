@@ -53,12 +53,12 @@ public class Administrator extends User {
             userId = "D" + String.format("%03d", doctors.size() + 1); // Example: D001, D002, etc.
             Doctor doctor = new Doctor(userId, password, gender, name, role, age);
             doctors.add(doctor);
-            System.out.println("Doctor added with User ID: " + userId);
+            System.out.println("Doctor added with Hospital ID: " + userId);
         } else if (role == Role.PHARMACIST) {
             userId = "P" + String.format("%03d", pharmacists.size() + 1); // Example: P001, P002, etc.
             Pharmacist pharmacist = new Pharmacist(userId, password, gender, name, role, age);
             pharmacists.add(pharmacist);
-            System.out.println("Pharmacist added with User ID: " + userId);
+            System.out.println("Pharmacist added with Hospital ID: " + userId);
         } else {
             System.out.println("Invalid role specified.");
         }
@@ -88,7 +88,7 @@ public class Administrator extends User {
     
         System.out.println("---- Staff updated successfully! ----");
         System.out.println("Updated Details:");
-        System.out.println("User ID: " + staff.getUserId());
+        System.out.println("Hospital ID: " + staff.getUserId());
         System.out.println("Name: " + staff.getName());
         System.out.println("Role: " + staff.getRole());
     }
@@ -98,7 +98,7 @@ public class Administrator extends User {
         // Check if the userId belongs to a Doctor
         if (userId.startsWith("D")) {
             if (doctors.removeIf(doctor -> doctor.getUserId().equals(userId))) {
-                System.out.println("Doctor with User ID " + userId + " removed successfully.");
+                System.out.println("Doctor with Hospital ID " + userId + " removed successfully.");
                 return;
             }
         }
@@ -106,13 +106,13 @@ public class Administrator extends User {
         // Check if the userId belongs to a Pharmacist
         else if (userId.startsWith("P")) {
             if (pharmacists.removeIf(pharmacist -> pharmacist.getUserId().equals(userId))) {
-                System.out.println("Pharmacist with User ID " + userId + " removed successfully.");
+                System.out.println("Pharmacist with Hospital ID " + userId + " removed successfully.");
                 return;
             }
         }
 
         // If not found in any list
-        System.out.println("Staff member with User ID " + userId + " not found.");
+        System.out.println("Staff member with Hospital ID " + userId + " not found.");
     }
 
 
@@ -335,7 +335,7 @@ public class Administrator extends User {
 
                     case 3:
                     // Update Staff
-                    System.out.print("Enter the User ID of the staff member to update: ");
+                    System.out.print("Enter the Hospital ID of the staff member to update: ");
                     String userIdToUpdate = sc.nextLine();
                 
                     // Use the findUserById method to search for the staff member
@@ -348,7 +348,7 @@ public class Administrator extends User {
                         // Call updateStaff method to change details
                         updateStaff(staffToUpdate);
                     } else {
-                        System.out.println("Staff member with User ID " + userIdToUpdate + " not found.");
+                        System.out.println("Staff member with Hospital ID " + userIdToUpdate + " not found.");
                     }       
                     viewStaff();             
                     
@@ -357,7 +357,7 @@ public class Administrator extends User {
                 case 4:
                     // Remove Staff
                     viewStaff();
-                    System.out.print("Enter User ID to remove: ");
+                    System.out.print("Enter Hospital ID to remove: ");
                     String removeUserId = sc.nextLine();
                     removeStaff(removeUserId);
                     viewStaff();

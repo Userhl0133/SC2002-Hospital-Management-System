@@ -29,32 +29,29 @@ public class Pharmacist extends User {
     }
 
     public void viewCompletedAppointmentOutcomeRecords() {
-        // Get all appointments with status COMPLETED
+        System.out.println("\n--- Completed Appointment Outcome Records ---");
+        
+        // Filter and display completed appointments (i.e., those with status 'COMPLETED')
         List<Appointment> completedAppointments = MainApp.appointments.stream()
                 .filter(a -> a.getAppointmentStatus() == AppointmentStatus.COMPLETED)
                 .collect(Collectors.toList());
-
+    
         if (completedAppointments.isEmpty()) {
-            System.out.println("No completed appointments found.");
-            return;
-        }
-
-        // Display outcome record for each completed appointment
-        System.out.println("\n--- Completed Appointment Outcome Records ---");
-        for (Appointment appointment : completedAppointments) {
-            AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
-            if (outcomeRecord != null) {
+            System.out.println("No completed appointments found.\n");
+        } else {
+            completedAppointments.forEach(appointment -> {
                 System.out.println("Appointment ID: " + appointment.getAppointmentID());
                 System.out.println("Doctor ID: " + appointment.getDoctorID());
                 System.out.println("Patient ID: " + appointment.getPatientID());
-                System.out.println("Outcome Record: " + outcomeRecord);
-                System.out.println("===============================================");
-            } else {
-                System.out.println("Appointment ID: " + appointment.getAppointmentID() + " - No outcome record available.");
-                System.out.println("===============================================");
-            }
+                System.out.println("Outcome Record: " + appointment.getAppointmentOutcomeRecord());
+                System.out.println("===============================");
+            });
         }
+    
+        // After displaying records, return to the menu
+        return;
     }
+    
 
     // Update Prescription Status (Placeholder method)
     public void updatePrescriptionStatus() {

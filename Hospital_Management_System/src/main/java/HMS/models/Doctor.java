@@ -64,6 +64,14 @@ public class Doctor extends User{
         }
 
         //TODO: personal availability
+        System.out.println("Unavailable timeslots:");
+        for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
+            int date = entry.getKey();
+            for (Integer time : entry.getValue()) {
+                System.out.printf("%d %04d - %04d", date, (time+8)*100, (time+9)*100);
+            }
+        }
+        System.out.println();
     }
 
     public void updatePatientParticular() {
@@ -200,10 +208,12 @@ public class Doctor extends User{
                     }
 
                     if (setAvailability(date, time)) {
-                        System.out.println(date + " " + (time+8)*100 + " set as unavailable");
+                        System.out.printf("%d %04d set as unavailable\n", date, (time+8)*100);
+//                        System.out.println(date + " " + (time+8)*100 + " set as unavailable");
                     }
                     else {
-                        System.out.println(date + " " + (time+8)*100 + " set as available");
+                        System.out.printf("%d %04d set as available\n", date, (time+8)*100);
+//                        System.out.println(date + " " + (time+8)*100 + " set as available");
                     }
                     break;
 
@@ -238,7 +248,7 @@ public class Doctor extends User{
                                         notFound = false;
                                     }
                                     else if (answer.equalsIgnoreCase("N")) {
-                                        appointment.setAppointmentStatus(AppointmentStatus.DECLINED);
+                                        appointment.setAppointmentStatus(AppointmentStatus.CANCELLED);
                                         System.out.println("Appointment " + id + " is declined.\n");
                                         notFound = false;
                                     }
@@ -264,6 +274,7 @@ public class Doctor extends User{
                     for (Patient patient : patients){
                         for (Appointment appointment : patient.getAppointments()) {
                             if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
+
                                 System.out.println(appointment);
                                 System.out.println();
                             }
@@ -307,6 +318,7 @@ public class Doctor extends User{
 
                                     AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, medicationsList, inputConsultationNotes);
                                     appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
+                                    appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
                                     notFound = false;
 
                                 }

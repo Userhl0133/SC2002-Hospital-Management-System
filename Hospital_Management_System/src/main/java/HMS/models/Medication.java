@@ -76,7 +76,6 @@ public class Medication {
             return;
         }
 
-        // Iterate over medications and display the details
         for (Medication medication : medications) {
             System.out.println("Medication ID: " + medication.getMedicationId());
             System.out.println("Medication Name: " + medication.getMedicationName());

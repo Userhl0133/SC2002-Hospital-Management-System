@@ -4,6 +4,7 @@ import HMS.enums.ReplenishmentStatus;
 
 public class ReplenishmentRequest {
 
+    private int requestID; // Added requestID field
     private String pharmacistID;
     private String medicationName;
     private int quantity;
@@ -11,13 +12,19 @@ public class ReplenishmentRequest {
     private ReplenishmentStatus status;
     private String administratorID;
 
-    // Constructor
-    public ReplenishmentRequest(String pharmacistID, String medicationName, int quantity, int stockLevel, ReplenishmentStatus status) {
+    // Constructor with requestID
+    public ReplenishmentRequest(int requestID, String pharmacistID, String medicationName, int quantity, int stockLevel, ReplenishmentStatus status) {
+        this.requestID = requestID;
         this.pharmacistID = pharmacistID;
         this.medicationName = medicationName;
         this.quantity = quantity;
         this.stockLevel = stockLevel;
         this.status = status;
+    }
+
+    // Getter for requestID
+    public int getRequestID() {
+        return requestID;
     }
 
     // Getters and Setters
@@ -69,10 +76,12 @@ public class ReplenishmentRequest {
         this.administratorID = administratorID;
     }
 
+    // Updated toString method to include requestID
     @Override
     public String toString() {
         return "ReplenishmentRequest{" +
-                "pharmacistID='" + pharmacistID + '\'' +
+                "requestID=" + requestID +  // Include requestID in the output
+                ", pharmacistID='" + pharmacistID + '\'' +
                 ", medicationName='" + medicationName + '\'' +
                 ", quantity=" + quantity +
                 ", stockLevel=" + stockLevel +

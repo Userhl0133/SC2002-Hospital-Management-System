@@ -1,7 +1,6 @@
 package HMS.models;
 
 import java.util.Scanner;
-
 import HMS.MainApp;  // Access to global variables in MainApp
 import static HMS.MainApp.medications;
 import HMS.enums.Gender;
@@ -18,6 +17,14 @@ public class Pharmacist extends User {
         this.age = age;
     }
 
+    // Method to print out details of the pharmacist
+    @Override
+    public String toString() {
+        return String.format("User ID: %s, Name: %s, Gender: %s, Role: %s, Age: %s",
+                super.getUserId(), super.getName(), super.getGender(), super.getRole(), age);
+    }
+
+    // Method to view appointment outcome record
     public void viewAppointmentOutcomeRecord() {
         Scanner sc = new Scanner(System.in);
         
@@ -47,8 +54,6 @@ public class Pharmacist extends User {
         }
     }
 
-    
-
     // Update Prescription Status (Placeholder method)
     public void updatePrescriptionStatus() {
         System.out.println("\n--- Update Prescription Status ---");
@@ -56,7 +61,7 @@ public class Pharmacist extends User {
         System.out.println("This feature is currently not implemented.");
     }
 
-
+    // Method to submit replenishment request
     public void submitReplenishmentRequest() {
         Scanner sc = new Scanner(System.in);
     
@@ -98,7 +103,9 @@ public class Pharmacist extends User {
         System.out.println("Current stock level for " + medication.getMedicationName() + ": " + currentStock);
     
         // Create a new ReplenishmentRequest
+        int requestID = MainApp.replenishmentRequests.size() + 1; // Generate a new request ID
         ReplenishmentRequest request = new ReplenishmentRequest(
+            requestID,
             loggedInPharmacistId,  // Pharmacist ID (now a String)
             medication.getMedicationName(),  // Medication Name
             quantity,  // Requested Quantity
@@ -114,7 +121,6 @@ public class Pharmacist extends User {
     
         System.out.println("Replenishment request submitted for " + medication.getMedicationName() + " with quantity " + quantity + ".");
     }
-    
 
     // Show the Pharmacist Menu
     public void showMenu() {

@@ -296,7 +296,7 @@ public class Doctor extends User{
                                         System.out.println("[" + i++ + "] " + serviceType);
                                     }
                                     int serviceTypeIndex = sc.nextInt();
-                                    ServiceType serviceType = ServiceType.values()[serviceTypeIndex];
+                                    ServiceType serviceType = ServiceType.values()[serviceTypeIndex-1];
 
 
                                     // Prescribed medications
@@ -310,7 +310,7 @@ public class Doctor extends User{
                                     String[] medicationsIndex = inputMedications.split(",");
                                     List<Prescription> prescriptionList = new ArrayList<>();
                                     for (String index : medicationsIndex) {
-                                        Prescription prescription = new Prescription(medications.get(Integer.parseInt(index)), PrescriptionStatus.PENDING);
+                                        Prescription prescription = new Prescription(medications.get(Integer.parseInt(index)-1), PrescriptionStatus.PENDING);
                                         prescriptionList.add(prescription);
                                     }
 
@@ -321,8 +321,8 @@ public class Doctor extends User{
                                     AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList, inputConsultationNotes);
                                     appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
                                     appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
+                                    appointmentOutcomeRecords.add(appointmentOutcomeRecord);
                                     notFound = false;
-
                                 }
                             }
                         }

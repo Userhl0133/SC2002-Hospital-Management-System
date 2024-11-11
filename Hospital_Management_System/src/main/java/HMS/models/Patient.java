@@ -96,6 +96,8 @@ public class Patient extends User {
         System.out.println("DOB: " + DOB);
         System.out.println("Blood Type: " + bloodType);
         System.out.println("Contact Info: " + contactInfo);
+        System.out.println("Diagnoses: " + diagnoses);
+        System.out.println("TreatmentPlan: " + treatmentPlan);
         System.out.println("--------------------");
         System.out.println("");
     }

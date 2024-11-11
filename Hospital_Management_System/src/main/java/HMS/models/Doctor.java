@@ -451,9 +451,11 @@ public class Doctor extends User{
                                     String inputTreatmentPlan = sc.nextLine();
                                     System.out.println("\nEnter consultation notes: ");
                                     String inputConsultationNotes = sc.nextLine();
-                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList,inputDiagnosis,inputTreatmentPlan,inputConsultationNotes);
+                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList,inputConsultationNotes);
                                     appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
                                     appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
+                                    patient.addDiagnoses(inputDiagnosis);
+                                    patient.addTreatmentPlan(inputTreatmentPlan);
                                     notFound = false;
                                 }
                             }

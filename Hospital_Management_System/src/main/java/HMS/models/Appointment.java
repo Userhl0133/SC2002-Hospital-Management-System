@@ -82,7 +82,9 @@ public class Appointment {
         String formattedDateTime = dateTime.format(formatter);
         Doctor doctor = new Doctor();
         doctor = doctor.getDoctorById(doctorID);
-        return String.format("Appointment ID: %d\nDoctor: %s %s\nStatus: %s\nDate & Time: %s\nAppointment Outcome: %s",
-                appointmentID, doctorID, doctor.getName() , appointmentStatus, formattedDateTime, appointmentOutcomeRecord);
+        Patient patient = new Patient();
+        patient = patient.getPatientById(patientID);
+        return String.format("Appointment ID: %d\nDoctor: %s %s\nPatient: %s %s\nStatus: %s\nDate & Time: %s\nAppointment Outcome: %s",
+                appointmentID, doctorID, doctor.getName() , patientID, patient.getName(), appointmentStatus, formattedDateTime, appointmentOutcomeRecord);
     }
 }

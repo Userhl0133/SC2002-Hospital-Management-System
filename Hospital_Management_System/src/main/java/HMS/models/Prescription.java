@@ -31,9 +31,9 @@ public class Prescription {
 
     @Override
     public String toString() {
-        return "ReplenishmentRequest{" +
+        return "Prescription{" +
                 "Medication=" + medication.getMedicationName() +
-                ", status='" + status +
+                ", Status='" + status +
                 '}';
     }
 }

@@ -3,19 +3,19 @@ package HMS.models;
 import HMS.enums.*;
 import java.util.*;
 import java.time.LocalDateTime;
-
-import static HMS.MainApp.administrators;
+import java.text.SimpleDateFormat;
 import static HMS.MainApp.*;
 
 public class Doctor extends User{
 
     // Attributes
-    // availability hashmap contains time slots where the doctor is unavailable, in 1 hour blocks
+    // availability hashmap contains time slots where the doctor is available, in 1 hour blocks
     // Key: Date in (DDMMYYYY) format, Value: Timeslot from int 1-9 (0900-1700)
     private Map<Integer, List<Integer>> availability;
     private int age;
 
     public Doctor() {
+
     }
 
     // Constructor
@@ -23,6 +23,21 @@ public class Doctor extends User{
         super(userId, password, gender, name, role);  // Passing all required parameters to User
         this.availability = new HashMap<>();
         this.age = age;
+
+        // Populate availability for next 10 days
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+        // Populate timeslots from 1 to 9
+        List<Integer> timeslots = new ArrayList<>();
+        for (int i = 1; i <= 9; i++) {
+            timeslots.add(i);
+        }
+        // Populate the next 10 dates
+        for (int i = 0; i < 10; i++) {
+            int dateKey = Integer.parseInt(sdf.format(calendar.getTime()));
+            this.availability.put(dateKey, new ArrayList<>(timeslots));
+            calendar.add(Calendar.DATE, 1); // Move to the next day
+        }
     }
 
     public Doctor getDoctorById(String doctorId) {
@@ -111,21 +126,12 @@ public class Doctor extends User{
     // Returns false if time slot removed, true if added
     public boolean setAvailability(int date, int time) {
         // If date exists
-        if (this.availability.containsKey(date)) {
-            if (this.availability.get(date).contains(time)) {
-                this.availability.get(date).remove(Integer.valueOf(time));
-                return false;
-            }
-            else{
-                this.availability.get(date).add(time);
-                return true;
-            }
+        if (this.availability.get(date).contains(time)) {
+            this.availability.get(date).remove(Integer.valueOf(time));
+            return false;
         }
-        // If date does not exist
         else{
-            List<Integer> timeSlots = new ArrayList<>();
-            timeSlots.add(time);
-            this.availability.put(date, timeSlots);
+            this.availability.get(date).add(time);
             return true;
         }
     }
@@ -184,36 +190,45 @@ public class Doctor extends User{
                     break;
 
                 case 4 :
-                    System.out.println("Set unavailable timeslot");
-                    System.out.println("Enter date (DDMMYYYY): ");
-                    int date = sc.nextInt();
+                    int date, time;
+                    System.out.println("Set timeslot availability");
+                    while (true){
+                        System.out.println("Enter date (DDMMYYYY): ");
+                        date = sc.nextInt();
+                        if (this.availability.containsKey(date)) {
+                            break;
+                        }
+                        System.out.println("Invalid Date. Please try again");
+                    }
 
                     // Print timeslots
                     int counter = 1;
                     for (int timeslot = 900; timeslot <= 1700; timeslot += 100) {
                         System.out.printf("[%d] %04d", counter, timeslot);
                         if (this.availability.containsKey(date) && this.availability.get(date).contains(counter)) {
+                            System.out.print(" (available)");
+                        }
+                        else {
                             System.out.print(" (unavailable)");
                         }
                         System.out.println();
                         counter++;
                     }
 
-                    System.out.println("Enter a timeslot number: ");
-                    int time = sc.nextInt();
-
-                    if (time < 1 || time > 9) {
+                    while (true){
+                        System.out.println("Enter a timeslot number: ");
+                        time = sc.nextInt();
+                        if (time >= 0 && time <= 9) {
+                            break;
+                        }
                         System.out.println("Invalid timeslot. Please try again.");
-                        break;
                     }
 
                     if (setAvailability(date, time)) {
-                        System.out.printf("%d %04d set as unavailable\n", date, (time+8)*100);
-//                        System.out.println(date + " " + (time+8)*100 + " set as unavailable");
+                        System.out.printf("%d %04d set as available\n", date, (time+8)*100);
                     }
                     else {
-                        System.out.printf("%d %04d set as available\n", date, (time+8)*100);
-//                        System.out.println(date + " " + (time+8)*100 + " set as available");
+                        System.out.printf("%d %04d set as unavailable\n", date, (time+8)*100);
                     }
                     break;
 
@@ -235,7 +250,7 @@ public class Doctor extends User{
                     // Accept or decline
                     notFound = true;
                     while (notFound) {
-                        System.out.println("Enter appointment ID to accept or decline: ");
+                        System.out.println("Enter appointment ID: ");
                         int id = sc.nextInt();
                         for (Patient patient : patients) {
                             for (Appointment appointment : patient.getAppointments()) {
@@ -269,12 +284,10 @@ public class Doctor extends User{
 
                 case 7 :
                     // Record Appointment Outcome
-
                     System.out.println("\n Appointments:");
                     for (Patient patient : patients){
                         for (Appointment appointment : patient.getAppointments()) {
                             if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
-
                                 System.out.println(appointment);
                                 System.out.println();
                             }
@@ -283,7 +296,7 @@ public class Doctor extends User{
 
                     notFound = true;
                     while (notFound) {
-                        System.out.println("\nEnter appointment ID:  ");
+                        System.out.println("\nEnter appointment ID: ");
                         int id = sc.nextInt();
                         for (Patient patient : patients) {
                             for (Appointment appointment : patient.getAppointments()) {
@@ -306,7 +319,8 @@ public class Doctor extends User{
                                     }
 
                                     System.out.println("Enter prescribed medication(s), separated by comma [eg. 1,2,3]:  ");
-                                    String inputMedications = sc.next();
+                                    sc.nextLine();
+                                    String inputMedications = sc.nextLine();
                                     String[] medicationsIndex = inputMedications.split(",");
                                     List<Prescription> prescriptionList = new ArrayList<>();
                                     for (String index : medicationsIndex) {
@@ -315,9 +329,8 @@ public class Doctor extends User{
                                     }
 
                                     // Consultation Notes
-                                    System.out.println("Enter consultation notes: ");
-                                    String inputConsultationNotes = sc.next();
-
+                                    System.out.println("\nEnter consultation notes: ");
+                                    String inputConsultationNotes = sc.nextLine();
                                     AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList, inputConsultationNotes);
                                     appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
                                     appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);

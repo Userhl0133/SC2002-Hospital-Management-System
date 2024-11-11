@@ -17,6 +17,9 @@ import HMS.enums.BloodType;
 import HMS.enums.Gender;
 import HMS.enums.Role;
 
+import static HMS.MainApp.doctors;
+import static HMS.MainApp.*;
+
 public class Patient extends User {
 
     private LocalDate DOB;
@@ -25,6 +28,11 @@ public class Patient extends User {
     private ArrayList<Appointment> appointments;
 
     // Constructor
+
+    public Patient(){
+
+    }
+
     public Patient(String userId, String password, Gender gender, String name, Role role, LocalDate DOB, BloodType bloodType, String contactInfo) {
         super(userId, password, gender, name, role);
         this.DOB = DOB;
@@ -642,6 +650,15 @@ public class Patient extends User {
 
     public ArrayList<Appointment> getAppointments() {
         return appointments;
+    }
+
+    public Patient getPatientById(String patientId) {
+        for (Patient patient : patients) {
+            if (patient.getUserId().equals(patientId)) {
+                return patient;
+            }
+        }
+        return null;
     }
 
     public void setDOB(LocalDate DOB) {

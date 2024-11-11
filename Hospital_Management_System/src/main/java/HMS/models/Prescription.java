@@ -1,8 +1,6 @@
 package HMS.models;
 
-import java.util.List;
-import HMS.MainApp;
-import HMS.enums.*;
+import HMS.enums.PrescriptionStatus;
 
 public class Prescription {
     private Medication medication;
@@ -12,6 +10,7 @@ public class Prescription {
         this.medication = medication;
         this.status = status;
     }
+
 
     public Medication getMedication() {
         return medication;

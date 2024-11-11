@@ -65,42 +65,34 @@ public class Pharmacist extends User {
             return; // No completed appointments to process
         }
     
-        // Display appointments to the pharmacist
-        System.out.println("Select the Appointment ID to update prescription status:");
-        for (int i = 0; i < completedAppointments.size(); i++) {
-            Appointment appointment = completedAppointments.get(i);
-            System.out.println((i + 1) + ". Appointment ID: " + appointment.getAppointmentID());
+        // Display completed appointments and ask for the Appointment ID
+        System.out.println("Completed appointments available to update the prescription status:");
+        completedAppointments.forEach(appointment -> {
+            System.out.println("Appointment ID: " + appointment.getAppointmentID());
+        });
     
-            // Get the AppointmentOutcomeRecord from the appointment
-            AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
-            if (outcomeRecord != null && !outcomeRecord.getPrescribedMedications().isEmpty()) {
-                // Display the prescription status for each prescribed medication
-                for (Prescription prescription : outcomeRecord.getPrescribedMedications()) {
-                    System.out.println("   Medication: " + prescription.getMedication().getMedicationName());
-                    System.out.println("   Prescription Status: " + prescription.getStatus());
-                }
-            } else {
-                System.out.println("   No prescribed medications available.");
-            }
-        }
+        // Ask for the Appointment ID to update prescription status
+        System.out.print("Enter the Appointment ID to update prescription status (or -1 to cancel): ");
+        int appointmentIDToUpdate = sc.nextInt();
+        sc.nextLine();  // Clear the buffer
     
-        // Ask the pharmacist to select an appointment
-        System.out.print("Enter the appointment number to update prescription status (or -1 to cancel): ");
-        int choice = sc.nextInt();
-        sc.nextLine(); // Clear buffer
-    
-        if (choice == -1) {
+        if (appointmentIDToUpdate == -1) {
             System.out.println("Action canceled.");
             return;
         }
     
-        // Get the selected appointment
-        if (choice < 1 || choice > completedAppointments.size()) {
-            System.out.println("Invalid selection. Please try again.");
-            return;
+        // Find the selected appointment by ID
+        Appointment selectedAppointment = completedAppointments.stream()
+                .filter(a -> a.getAppointmentID() == appointmentIDToUpdate)
+                .findFirst()
+                .orElse(null);
+    
+        if (selectedAppointment == null) {
+            System.out.println("Invalid Appointment ID. Please try again.");
+            return;  // No such appointment found
         }
     
-        Appointment selectedAppointment = completedAppointments.get(choice - 1);
+        // Get the AppointmentOutcomeRecord from the selected appointment
         AppointmentOutcomeRecord selectedOutcomeRecord = selectedAppointment.getAppointmentOutcomeRecord();
     
         if (selectedOutcomeRecord != null && !selectedOutcomeRecord.getPrescribedMedications().isEmpty()) {
@@ -113,6 +105,7 @@ public class Pharmacist extends User {
                         " (Status: " + prescription.getStatus() + ")");
             }
     
+            // Ask the pharmacist to select the medication number
             System.out.print("Enter the number to update medication status (or -1 to cancel): ");
             int medChoice = sc.nextInt();
             sc.nextLine(); // Clear buffer
@@ -143,7 +136,7 @@ public class Pharmacist extends User {
         }
     }
     
-
+    
 
     // Method to submit replenishment request
     public void submitReplenishmentRequest() {

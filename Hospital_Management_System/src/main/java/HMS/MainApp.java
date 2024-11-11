@@ -21,9 +21,9 @@ public class MainApp {
     public static List<Pharmacist> pharmacists = new ArrayList<>();
     public static List<Administrator> administrators = new ArrayList<>();
     public static List<Medication> medications = new ArrayList<>();
-    public static List<Appointment> appointments = new ArrayList<>();
     public static List<ReplenishmentRequest> replenishmentRequests = new ArrayList<>();
-    public static List<AppointmentOutcomeRecord> appointmentOutcomeRecords = new ArrayList<>();
+//    public static List<Appointment> appointments = new ArrayList<>();
+//    public static List<AppointmentOutcomeRecord> appointmentOutcomeRecords = new ArrayList<>();
 
 
     public static void main(String[] args) {

@@ -5,12 +5,13 @@ import java.util.Scanner;
 
 import HMS.MainApp;
 import static HMS.MainApp.administrators;
-import static HMS.MainApp.appointments;
 import static HMS.MainApp.doctors;
 import static HMS.MainApp.medications;
 import static HMS.MainApp.patients;
 import static HMS.MainApp.pharmacists;
 import static HMS.MainApp.replenishmentRequests;
+import static HMS.models.Appointment.getAppointments;
+
 import HMS.enums.AppointmentStatus;
 import HMS.enums.Gender;
 import HMS.enums.ReplenishmentStatus;
@@ -121,14 +122,14 @@ public class Administrator extends User {
     public void viewAppointments() {
         // Implementation for displaying the list of appointments (done but haven't try)
         // Check if the appointments list is empty
-        if (appointments == null || appointments.isEmpty()) {
+        if (getAppointments() == null || getAppointments().isEmpty()) {
             System.out.println("\n---- No appointments found ----");
             return;
         }
         System.out.println("\n---- List of Appointments ----");
 
         // Iterate through each appointment for the patient
-        for (Appointment appointment : appointments) {
+        for (Appointment appointment : getAppointments()) {
             System.out.println(appointment);
 
             // Check if the appointment is completed and has an outcome record
@@ -284,6 +285,7 @@ public class Administrator extends User {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
         while (choice != 12) {
+            System.out.println();
             System.out.println("\n============================");
             System.out.println("-----Administrator Menu-----");
             System.out.println("============================");

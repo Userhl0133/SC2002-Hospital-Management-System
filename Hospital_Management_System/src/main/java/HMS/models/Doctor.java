@@ -78,7 +78,6 @@ public class Doctor extends User{
             }
         }
 
-        //TODO: personal availability
         System.out.println("Unavailable timeslots:");
         for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
             int date = entry.getKey();
@@ -99,28 +98,12 @@ public class Doctor extends User{
         System.out.println("\nUpcoming appointments:");
         for (Patient patient : patients){
             for (Appointment appointment : patient.getAppointments()) {
-                if(appointment.getDoctorID() == super.getUserId()){
+                if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
                     System.out.println(appointment);
                     System.out.println();
                 }
             }
         }
-    }
-
-    public void updateAppointmentOutcomeRecord() {
-        // Implementation for updating appointment outcome records
-    }
-
-    public void viewAppointmentOutcomeRecord() {
-        // Implementation for viewing appointment outcome records
-    }
-
-    public void createAppointmentOutcomeRecord() {
-        // Implementation for creating an appointment outcome record
-    }
-
-    public void cancelAppointment() {
-        // Implementation for canceling an appointment
     }
 
     // Returns false if time slot removed, true if added
@@ -136,10 +119,6 @@ public class Doctor extends User{
         }
     }
 
-    public void updateAppointment() {
-        // Implementation for updating an appointment
-    }
-
     @Override
     public String toString() {
         return String.format("User ID: %s, Name: %s, Gender: %s, Role: %s, Age: %s",
@@ -151,6 +130,7 @@ public class Doctor extends User{
         boolean notFound = true;
         Scanner sc = new Scanner(System.in);
         while (choice != 8) {
+            System.out.println();
             System.out.println("=====================");
             System.out.println("-----Doctor Menu-----");
             System.out.println("=====================");
@@ -164,6 +144,7 @@ public class Doctor extends User{
             System.out.println("8.Logout");
             System.out.print("Please select an option: ");
             choice = sc.nextInt();
+            sc.nextLine();
             switch(choice) {
                 case 1 :
                     // View Patient Medical Records
@@ -182,7 +163,105 @@ public class Doctor extends User{
                 case 2 :
                     // Update Patient Medical Records
 
+                    try {
+                        // View patients
+                        boolean noPatients = true;
+                        for (Patient patient : patients) {
+                            for (Appointment appointment : patient.getAppointments()) {
+                                if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
+                                    System.out.println(patient.getPatientID() + "    " + patient.getName());
+                                    System.out.println();
+                                    noPatients = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (noPatients) {
+                            System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
+                            break;
+                        }
+
+                        Patient patient;
+                        while(true) {
+                            System.out.println("Enter Patient ID: ");
+                            String inputPatientId = sc.nextLine();
+                            patient = new Patient().getPatientById(inputPatientId);
+                            if (patient != null) {
+                                break;
+                            }
+                            System.out.println("Invalid Patient ID, please try again");
+                        }
+
+                        System.out.println();
+                        System.out.println(patient.getPatientID() + " " + patient.getName());
+                        System.out.println("Diagnoses: ");
+                        if(patient.getDiagnoses() == null || patient.getDiagnoses().isEmpty()){
+                            System.out.println("None");
+                        }
+                        else{
+                            for(String diagnosis : patient.getDiagnoses()){
+                                System.out.println(diagnosis);
+                            }
+                        }
+                        System.out.println("Treatment plan: ");
+                        if(patient.getDiagnoses().isEmpty()){
+                            System.out.println("None");
+                        }
+                        else{
+                            for(String treatmentPlan : patient.getTreatmentPlan()){
+                                System.out.println(treatmentPlan);
+                            }
+                        }
+                        System.out.println("[1] Add diagnosis");
+                        System.out.println("[2] Add treatment plan");
+                        System.out.println("Select an option: ");
+                        choice = sc.nextInt();
+                        sc.nextLine();
+                        switch(choice) {
+                            case 1:
+                                System.out.println("Enter diagnosis: ");
+                                String diagnosis = sc.nextLine();
+                                patient.addDiagnoses(diagnosis);
+                                break;
+
+                            case 2:
+                                System.out.println("Enter treatment plan: ");
+                                String treatmentPlan = sc.nextLine();
+                                patient.addTreatmentPlan(treatmentPlan);
+                                break;
+
+                            default:
+                                System.out.println("Invalid option");
+
+
+                        }
+
+                        System.out.println("Updated medical record for " +patient.getPatientID() + " " + patient.getName());
+                        System.out.println("Diagnoses: ");
+                        if(patient.getDiagnoses().isEmpty()){
+                            System.out.println("None");
+                        }
+                        else{
+                            for(String diagnosis : patient.getDiagnoses()){
+                                System.out.println(diagnosis);
+                            }
+                        }
+                        System.out.println("Treatment plan: ");
+                        if(patient.getTreatmentPlan().isEmpty()){
+                            System.out.println("None");
+                        }
+                        else{
+                            for(String treatmentPlan : patient.getTreatmentPlan()){
+                                System.out.println(treatmentPlan);
+                            }
+                        }
+                    }
+
+                    catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
                     break;
+
 
                 case 3 :
                     // View Personal Schedule
@@ -308,6 +387,7 @@ public class Doctor extends User{
                                     for (ServiceType serviceType : ServiceType.values()) {
                                         System.out.println("[" + i++ + "] " + serviceType);
                                     }
+                                    System.out.println();
                                     int serviceTypeIndex = sc.nextInt();
                                     ServiceType serviceType = ServiceType.values()[serviceTypeIndex-1];
 
@@ -329,12 +409,15 @@ public class Doctor extends User{
                                     }
 
                                     // Consultation Notes
+                                    System.out.println("\n\nEnter Diagnosis: ");
+                                    String inputDiagnosis = sc.nextLine();
+                                    System.out.println("\nEnter Treatment plan: ");
+                                    String inputTreatmentPlan = sc.nextLine();
                                     System.out.println("\nEnter consultation notes: ");
                                     String inputConsultationNotes = sc.nextLine();
-                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList, inputConsultationNotes);
+                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList,inputDiagnosis,inputTreatmentPlan,inputConsultationNotes);
                                     appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
                                     appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
-                                    appointmentOutcomeRecords.add(appointmentOutcomeRecord);
                                     notFound = false;
                                 }
                             }

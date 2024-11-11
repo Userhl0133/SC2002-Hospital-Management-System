@@ -1,21 +1,29 @@
 
 package HMS.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import HMS.enums.ServiceType;
+
+import static HMS.MainApp.patients;
+import static HMS.models.Appointment.getAppointments;
 
 public class AppointmentOutcomeRecord {
     private int recordID;  // Unique ID for the record
     private ServiceType serviceType;  // Type of the medical service provided
     private List<Prescription> prescribedMedications;  // Medications prescribed during the appointment
+    private String diagnosis;
+    private String treatmentPlan;
     private String consultationNotes;  // Notes from the consultation
 
     // Constructor to initialize all fields
-    public AppointmentOutcomeRecord(int recordID, ServiceType serviceType, List<Prescription> prescribedMedications, String consultationNotes) {
+    public AppointmentOutcomeRecord(int recordID, ServiceType serviceType, List<Prescription> prescribedMedications, String diagnosis, String treatmentPlan, String consultationNotes) {
         this.recordID = recordID;
         this.serviceType = serviceType;
         this.prescribedMedications = prescribedMedications;
+        this.diagnosis = diagnosis;
+        this.treatmentPlan = treatmentPlan;
         this.consultationNotes = consultationNotes;
     }
 
@@ -27,6 +35,26 @@ public class AppointmentOutcomeRecord {
     // Setter for serviceType
     public void setServiceType(ServiceType serviceType) {
         this.serviceType = serviceType;
+    }
+
+    // Getter for diagnosis
+    public String getDiagnosis() {
+        return this.diagnosis;
+    }
+
+    // Setter for diagnosis
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    // Getter for treatmentPlan
+    public String getTreatmentPlan() {
+        return this.treatmentPlan;
+    }
+
+    // Setter for treatmentPlan
+    public void setTreatmentPlan(String treatmentPlan) {
+        this.treatmentPlan = treatmentPlan;
     }
 
     // Getter for consultationNotes
@@ -64,11 +92,21 @@ public class AppointmentOutcomeRecord {
         }
     }
 
+    public static ArrayList<AppointmentOutcomeRecord> getAppointmentOutcomeRecords() {
+        ArrayList<AppointmentOutcomeRecord> result = new ArrayList<>();
+        for(Appointment appointment : getAppointments()){
+            result.add(appointment.getAppointmentOutcomeRecord());
+        }
+        return result;
+    }
+
     // Override toString() to provide a meaningful representation of AppointmentOutcomeRecord
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Service Type: ").append(serviceType).append("\n");
+        builder.append("Diagnosis: ").append(diagnosis).append("\n");
+        builder.append("Treatment Plan: ").append(treatmentPlan).append("\n");
         builder.append("Consultation Notes: ").append(consultationNotes).append("\n");
         builder.append("Prescribed Medications:\n");
 

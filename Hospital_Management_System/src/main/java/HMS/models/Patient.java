@@ -1,5 +1,6 @@
 package HMS.models;
 
+import java.lang.reflect.Array;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +26,8 @@ public class Patient extends User {
     private LocalDate DOB;
     private BloodType bloodType;
     private String contactInfo;
+    private ArrayList<String> diagnoses;
+    private ArrayList<String> treatmentPlan;
     private ArrayList<Appointment> appointments;
 
     // Constructor
@@ -38,6 +41,8 @@ public class Patient extends User {
         this.DOB = DOB;
         this.bloodType = bloodType;
         this.contactInfo = contactInfo;
+        this.diagnoses = new ArrayList<>();
+        this.treatmentPlan = new ArrayList<>();
         this.appointments = new ArrayList<>();
     }
 
@@ -167,7 +172,6 @@ public class Patient extends User {
         // Add the new appointment to the patient's and main appointment lists
         if (newAppointment != null) {
             this.appointments.add(newAppointment);
-            MainApp.appointments.add(newAppointment);
 
             // Format the appointment date and time for display
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -593,7 +597,7 @@ public class Patient extends User {
                 appointment.setAppointmentStatus(AppointmentStatus.CANCELLED);
 
                 // Update the appointment in the main list
-                for (Appointment mainAppAppointment : MainApp.appointments) {
+                for (Appointment mainAppAppointment : getAppointments()) {
                     if (mainAppAppointment.getAppointmentID() == appointmentID) {
                         mainAppAppointment.setAppointmentStatus(AppointmentStatus.CANCELLED);
                         break;
@@ -648,6 +652,20 @@ public class Patient extends User {
         return super.getRole();
     }
 
+    public ArrayList<String> getDiagnoses() {
+        if (diagnoses == null) {
+            diagnoses = new ArrayList<>();
+        }
+        return diagnoses;
+    }
+
+    public ArrayList<String> getTreatmentPlan() {
+        if (treatmentPlan == null) {
+            treatmentPlan = new ArrayList<>();
+        }
+        return treatmentPlan;
+    }
+
     public ArrayList<Appointment> getAppointments() {
         return appointments;
     }
@@ -671,6 +689,14 @@ public class Patient extends User {
 
     public void setBloodType(BloodType bloodType) {
         this.bloodType = bloodType;
+    }
+
+    public void addDiagnoses(String diagnoses) {
+        this.diagnoses.add(diagnoses);
+    }
+
+    public void addTreatmentPlan(String treatmentPlan) {
+        this.treatmentPlan.add(treatmentPlan);
     }
 
     private String convertDateFormat(String dateStr) {
@@ -727,6 +753,7 @@ public class Patient extends User {
         Scanner sc = new Scanner(System.in);
 
         while (choice != 9) {
+            System.out.println();
             System.out.println("======================");
             System.out.println("-----Patient Menu-----");
             System.out.println("======================");

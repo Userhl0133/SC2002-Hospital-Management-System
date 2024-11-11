@@ -72,7 +72,7 @@ public class Pharmacist extends User {
         });
     
         // Ask for the Appointment ID to update prescription status
-        System.out.print("Enter the Appointment ID to update prescription status (or -1 to cancel): ");
+        System.out.print("\nEnter the Appointment ID to update prescription status (or -1 to cancel): ");
         int appointmentIDToUpdate = sc.nextInt();
         sc.nextLine();  // Clear the buffer
     
@@ -106,7 +106,7 @@ public class Pharmacist extends User {
             }
     
             // Ask the pharmacist to select the medication number
-            System.out.print("Enter the number to update medication status (or -1 to cancel): ");
+            System.out.print("\nEnter the number to dispense medication (or -1 to cancel): ");
             int medChoice = sc.nextInt();
             sc.nextLine(); // Clear buffer
     

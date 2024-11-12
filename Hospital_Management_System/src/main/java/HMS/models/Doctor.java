@@ -1,10 +1,22 @@
 package HMS.models;
 
-import HMS.enums.*;
-import java.util.*;
-import java.time.LocalDateTime;
 import java.text.SimpleDateFormat;
-import static HMS.MainApp.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Scanner;
+
+import static HMS.MainApp.doctors;
+import static HMS.MainApp.medications;
+import static HMS.MainApp.patients;
+import HMS.enums.AppointmentStatus;
+import HMS.enums.Gender;
+import HMS.enums.PrescriptionStatus;
+import HMS.enums.Role;
+import HMS.enums.ServiceType;
 
 public class Doctor extends User{
 
@@ -468,7 +480,7 @@ public class Doctor extends User{
 
                 case 8 :
                     // Logout
-                    System.out.println("Logging out");
+                    System.out.println("Logging out... Returning to main login page...");
                     break;
 
                 default :

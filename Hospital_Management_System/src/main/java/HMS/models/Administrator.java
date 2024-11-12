@@ -466,7 +466,7 @@ public class Administrator extends User {
 
                 case 12:
                     // Logout
-                    System.out.println("Logging out");
+                    System.out.println("Logging out... Returning to main login page...");
                     break;
 
                 default:

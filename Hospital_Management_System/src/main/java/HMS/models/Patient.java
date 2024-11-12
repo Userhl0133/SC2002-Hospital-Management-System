@@ -1,7 +1,5 @@
 package HMS.models;
 
-import java.lang.reflect.Array;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,13 +11,11 @@ import java.util.Map;
 import java.util.Scanner;
 
 import HMS.MainApp;
+import static HMS.MainApp.patients;
 import HMS.enums.AppointmentStatus;
 import HMS.enums.BloodType;
 import HMS.enums.Gender;
 import HMS.enums.Role;
-
-import static HMS.MainApp.doctors;
-import static HMS.MainApp.*;
 
 public class Patient extends User {
 
@@ -816,7 +812,7 @@ public class Patient extends User {
 
                 case 9:
                     // Logout
-                    System.out.println("Logging out");
+                    System.out.println("Logging out... Returning to main login page...");
                     break;
 
                 default:

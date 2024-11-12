@@ -1,6 +1,5 @@
 package HMS.models;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import HMS.MainApp;
@@ -10,12 +9,11 @@ import static HMS.MainApp.medications;
 import static HMS.MainApp.patients;
 import static HMS.MainApp.pharmacists;
 import static HMS.MainApp.replenishmentRequests;
-import static HMS.models.Appointment.getAppointments;
-
 import HMS.enums.AppointmentStatus;
 import HMS.enums.Gender;
 import HMS.enums.ReplenishmentStatus;
 import HMS.enums.Role;
+import static HMS.models.Appointment.getAppointments;
 
 
 
@@ -26,7 +24,6 @@ public class Administrator extends User {
     public Administrator(String userId, String password, Gender gender, String name, Role role, int age) {
         super(userId, password, gender, name, role);
         this.age = age;
-        replenishmentRequests = new ArrayList<>();
     }
 
     // Methods
@@ -161,37 +158,83 @@ public class Administrator extends User {
     }
 
     public void addMedication(String name, int stockLevel, int lowStockLevel) {
-        // Add a New Medication
-        int medicationId = medications.size();
+        Scanner scanner = new Scanner(System.in);
+    
+        // Check if the medication name already exists in the inventory
+        while (true) {
+            boolean exists = false;
+            for (Medication medication : medications) {
+                if (medication.getMedicationName().equalsIgnoreCase(name)) {
+                    System.out.println("Medication with name '" + name + "' already exists in the inventory.");
+                    System.out.print("Please enter a different medication name: ");
+                    name = scanner.nextLine();
+                    exists = true;
+                    break;
+                }
+            }
+    
+            // If the name doesn't exist, break the loop
+            if (!exists) {
+                break;
+            }
+        }
+    
+        // Generate a new medication ID
+        int medicationId = medications.size() + 1;
         Medication newMedication = new Medication(medicationId, lowStockLevel, stockLevel, name);
         medications.add(newMedication);
         System.out.println("Medication Name: " + name + " added successfully.");
     }
 
-    public void removeMedication(int medicationId) {
-        // Remove a Medication 
-        boolean found = medications.removeIf(med -> med.getMedicationId() == medicationId);
-        if (found) {
-            System.out.println("Medication removed successfully.");
-        } else {
-            System.out.println("Medication with ID " + medicationId + " not found.");
+    public void removeMedication() {
+        Scanner scanner = new Scanner(System.in);
+    
+        while (true) {
+            System.out.print("\nEnter Medication ID to remove: ");
+            int medicationId = scanner.nextInt();
+    
+            // Attempt to remove the medication
+            boolean found = medications.removeIf(med -> med.getMedicationId() == medicationId);
+            if (found) {
+                System.out.println("Medication with ID " + medicationId + " removed successfully.");
+                break; // Exit the loop once the medication is removed
+            } else {
+                System.out.println("Medication with ID " + medicationId + " not found. Please try again.");
+            }
         }
     }
 
-    public void updateLowStockLevel(int medicationId, int newStockLevel) {
-        // implementation for updating low stock level
-        for (Medication medication : medications) {
-            if (medication.getMedicationId() == medicationId) {
-                medication.updateLowStockLevel(newStockLevel);
-                System.out.println("Low stock alert level for " + medication.getMedicationName() + " updated to " + newStockLevel);
-                return;
+    public void updateLowStockLevel() {
+        Scanner scanner = new Scanner(System.in);
+    
+        while (true) {
+            System.out.print("\nEnter Medication ID to update low stock level: ");
+            int medicationId = scanner.nextInt();
+    
+            // Check if the medication exists
+            boolean found = false;
+            for (Medication medication : medications) {
+                if (medication.getMedicationId() == medicationId) {
+                    System.out.print("Enter new low stock level: ");
+                    int newStockLevel = scanner.nextInt();
+                    medication.updateLowStockLevel(newStockLevel);
+                    System.out.println("Low stock alert level for " + medication.getMedicationName() + " updated to " + newStockLevel);
+                    found = true;
+                    break;
+                }
+            }
+    
+            // If medication not found, prompt the user again
+            if (found) {
+                break;
+            } else {
+                System.out.println("Medication with ID " + medicationId + " not found. Please try again.");
             }
         }
-        System.out.println("Medication with ID " + medicationId + " not found.");
     }
     public void viewAllReplenishmentRequests() {
         if (replenishmentRequests == null || replenishmentRequests.isEmpty()) {
-            System.out.println("\n---- No replenishment requests available ---- ");
+            System.out.println("\n---- No Replenishment Requests Available ---- ");
             return;
         }
         System.out.println("\n---- Viewing All Replenishment Requests ----");
@@ -202,7 +245,7 @@ public class Administrator extends User {
 
     public void approveReplenishmentRequests() {
         if (replenishmentRequests == null || replenishmentRequests.isEmpty()) {
-            System.out.println("\n---- No replenishment requests available ---- ");
+            System.out.println("\n---- No Replenishment Requests Available ---- ");
             return;
         }
     
@@ -216,7 +259,7 @@ public class Administrator extends User {
         }
     
         if (!hasPendingRequests) {
-            System.out.println("---- No pending replenishment requests available ---- ");
+            System.out.println("---- No Pending Replenishment Requests Available ---- ");
             return;
         }
     
@@ -286,7 +329,7 @@ public class Administrator extends User {
         Scanner sc = new Scanner(System.in);
         while (choice != 12) {
             System.out.println();
-            System.out.println("\n============================");
+            System.out.println("============================");
             System.out.println("-----Administrator Menu-----");
             System.out.println("============================");
             System.out.println("1.View Staff");
@@ -400,20 +443,14 @@ public class Administrator extends User {
                 case 8:
                     // Remove Medication
                     Medication.viewInventory();
-                    System.out.print("\nEnter Medication ID to remove: ");
-                    int removeMedId = sc.nextInt();
-                    removeMedication(removeMedId);
+                    removeMedication();
                     Medication.viewInventory();
                     break;
 
                 case 9:
                     // Update Medication Low Stock Level Alert
                     Medication.viewInventory();
-                    System.out.print("\nEnter Medication ID to update low stock level alert: ");
-                    int medicationID = sc.nextInt();
-                    System.out.print("Enter new stock level alert: ");
-                    int newStockLevelalert = sc.nextInt();
-                    updateLowStockLevel(medicationID, newStockLevelalert); 
+                    updateLowStockLevel(); 
                     Medication.viewInventory();
                     break;
 

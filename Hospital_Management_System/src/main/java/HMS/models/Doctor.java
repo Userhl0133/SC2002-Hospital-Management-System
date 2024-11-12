@@ -159,6 +159,7 @@ public class Doctor extends User{
     public void showMenu() {
         int choice = 0;
         boolean notFound = true;
+        ArrayList<Integer> validIds = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         while (choice != 8) {
             System.out.println();
@@ -269,7 +270,6 @@ public class Doctor extends User{
 
                             default:
                                 System.out.println("Invalid option");
-
                         }
 
                         System.out.println("Updated medical record for " +patient.getPatientID() + " " + patient.getName());
@@ -352,11 +352,13 @@ public class Doctor extends User{
 
                     // Display pending appointments
                     notFound = true;
+                    validIds = new ArrayList<>();
                     System.out.println("Pending appointments: ");
                     for (Patient patient : patients) {
                         for (Appointment appointment : patient.getAppointments()) {
                             if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
                                 if(appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
+                                    validIds.add(appointment.getAppointmentID());
                                     System.out.println(appointment);
                                     System.out.println();
                                     notFound = false;
@@ -373,6 +375,10 @@ public class Doctor extends User{
                     while (notFound) {
                         System.out.println("Enter appointment ID: ");
                         int id = sc.nextInt();
+                        if(!validIds.contains(id)){
+                            System.out.println("Invalid appointment ID");
+                            continue;
+                        }
                         for (Patient patient : patients) {
                             for (Appointment appointment : patient.getAppointments()) {
                                 if (appointment.getAppointmentID() == id) {
@@ -406,12 +412,14 @@ public class Doctor extends User{
                 case 7 :
                     // Record Appointment Outcome
                     notFound = true;
+                    validIds = new ArrayList<>();
                     System.out.println("Appointments:");
                     for (Patient patient : patients){
                         for (Appointment appointment : patient.getAppointments()) {
                             if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
                                 System.out.println(appointment);
                                 System.out.println();
+                                validIds.add(appointment.getAppointmentID());
                                 notFound = false;
                             }
                         }
@@ -425,23 +433,32 @@ public class Doctor extends User{
                     while (notFound) {
                         System.out.println("\nEnter appointment ID: ");
                         int id = sc.nextInt();
+                        if (!validIds.contains(id)) {
+                            System.out.println("Invalid appointment ID");
+                            continue;
+                        }
                         for (Patient patient : patients) {
                             for (Appointment appointment : patient.getAppointments()) {
                                 if (appointment.getAppointmentID() == id) {
-
                                     // Service type
-                                    int i = 1;
-                                    System.out.println("Enter service type [1/2/3]:  ");
-                                    for (ServiceType serviceType : ServiceType.values()) {
-                                        System.out.println("[" + i++ + "] " + serviceType);
+                                    ServiceType serviceType;
+                                    while(true){
+                                        int i = 1;
+                                        for (ServiceType service : ServiceType.values()) {
+                                            System.out.println("[" + i++ + "] " + service);
+                                        }
+                                        System.out.println("Enter service type [1/2/3]:  ");
+                                        int serviceTypeIndex = sc.nextInt();
+                                        if(serviceTypeIndex == 1 || serviceTypeIndex == 2 || serviceTypeIndex == 3){
+                                            serviceType = ServiceType.values()[serviceTypeIndex-1];
+                                            break;
+                                        }
+                                        System.out.println("Invalid input. Please try again");
                                     }
-                                    System.out.println();
-                                    int serviceTypeIndex = sc.nextInt();
-                                    ServiceType serviceType = ServiceType.values()[serviceTypeIndex-1];
 
 
                                     // Prescribed medications
-                                    i = 1;
+                                    int i = 1;
                                     for (Medication medication : medications) {
                                         System.out.println("[" + i++ + "] " + medication.getMedicationName());
                                     }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import HMS.models.Administrator;
-import HMS.models.Appointment;
-import HMS.models.AppointmentOutcomeRecord;
 import HMS.models.Doctor;
 import HMS.models.Medication;
 import HMS.models.Patient;
@@ -25,7 +23,7 @@ public class MainApp {
 //    public static List<Appointment> appointments = new ArrayList<>();
 //    public static List<AppointmentOutcomeRecord> appointmentOutcomeRecords = new ArrayList<>();
 
-
+    
     public static void main(String[] args) {
         initialiseData();
 
@@ -37,7 +35,11 @@ public class MainApp {
             System.out.println("Please log in");
 
             User validatedUser = User.login(patients, doctors, pharmacists, administrators);
-            validatedUser.showMenu();
+            if (validatedUser != null) {
+                validatedUser.showMenu();  // Only proceed if a valid user is found
+            } else {
+                System.out.println("Invalid login. Please try again.");
+            }
         }
     }
 

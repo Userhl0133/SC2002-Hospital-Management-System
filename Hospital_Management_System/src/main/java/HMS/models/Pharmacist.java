@@ -127,7 +127,7 @@ public class Pharmacist extends User {
                 if (allDispensed) {
                     System.out.println("\nAll medications dispensed successfully.");
                 } else {
-                    System.out.println("\nSome medications were already dispensed or could not be updated.");
+                    System.out.println("\nAll medications were already dispensed.");
                 }
             } else {
                 // If the pharmacist chooses not to dispense all at once, proceed with individual dispensing

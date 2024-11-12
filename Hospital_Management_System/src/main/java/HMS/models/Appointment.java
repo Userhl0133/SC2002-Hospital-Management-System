@@ -2,10 +2,14 @@ package HMS.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.xml.crypto.Data;
 
 import HMS.enums.AppointmentStatus;
+
+import static HMS.MainApp.*;
 
 public class Appointment {
 
@@ -74,6 +78,14 @@ public class Appointment {
 
     public LocalDateTime getAppointmentDateTime() {
         return this.dateTime;
+    }
+
+    public static ArrayList<Appointment> getAppointments() {
+        ArrayList<Appointment> result = new ArrayList<>();
+        for(Patient patient : patients){
+            result.addAll(patient.getAppointments());
+        }
+        return result;
     }
 
     @Override

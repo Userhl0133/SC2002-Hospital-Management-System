@@ -1,9 +1,13 @@
 
 package HMS.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import HMS.enums.ServiceType;
+
+import static HMS.MainApp.patients;
+import static HMS.models.Appointment.getAppointments;
 
 public class AppointmentOutcomeRecord {
     private int recordID;  // Unique ID for the record
@@ -62,6 +66,14 @@ public class AppointmentOutcomeRecord {
             // Handle null scenario, e.g., throw an exception or log a warning
             System.out.println("Error: prescribedMedications list cannot be null.");
         }
+    }
+
+    public static ArrayList<AppointmentOutcomeRecord> getAppointmentOutcomeRecords() {
+        ArrayList<AppointmentOutcomeRecord> result = new ArrayList<>();
+        for(Appointment appointment : getAppointments()){
+            result.add(appointment.getAppointmentOutcomeRecord());
+        }
+        return result;
     }
 
     // Override toString() to provide a meaningful representation of AppointmentOutcomeRecord

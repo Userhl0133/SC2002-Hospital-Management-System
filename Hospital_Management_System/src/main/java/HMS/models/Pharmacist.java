@@ -11,6 +11,8 @@ import HMS.enums.PrescriptionStatus;
 import HMS.enums.ReplenishmentStatus;
 import HMS.enums.Role;
 
+import static HMS.models.Appointment.getAppointments;
+
 public class Pharmacist extends User {
 
     private int age;
@@ -32,9 +34,9 @@ public class Pharmacist extends User {
         System.out.println("\n--- Completed Appointment Outcome Records ---");
         
         // Filter and display completed appointments (i.e., those with status 'COMPLETED')
-        List<Appointment> completedAppointments = MainApp.appointments.stream()
+        List<Appointment> completedAppointments = getAppointments().stream()
                 .filter(a -> a.getAppointmentStatus() == AppointmentStatus.COMPLETED)
-                .collect(Collectors.toList());
+                .toList();
     
         if (completedAppointments.isEmpty()) {
             System.out.println("No completed appointments found.\n");
@@ -56,7 +58,7 @@ public class Pharmacist extends User {
         Scanner sc = new Scanner(System.in);
     
         // Get the completed appointments
-        List<Appointment> completedAppointments = MainApp.appointments.stream()
+        List<Appointment> completedAppointments = getAppointments().stream()
                 .filter(a -> a.getAppointmentStatus() == AppointmentStatus.COMPLETED)
                 .collect(Collectors.toList());
     
@@ -199,6 +201,7 @@ public class Pharmacist extends User {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
         while (choice != 5) { // Option 5 will be the logout option
+            System.out.println();
             System.out.println("=============================");
             System.out.println("----- Pharmacist Menu -------");
             System.out.println("=============================");

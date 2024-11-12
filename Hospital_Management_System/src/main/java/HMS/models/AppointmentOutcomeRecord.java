@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import HMS.enums.ServiceType;
-
-import static HMS.MainApp.patients;
 import static HMS.models.Appointment.getAppointments;
 
 public class AppointmentOutcomeRecord {
@@ -80,7 +78,7 @@ public class AppointmentOutcomeRecord {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Service Type: ").append(serviceType).append("\n");
+        builder.append("\nService Type: ").append(serviceType).append("\n");
         builder.append("Consultation Notes: ").append(consultationNotes).append("\n");
         builder.append("Prescribed Medications:\n");
 

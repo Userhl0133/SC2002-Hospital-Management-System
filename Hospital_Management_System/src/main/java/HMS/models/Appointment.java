@@ -3,13 +3,9 @@ package HMS.models;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
 
-import javax.xml.crypto.Data;
-
+import static HMS.MainApp.patients;
 import HMS.enums.AppointmentStatus;
-
-import static HMS.MainApp.*;
 
 public class Appointment {
 
@@ -96,7 +92,7 @@ public class Appointment {
         doctor = doctor.getDoctorById(doctorID);
         Patient patient = new Patient();
         patient = patient.getPatientById(patientID);
-        return String.format("Appointment ID: %d\nDoctor: %s %s\nPatient: %s %s\nStatus: %s\nDate & Time: %s\nAppointment Outcome: %s",
+        return String.format("Appointment ID: %d\nDoctor: %s %s\nPatient: %s %s\nStatus: %s\nDate & Time: %s\n\nAppointment Outcome: %s",
                 appointmentID, doctorID, doctor.getName() , patientID, patient.getName(), appointmentStatus, formattedDateTime, appointmentOutcomeRecord);
     }
 }

@@ -131,10 +131,10 @@ public class Administrator extends User {
 
             // Check if the appointment is completed and has an outcome record
             if (appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED && appointment.getAppointmentOutcomeRecord() != null) {
-                AppointmentOutcomeRecord outcome = appointment.getAppointmentOutcomeRecord();
+                /*AppointmentOutcomeRecord outcome = appointment.getAppointmentOutcomeRecord();
                 
                 System.out.println("---- Appointment Outcome Record ----");
-                System.out.println(outcome);
+                System.out.println(outcome);*/
                 /*System.out.println("Service Type: " + outcome.getServiceType());
                 System.out.println("Consultation Notes: " + outcome.getConsultationNotes());
 

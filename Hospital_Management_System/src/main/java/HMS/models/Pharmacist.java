@@ -106,7 +106,7 @@ public class Pharmacist extends User {
             List<Prescription> prescribedMedications = selectedOutcomeRecord.getPrescribedMedications();
     
             // Ask if the pharmacist wants to dispense all medications at once
-            System.out.print("\nDo you want to dispense all pending medications for that appointment ID number " + selectedAppointment.getAppointmentID() + "? (yes/no): ");
+            System.out.print("\nDo you want to dispense all pending medications for appointment ID number " + selectedAppointment.getAppointmentID() + "? (yes/no): ");
             String dispenseAllChoice = sc.nextLine().trim().toLowerCase();
     
             if (dispenseAllChoice.equals("yes")) {

@@ -36,7 +36,7 @@ public class MainApp {
 
             User validatedUser = User.login(patients, doctors, pharmacists, administrators);
             if (validatedUser != null) {
-                validatedUser.showMenu();  // Only proceed if a valid user is found
+                validatedUser.showMenu();
             } else {
                 System.out.println("Invalid login. Please try again.");
             }

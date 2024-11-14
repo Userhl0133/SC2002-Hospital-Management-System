@@ -27,8 +27,7 @@ public class Patient extends User {
     private ArrayList<Appointment> appointments;
 
     // Constructor
-
-    public Patient(){
+    public Patient() {
 
     }
 
@@ -133,15 +132,15 @@ public class Patient extends User {
                 // Display the date
                 availability.append("  Date: ").append(formattedDate).append("\n");
 
-                // Display each available slot as a time (e.g., 0900, 1000)
+                // Display each available slot as a time (e.g., 0900, 1000) in ascending order
                 if (slots.isEmpty()) {
                     availability.append("    No available slots\n");
                 } else {
                     availability.append("    Slots: ");
-                    for (int slot : slots) {
+                    slots.stream().sorted().forEach(slot -> {
                         String timeSlot = convertSlotToTime(slot);
                         availability.append(timeSlot).append(" ");
-                    }
+                    });
                     availability.append("\n");
                 }
             }
@@ -182,96 +181,6 @@ public class Patient extends User {
         }
     }
 
-
-    /*
-    public Map.Entry<Doctor, Appointment> checkAvaiDoctor(Scanner sc) {
-        System.out.println("Available Doctors: ");
-        int counter = 1;
-        boolean validDoctorID = false;
-        String doctorID = "";
-        Doctor selectedDoctor = null;
-
-        while (!validDoctorID) {
-            for (Doctor doctor : MainApp.doctors) {
-                System.out.println(counter + ": " + doctor.getUserId() + " " + doctor.getName());
-                counter++;
-            }
-            System.out.println("Enter the ID of the doctor you want to schedule an appointment with: ");
-            doctorID = sc.nextLine();
-            for (Doctor doctor : MainApp.doctors) {
-                if (doctor.getUserId().equals(doctorID)) {
-                    validDoctorID = true;
-                    selectedDoctor = doctor;
-                    break;
-                }
-            }
-            if (!validDoctorID) {
-                System.out.println("Invalid Doctor ID. Please try again.");
-            }
-        }
-
-        while (true) {
-            System.out.println("Selected Doctor: " + selectedDoctor.getName());
-            System.out.println("Available Appointment Slots: ");
-            Map<Integer, List<Integer>> availability = selectedDoctor.getAvailability();
-            if (availability.isEmpty()) {
-                System.out.println("No available slots for Dr. " + selectedDoctor.getName() + ". Please choose another doctor.");
-                validDoctorID = false;
-                counter = 1;
-                while (!validDoctorID) {
-                    for (Doctor doctor : MainApp.doctors) {
-                        System.out.println(counter + ": " + doctor.getUserId() + " " + doctor.getName());
-                        counter++;
-                    }
-                    System.out.println("Enter the ID of the doctor you want to schedule an appointment with: ");
-                    doctorID = sc.nextLine();
-                    for (Doctor doctor : MainApp.doctors) {
-                        if (doctor.getUserId().equals(doctorID)) {
-                            validDoctorID = true;
-                            selectedDoctor = doctor;
-                            break;
-                        }
-                    }
-                    if (!validDoctorID) {
-                        System.out.println("Invalid Doctor ID. Please try again.");
-                    }
-                }
-            } else {
-                for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
-                    System.out.println("Date: " + entry.getKey() + " Slots: " + entry.getValue());
-                }
-                System.out.print("Enter the Date (yyyy-MM-dd): ");
-                String dateInput = sc.nextLine();
-                LocalDate date;
-                try {
-                    date = LocalDate.parse(dateInput);
-                } catch (Exception e) {
-                    System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
-                    continue;
-                }
-                System.out.print("Enter the Slot: ");
-                int slot = sc.nextInt();
-                sc.nextLine(); // Consume newline character
-
-                if (date.isBefore(LocalDate.now())) {
-                    System.out.println("Invalid date. Please enter a future date.");
-                    continue;
-                }
-
-                List<Integer> availableSlots = availability.get(date.getDayOfYear());
-                if (availableSlots == null || !availableSlots.contains(slot)) {
-                    System.out.println("Invalid slot. Please enter a valid slot.");
-                    continue;
-                }
-
-                LocalDateTime appointmentDateTime = LocalDateTime.of(date, LocalTime.of(slot, 0));
-                Appointment newAppointment = new Appointment(this.getUserId(), selectedDoctor.getUserId(), appointmentDateTime, AppointmentStatus.PENDING, null);
-                return Map.entry(selectedDoctor, newAppointment);
-            }
-        }
-    }
-
-     */
     public Map.Entry<Doctor, Appointment> checkAvaiDoctor(Scanner sc) {
         Doctor selectedDoctor = selectDoctor(sc);
         if (selectedDoctor == null) {
@@ -355,7 +264,7 @@ public class Patient extends User {
             }
 
             System.out.println("[-1] Exit");
-            System.out.print("Select a doctor or -1 to exit: ");
+            System.out.print("Select a doctor or -1 to exit: \n");
             String input = sc.nextLine();
 
             // Exit if the user enters -1
@@ -394,9 +303,7 @@ public class Patient extends User {
             }
         }
 
-        System.out.println("Available Appointment Dates for Dr. " + doctor.getName() + ":");
-
-// If no dates have available slots, return -1
+        // If no dates have available slots, return -1
         if (dateKeys.isEmpty()) {
             System.out.println("No available slots for Dr. " + doctor.getName() + ".");
             return -1;
@@ -518,6 +425,7 @@ public class Patient extends User {
                     || appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
 
                 System.out.println(appointment); // Assumes Appointment has a proper toString() implementation
+                System.out.println("");
                 hasAppointments = true;
                 counter++;
             }
@@ -537,13 +445,18 @@ public class Patient extends User {
         // This would contain logic to reschedule an appointment
         System.out.println("Rescheduling appointment for patient: " + getName());
         System.out.println("");
-        if(viewScheduledAppointments() == 0) {
+        if (viewScheduledAppointments() == 0) {
             System.out.println("No appointments to reschedule.");
             System.out.println("");
             return;
         }
-        System.out.print("Enter the appointment ID to reschedule: ");
+        System.out.print("Enter the appointment ID to reschedule or (-1) to cancel: ");
         int appointmentID = sc.nextInt();
+        if (appointmentID == -1) {
+            System.out.println("Rescheduling canceled.");
+            System.out.println("");
+            return;
+        }
         sc.nextLine(); // Consume newline character
 
         Map.Entry<Doctor, Appointment> entry = checkAvaiDoctor(sc);
@@ -557,6 +470,16 @@ public class Patient extends User {
 
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentID() == appointmentID) {
+                // Add back the old time slot to the doctor's availability
+                Doctor oldDoctor = new Doctor().getDoctorById(appointment.getDoctorID());
+                if (oldDoctor != null) {
+                    LocalDate oldDate = appointment.getAppointmentDateTime().toLocalDate();
+                    int oldDateKey = Integer.parseInt(oldDate.format(DateTimeFormatter.ofPattern("ddMMyyyy")));
+                    int oldHour = appointment.getAppointmentDateTime().getHour();
+                    int oldTimeSlot = (oldHour - 9) + 1; // Convert hour to slot number (1-9)
+                    oldDoctor.setAvailability(oldDateKey, oldTimeSlot);
+                }
+
                 appointment.setDoctorID(selectedDoctor.getUserId());
                 appointment.setDateTime(newAppointment.getAppointmentDateTime());
                 appointment.setAppointmentStatus(AppointmentStatus.PENDING);
@@ -749,7 +672,17 @@ public class Patient extends User {
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
-
+        // Check and display appointments that are confirmed or rejected
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED
+                    || appointment.getAppointmentStatus() == AppointmentStatus.CANCELLED) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                System.out.println("Upcoming Appointment"
+                        + " with Dr. " + new Doctor().getDoctorById(appointment.getDoctorID()).getName()
+                        + " on " + appointment.getAppointmentDateTime().format(formatter)
+                        + " is " + appointment.getAppointmentStatus() + "!");
+            }
+        }
         while (choice != 9) {
             System.out.println();
             System.out.println("======================");
@@ -814,6 +747,9 @@ public class Patient extends User {
                     // Logout
                     System.out.println("Logging out... Returning to main login page...");
                     break;
+
+                case 10:
+                    System.err.println("Hashed Password = "+ this.getHashedPassword());
 
                 default:
                     System.out.println("Invalid Option");

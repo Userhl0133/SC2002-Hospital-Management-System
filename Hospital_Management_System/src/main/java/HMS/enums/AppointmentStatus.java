@@ -3,7 +3,6 @@ package HMS.enums;
 public enum AppointmentStatus {
     PENDING("Pending"),
     CONFIRMED("Confirmed"),
-    DECLINED("Declined"),
     COMPLETED("Completed"),
     CANCELLED("Cancelled");
 

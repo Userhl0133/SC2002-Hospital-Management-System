@@ -18,6 +18,7 @@ public abstract class User {
     private String name;
     private Role role;
 
+    private static final String SALT = "ThisIsATopScret";
     private static final String DEFAULT_PASSWORD = "password";
 
     public User() {
@@ -27,7 +28,7 @@ public abstract class User {
     // Constructor
     public User(String userId, String password, Gender gender, String name, Role role) {
         this.userId = userId;
-        this.hashedPassword = passwordHashing(password);
+        this.hashedPassword = password;
         this.gender = gender;
         this.name = name;
         this.role = role;
@@ -65,8 +66,13 @@ public abstract class User {
         // Validate the password
         while (true) {
             System.out.print("Enter Password: ");
-            String inputPassword = scanner.nextLine();
+            String inputPassword = scanner.nextLine().trim();
             String hashedInputPassword = passwordHashing(inputPassword);
+
+            System.out.println("DEBUG: User ID = " + foundUser.getName());
+            
+            System.out.println("DEBUG: Stored Hash = " + foundUser.getHashedPassword());
+            System.out.println("DEBUG: Input Hash  = " + hashedInputPassword);
 
             if (foundUser.hashedPassword.equals(hashedInputPassword)) {
                 System.out.println("Login successful!");
@@ -78,7 +84,7 @@ public abstract class User {
     }
 
 // Method to find a user by userId from different lists
-    public static  User findUserById(String userId, List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
+    public static User findUserById(String userId, List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
         for (Patient patient : patients) {
             if (patient.getUserId().equals(userId)) {
                 return patient;
@@ -112,9 +118,11 @@ public abstract class User {
         try {
             // Create SHA-256 MessageDigest instance
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // Combine the password with the hardcoded salt
+            String saltedPassword = password + SALT;
 
             // Perform the hashing on the password and store the result as bytes
-            byte[] hashBytes = digest.digest(password.getBytes());
+            byte[] hashBytes = digest.digest(saltedPassword.getBytes());
 
             // Convert the hash bytes to a Base64 encoded string for easier storage and display
             return Base64.getEncoder().encodeToString(hashBytes);

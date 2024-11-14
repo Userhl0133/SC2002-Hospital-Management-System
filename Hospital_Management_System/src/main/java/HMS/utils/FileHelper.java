@@ -41,7 +41,9 @@ public class FileHelper {
                 Gender gender = Gender.valueOf(values[3].toUpperCase());
                 BloodType bloodType = BloodType.fromDisplayName(values[4].toUpperCase());
                 String contactInfo = values[5];
-                String password = values[6];
+                String password = values[6].trim();;
+
+                System.out.println("DEBUG: Reading password for user " + name + ": " + password);
 
                 // Set a default role, such as 'PATIENT'
                 Role role = Role.PATIENT;

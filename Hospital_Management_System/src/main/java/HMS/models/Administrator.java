@@ -331,6 +331,19 @@ public class Administrator extends User {
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
+
+        // Check for pending replenishment requests
+        boolean hasPendingRequests = replenishmentRequests.stream()
+            .anyMatch(request -> request.getStatus() == ReplenishmentStatus.PENDING);
+
+        if (hasPendingRequests) {
+            System.out.println("\n---- There are pending replenishment requests ----");
+            for (ReplenishmentRequest request : replenishmentRequests) {
+                if (request.getStatus() == ReplenishmentStatus.PENDING) {
+                    System.out.println("Request ID: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());
+                }
+            }
+        }
         while (choice != 12) {
             System.out.println();
             System.out.println("============================");

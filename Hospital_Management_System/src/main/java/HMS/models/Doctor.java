@@ -18,7 +18,7 @@ import HMS.enums.PrescriptionStatus;
 import HMS.enums.Role;
 import HMS.enums.ServiceType;
 
-public class Doctor extends User{
+public class Doctor extends User {
 
     // Attributes
     // availability hashmap contains time slots where the doctor is available, in 1 hour blocks
@@ -33,11 +33,11 @@ public class Doctor extends User{
     // Constructor
     public Doctor(String userId, String password, Gender gender, String name, Role role, int age) {
         super(userId, password, gender, name, role);  // Passing all required parameters to User
-        this.availability = generateAvailability();
+        this.availability = new HashMap<>();
         this.age = age;
     }
 
-    public Map<Integer, List<Integer>> generateAvailability(){
+    public Map<Integer, List<Integer>> generateAvailability() {
         // Populate availability for next 10 days
         Calendar calendar = Calendar.getInstance();
         Map<Integer, List<Integer>> result = new HashMap<>();
@@ -65,27 +65,39 @@ public class Doctor extends User{
         return null;
     }
 
+    public static Doctor getDoctorById(String doctorId, List<Doctor> doctors) {
+        for (Doctor doctor : doctors) {
+            if (doctor.getUserId().equals(doctorId)) {
+                return doctor;
+            }
+        }
+        return null;
+    }
+
     public String getName() {
         return super.getName();
     }
 
+    public int getAge() {
+        return age;
+    }
+
     public Map<Integer, List<Integer>> getAvailability() {
-         Map<Integer, List<Integer>> copy = new HashMap<>();
+        Map<Integer, List<Integer>> copy = new HashMap<>();
         for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
             copy.put(entry.getKey(), new ArrayList<>(entry.getValue()));
         }
         return copy;
     }
 
-
     // Methods
     public void viewPersonalSchedule() {
         // Viewing upcoming appointments
         boolean notFound = true;
         System.out.println("Upcoming Appointments:");
-        for (Patient patient : patients){
+        for (Patient patient : patients) {
             for (Appointment appointment : patient.getAppointments()) {
-                if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
+                if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
                     System.out.println("Appointment " + appointment.getAppointmentID());
                     System.out.println("Patient: " + patient.getName());
                     System.out.println("Date and Time: " + appointment.getDateTime().toString());
@@ -94,7 +106,7 @@ public class Doctor extends User{
                 }
             }
         }
-        if(notFound){
+        if (notFound) {
             System.out.println("No appointments found");
         }
 
@@ -107,13 +119,13 @@ public class Doctor extends User{
         for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
             int date = entry.getKey();
             for (Integer time : timeslots) {
-                if(!entry.getValue().contains(time)){
-                    System.out.printf("%d %04d - %04d\n", date, (time+8)*100, (time+9)*100);
+                if (!entry.getValue().contains(time)) {
+                    System.out.printf("%d %04d - %04d\n", date, (time + 8) * 100, (time + 9) * 100);
                     notFound = false;
                 }
             }
         }
-        if(notFound){
+        if (notFound) {
             System.out.println("All timeslots available");
         }
         System.out.println();
@@ -123,30 +135,34 @@ public class Doctor extends User{
         // Implementation for viewing upcoming appointments
         boolean notFound = true;
         System.out.println("Upcoming appointments:");
-        for (Patient patient : patients){
+        for (Patient patient : patients) {
             for (Appointment appointment : patient.getAppointments()) {
-                if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
+                if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
                     System.out.println(appointment);
                     System.out.println();
                     notFound = false;
                 }
             }
         }
-        if(notFound){
+        if (notFound) {
             System.out.println("No upcoming appointments");
         }
     }
 
-    // Returns false if time slot removed, true if added
     public boolean setAvailability(int date, int time) {
-        // If date exists
-        if (this.availability.get(date).contains(time)) {
-            this.availability.get(date).remove(Integer.valueOf(time));
-            return false;
+        // Initialize the list if the date does not exist in the map
+        if (!this.availability.containsKey(date)) {
+            this.availability.put(date, new ArrayList<>());
         }
-        else{
-            this.availability.get(date).add(time);
-            return true;
+
+        // Now, the list is guaranteed to be non-null
+        List<Integer> slots = this.availability.get(date);
+        if (slots.contains(time)) {
+            slots.remove(Integer.valueOf(time));
+            return false; // Time slot removed
+        } else {
+            slots.add(time);
+            return true; // Time slot added
         }
     }
 
@@ -178,8 +194,8 @@ public class Doctor extends User{
             choice = sc.nextInt();
             sc.nextLine();
             System.out.print("\n");
-            switch(choice) {
-                case 1 :
+            switch (choice) {
+                case 1:
                     // View Patient Medical Records
                     notFound = true;
                     for (Patient patient : patients) {
@@ -193,12 +209,12 @@ public class Doctor extends User{
                             }
                         }
                     }
-                    if(notFound){
+                    if (notFound) {
                         System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
                     }
                     break;
 
-                case 2 :
+                case 2:
                     // Update Patient Medical Records
 
                     try {
@@ -220,7 +236,7 @@ public class Doctor extends User{
                         }
 
                         Patient patient;
-                        while(true) {
+                        while (true) {
                             System.out.println("Enter Patient ID: ");
                             String inputPatientId = sc.nextLine();
                             patient = new Patient().getPatientById(inputPatientId);
@@ -233,20 +249,18 @@ public class Doctor extends User{
                         System.out.println();
                         System.out.println(patient.getPatientID() + " " + patient.getName());
                         System.out.println("Diagnoses: ");
-                        if(patient.getDiagnoses() == null || patient.getDiagnoses().isEmpty()){
+                        if (patient.getDiagnoses() == null || patient.getDiagnoses().isEmpty()) {
                             System.out.println("None");
-                        }
-                        else{
-                            for(String diagnosis : patient.getDiagnoses()){
+                        } else {
+                            for (String diagnosis : patient.getDiagnoses()) {
                                 System.out.println(diagnosis);
                             }
                         }
                         System.out.println("Treatment plan: ");
-                        if(patient.getDiagnoses().isEmpty()){
+                        if (patient.getDiagnoses().isEmpty()) {
                             System.out.println("None");
-                        }
-                        else{
-                            for(String treatmentPlan : patient.getTreatmentPlan()){
+                        } else {
+                            for (String treatmentPlan : patient.getTreatmentPlan()) {
                                 System.out.println(treatmentPlan);
                             }
                         }
@@ -255,7 +269,7 @@ public class Doctor extends User{
                         System.out.println("Select an option: ");
                         choice = sc.nextInt();
                         sc.nextLine();
-                        switch(choice) {
+                        switch (choice) {
                             case 1:
                                 System.out.println("Enter diagnosis: ");
                                 String diagnosis = sc.nextLine();
@@ -272,42 +286,38 @@ public class Doctor extends User{
                                 System.out.println("Invalid option");
                         }
 
-                        System.out.println("Updated medical record for " +patient.getPatientID() + " " + patient.getName());
+                        System.out.println("Updated medical record for " + patient.getPatientID() + " " + patient.getName());
                         System.out.println("Diagnoses: ");
-                        if(patient.getDiagnoses().isEmpty()){
+                        if (patient.getDiagnoses().isEmpty()) {
                             System.out.println("None");
-                        }
-                        else{
-                            for(String diagnosis : patient.getDiagnoses()){
+                        } else {
+                            for (String diagnosis : patient.getDiagnoses()) {
                                 System.out.println(diagnosis);
                             }
                         }
                         System.out.println("Treatment plan: ");
-                        if(patient.getTreatmentPlan().isEmpty()){
+                        if (patient.getTreatmentPlan().isEmpty()) {
                             System.out.println("None");
-                        }
-                        else{
-                            for(String treatmentPlan : patient.getTreatmentPlan()){
+                        } else {
+                            for (String treatmentPlan : patient.getTreatmentPlan()) {
                                 System.out.println(treatmentPlan);
                             }
                         }
-                    }
-
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         System.out.println("Error: " + e.getMessage());
                     }
                     break;
 
-
-                case 3 :
+                case 3:
                     // View Personal Schedule
                     viewPersonalSchedule();
                     break;
 
-                case 4 :
-                    int date, time;
+                case 4:
+                    int date,
+                     time;
                     System.out.println("Set timeslot availability");
-                    while (true){
+                    while (true) {
                         System.out.println("Enter date (DDMMYYYY): ");
                         date = sc.nextInt();
                         if (this.availability.containsKey(date)) {
@@ -322,15 +332,14 @@ public class Doctor extends User{
                         System.out.printf("[%d] %04d", counter, timeslot);
                         if (this.availability.containsKey(date) && this.availability.get(date).contains(counter)) {
                             System.out.print(" (available)");
-                        }
-                        else {
+                        } else {
                             System.out.print(" (unavailable)");
                         }
                         System.out.println();
                         counter++;
                     }
 
-                    while (true){
+                    while (true) {
                         System.out.println("Enter a timeslot number: ");
                         time = sc.nextInt();
                         if (time >= 0 && time <= 9) {
@@ -340,14 +349,13 @@ public class Doctor extends User{
                     }
 
                     if (setAvailability(date, time)) {
-                        System.out.printf("%d %04d set as available\n", date, (time+8)*100);
-                    }
-                    else {
-                        System.out.printf("%d %04d set as unavailable\n", date, (time+8)*100);
+                        System.out.printf("%d %04d set as available\n", date, (time + 8) * 100);
+                    } else {
+                        System.out.printf("%d %04d set as unavailable\n", date, (time + 8) * 100);
                     }
                     break;
 
-                case 5 :
+                case 5:
                     // Accept or Decline Appointment Requests
 
                     // Display pending appointments
@@ -356,8 +364,8 @@ public class Doctor extends User{
                     System.out.println("Pending appointments: ");
                     for (Patient patient : patients) {
                         for (Appointment appointment : patient.getAppointments()) {
-                            if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
-                                if(appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
+                            if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
+                                if (appointment.getAppointmentStatus() == AppointmentStatus.PENDING) {
                                     validIds.add(appointment.getAppointmentID());
                                     System.out.println(appointment);
                                     System.out.println();
@@ -375,7 +383,7 @@ public class Doctor extends User{
                     while (notFound) {
                         System.out.println("Enter appointment ID: ");
                         int id = sc.nextInt();
-                        if(!validIds.contains(id)){
+                        if (!validIds.contains(id)) {
                             System.out.println("Invalid appointment ID");
                             continue;
                         }
@@ -388,8 +396,7 @@ public class Doctor extends User{
                                         appointment.setAppointmentStatus(AppointmentStatus.CONFIRMED);
                                         System.out.println("Appointment " + id + " is confirmed\n");
                                         notFound = false;
-                                    }
-                                    else if (answer.equalsIgnoreCase("N")) {
+                                    } else if (answer.equalsIgnoreCase("N")) {
                                         appointment.setAppointmentStatus(AppointmentStatus.CANCELLED);
                                         System.out.println("Appointment " + id + " is declined.\n");
                                         notFound = false;
@@ -404,19 +411,19 @@ public class Doctor extends User{
 
                     break;
 
-                case 6 :
+                case 6:
                     // View Upcoming Appointments
                     viewUpcomingAppointment();
                     break;
 
-                case 7 :
+                case 7:
                     // Record Appointment Outcome
                     notFound = true;
                     validIds = new ArrayList<>();
                     System.out.println("Appointments:");
-                    for (Patient patient : patients){
+                    for (Patient patient : patients) {
                         for (Appointment appointment : patient.getAppointments()) {
-                            if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
+                            if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
                                 System.out.println(appointment);
                                 System.out.println();
                                 validIds.add(appointment.getAppointmentID());
@@ -442,20 +449,19 @@ public class Doctor extends User{
                                 if (appointment.getAppointmentID() == id) {
                                     // Service type
                                     ServiceType serviceType;
-                                    while(true){
+                                    while (true) {
                                         int i = 1;
                                         for (ServiceType service : ServiceType.values()) {
                                             System.out.println("[" + i++ + "] " + service);
                                         }
                                         System.out.println("Enter service type [1/2/3]:  ");
                                         int serviceTypeIndex = sc.nextInt();
-                                        if(serviceTypeIndex == 1 || serviceTypeIndex == 2 || serviceTypeIndex == 3){
-                                            serviceType = ServiceType.values()[serviceTypeIndex-1];
+                                        if (serviceTypeIndex == 1 || serviceTypeIndex == 2 || serviceTypeIndex == 3) {
+                                            serviceType = ServiceType.values()[serviceTypeIndex - 1];
                                             break;
                                         }
                                         System.out.println("Invalid input. Please try again");
                                     }
-
 
                                     // Prescribed medications
                                     int i = 1;
@@ -469,7 +475,7 @@ public class Doctor extends User{
                                     String[] medicationsIndex = inputMedications.split(",");
                                     List<Prescription> prescriptionList = new ArrayList<>();
                                     for (String index : medicationsIndex) {
-                                        Prescription prescription = new Prescription(medications.get(Integer.parseInt(index)-1), PrescriptionStatus.PENDING);
+                                        Prescription prescription = new Prescription(medications.get(Integer.parseInt(index) - 1), PrescriptionStatus.PENDING);
                                         prescriptionList.add(prescription);
                                     }
 
@@ -480,7 +486,7 @@ public class Doctor extends User{
                                     String inputTreatmentPlan = sc.nextLine();
                                     System.out.println("\nEnter consultation notes: ");
                                     String inputConsultationNotes = sc.nextLine();
-                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList,inputConsultationNotes);
+                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, prescriptionList, inputConsultationNotes);
                                     appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
                                     appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
                                     patient.addDiagnoses(inputDiagnosis);
@@ -495,12 +501,12 @@ public class Doctor extends User{
                     }
                     break;
 
-                case 8 :
+                case 8:
                     // Logout
                     System.out.println("Logging out... Returning to main login page...");
                     break;
 
-                default :
+                default:
                     System.out.println("Invalid Option");
             }
         }

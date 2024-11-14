@@ -180,7 +180,7 @@ public class Administrator extends User {
         }
     
         // Generate a new medication ID
-        int medicationId = medications.size() + 1;
+        int medicationId = medications.size();
         Medication newMedication = new Medication(medicationId, lowStockLevel, stockLevel, name);
         medications.add(newMedication);
         System.out.println("Medication Name: " + name + " added successfully.");
@@ -317,6 +317,10 @@ public class Administrator extends User {
         }
     }
 
+    // Getters and Setters
+    public int getAge() {
+        return age;
+    }
 
     @Override
     public String toString() {

@@ -22,6 +22,11 @@ public class Pharmacist extends User {
         this.age = age;
     }
 
+    // Getters and Setters 
+    public int getAge() {
+        return age;
+    }
+
     // Method to print out details of the pharmacist
     @Override
     public String toString() {

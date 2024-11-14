@@ -258,7 +258,7 @@ public class FileHelper {
                     // Convert slots list to a comma-separated string
                     String slotsString = slots.stream()
                             .map(String::valueOf)
-                            .collect(Collectors.joining(","));
+                            .collect(Collectors.joining(";"));
 
                     // Write to the CSV
                     writer.write(String.format("%s,%d,%s",

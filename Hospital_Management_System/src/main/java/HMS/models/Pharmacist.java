@@ -105,8 +105,14 @@ public class Pharmacist extends User {
             // Get the prescribed medications
             List<Prescription> prescribedMedications = selectedOutcomeRecord.getPrescribedMedications();
     
+            // Show the list of medications before dispensing
+            System.out.println("\nList of prescribed medications for Appointment ID " + selectedAppointment.getAppointmentID() + ":");
+            prescribedMedications.forEach(prescription -> {
+                System.out.println("- " + prescription.getMedication().getMedicationName() + " (Status: " + prescription.getStatus() + ")");
+            });
+    
             // Ask if the pharmacist wants to dispense all medications at once
-            System.out.print("\nDo you want to dispense all pending medications for that appointment ID number " + selectedAppointment.getAppointmentID() + "? (yes/no): ");
+            System.out.print("\nDo you want to dispense all pending medications for appointment ID " + selectedAppointment.getAppointmentID() + "? (yes/no): ");
             String dispenseAllChoice = sc.nextLine().trim().toLowerCase();
     
             if (dispenseAllChoice.equals("yes")) {
@@ -127,7 +133,7 @@ public class Pharmacist extends User {
                 if (allDispensed) {
                     System.out.println("\nAll medications dispensed successfully.");
                 } else {
-                    System.out.println("\nAll medications were already dispensed.");
+                    System.out.println("\nSome medications were already dispensed or not in PENDING status.");
                 }
             } else {
                 // If the pharmacist chooses not to dispense all at once, proceed with individual dispensing

@@ -75,7 +75,7 @@ public abstract class User {
             System.out.println("DEBUG: Input Hash  = " + hashedInputPassword);
 
             if (foundUser.hashedPassword.equals(hashedInputPassword)) {
-                System.out.println("Login successful!");
+                System.out.println("\nWelcome " + foundUser.getName() + " [" + foundUser.getRole() + "]");
                 return foundUser;
             } else {
                 System.out.println("Invalid password. Please try again.");

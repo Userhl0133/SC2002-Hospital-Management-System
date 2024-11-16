@@ -22,8 +22,6 @@ public class Patient extends User {
     private LocalDate DOB;
     private BloodType bloodType;
     private String contactInfo;
-    private ArrayList<String> diagnoses;
-    private ArrayList<String> treatmentPlan;
     private ArrayList<Appointment> appointments;
 
     // Constructor
@@ -36,8 +34,6 @@ public class Patient extends User {
         this.DOB = DOB;
         this.bloodType = bloodType;
         this.contactInfo = contactInfo;
-        this.diagnoses = new ArrayList<>();
-        this.treatmentPlan = new ArrayList<>();
         this.appointments = new ArrayList<>();
     }
 
@@ -91,8 +87,6 @@ public class Patient extends User {
         System.out.println("DOB: " + DOB);
         System.out.println("Blood Type: " + bloodType);
         System.out.println("Contact Info: " + contactInfo);
-        System.out.println("Diagnoses: " + diagnoses);
-        System.out.println("TreatmentPlan: " + treatmentPlan);
         System.out.println("--------------------");
         System.out.println("");
     }
@@ -573,20 +567,6 @@ public class Patient extends User {
         return super.getRole();
     }
 
-    public ArrayList<String> getDiagnoses() {
-        if (diagnoses == null) {
-            diagnoses = new ArrayList<>();
-        }
-        return diagnoses;
-    }
-
-    public ArrayList<String> getTreatmentPlan() {
-        if (treatmentPlan == null) {
-            treatmentPlan = new ArrayList<>();
-        }
-        return treatmentPlan;
-    }
-
     public ArrayList<Appointment> getAppointments() {
         return appointments;
     }
@@ -610,14 +590,6 @@ public class Patient extends User {
 
     public void setBloodType(BloodType bloodType) {
         this.bloodType = bloodType;
-    }
-
-    public void addDiagnoses(String diagnoses) {
-        this.diagnoses.add(diagnoses);
-    }
-
-    public void addTreatmentPlan(String treatmentPlan) {
-        this.treatmentPlan.add(treatmentPlan);
     }
 
     private String convertDateFormat(String dateStr) {

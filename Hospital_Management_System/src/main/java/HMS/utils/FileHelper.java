@@ -225,7 +225,7 @@ public class FileHelper {
                 int dateKey = Integer.parseInt(values[1]);
 
                 // Find the doctor in the existing list using the doctorId
-                Doctor doctor = Doctor.getDoctorById(doctorId, doctors);
+                Doctor doctor = new Doctor().getDoctorById(doctorId);
 
                 // If the doctor is found, update their availability
                 if (doctor != null) {
@@ -273,5 +273,4 @@ public class FileHelper {
             e.printStackTrace();
         }
     }
-
 }

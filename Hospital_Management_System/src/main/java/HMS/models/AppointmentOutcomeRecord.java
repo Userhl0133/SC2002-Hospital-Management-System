@@ -10,13 +10,17 @@ import static HMS.models.Appointment.getAppointments;
 public class AppointmentOutcomeRecord {
     private int recordID;  // Unique ID for the record
     private ServiceType serviceType;  // Type of the medical service provided
+    private String diagnosis;
+    private String treatmentPlan;
     private List<Prescription> prescribedMedications;  // Medications prescribed during the appointment
     private String consultationNotes;  // Notes from the consultation
 
     // Constructor to initialize all fields
-    public AppointmentOutcomeRecord(int recordID, ServiceType serviceType, List<Prescription> prescribedMedications, String consultationNotes) {
+    public AppointmentOutcomeRecord(int recordID, ServiceType serviceType, String diagnosis, String treatmentPlan, List<Prescription> prescribedMedications, String consultationNotes) {
         this.recordID = recordID;
         this.serviceType = serviceType;
+        this.diagnosis = diagnosis;
+        this.treatmentPlan = treatmentPlan;
         this.prescribedMedications = prescribedMedications;
         this.consultationNotes = consultationNotes;
     }
@@ -51,6 +55,26 @@ public class AppointmentOutcomeRecord {
         this.recordID = recordID;
     }
 
+    // Getter for diagnosis
+    public String getDiagnosis() {
+        return diagnosis;
+    }
+
+    // Setter for diagnosis
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    // Getter for treatment plan
+    public String getTreatmentPlan() {
+        return treatmentPlan;
+    }
+
+    // Setter for treatment plan
+    public void setTreatmentPlan(String treatmentPlan) {
+        this.treatmentPlan = treatmentPlan;
+    }
+
     // Getter for prescribedMedications
     public List<Prescription> getPrescribedMedications() {
         return prescribedMedications;
@@ -80,14 +104,17 @@ public class AppointmentOutcomeRecord {
         StringBuilder builder = new StringBuilder();
         builder.append("\nService Type: ").append(serviceType).append("\n");
         builder.append("Consultation Notes: ").append(consultationNotes).append("\n");
+        builder.append("Diagnosis: ").append(diagnosis).append("\n");
+        builder.append("Treatment plan: ").append(treatmentPlan).append("\n");
         builder.append("Prescribed Medications:\n");
 
         // Loop through medications and print without stock level
         for (Prescription prescription : prescribedMedications) {
             builder.append(" - ").append(prescription.getMedication().getMedicationName()) // Assuming the Medication class has `getMedicationName()`
-                   .append(" (Status: ").append(prescription.getStatus()).append(")\n"); // Display status of the prescription
+                   .append(" (Status: ").append(prescription.getStatus()).append(")")
+                    .append("\n     - Quantity: ").append(prescription.getQuantity())
+                    .append("\n     - Frequency: ").append(prescription.getFrequency()).append("\n"); // Display status of the prescription
         }
-
         return builder.toString();
     }
 }

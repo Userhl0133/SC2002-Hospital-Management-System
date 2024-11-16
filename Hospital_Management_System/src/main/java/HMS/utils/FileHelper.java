@@ -2,7 +2,6 @@ package HMS.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -24,9 +23,12 @@ import HMS.enums.Gender;
 import HMS.enums.BloodType;
 import HMS.enums.Role;
 
-public class FileHelper {
+import HMS.service.IFileService;
 
-    public static List<Patient> getPatientsData(String filePath) {
+public class FileHelper implements IFileService {
+
+    @Override
+    public List<Patient> getPatientsData(String filePath) {
         List<Patient> patients = new ArrayList<>();
 
         try {
@@ -59,7 +61,8 @@ public class FileHelper {
         return patients;
     }
 
-    public static void writePatientsData(String filePath, List<Patient> patients) {
+    @Override
+    public void writePatientsData(String filePath, List<Patient> patients) {
         List<String> lines = new ArrayList<>();
         lines.add("ID,Name,DOB,Gender,BloodType,ContactInfo,Password"); // Header
 
@@ -82,7 +85,8 @@ public class FileHelper {
         }
     }
 
-    public static List<Object> getStaffData(String filePath) {
+    @Override
+    public List<Object> getStaffData(String filePath) {
         List<Object> staff = new ArrayList<>();
 
         try {
@@ -122,7 +126,8 @@ public class FileHelper {
         return staff;
     }
 
-    public static void writeStaffData(String filePath, List<Object> staff) {
+    @Override
+    public void writeStaffData(String filePath, List<Object> staff) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
             // Write the header
             writer.write("id,name,role,gender,age,password");
@@ -168,7 +173,8 @@ public class FileHelper {
         }
     }
 
-    public static List<Medication> getMedicationsData(String filePath) {
+    @Override
+    public List<Medication> getMedicationsData(String filePath) {
         List<Medication> medications = new ArrayList<>();
 
         try {
@@ -191,7 +197,8 @@ public class FileHelper {
         return medications;
     }
 
-    public static void writeMedicationData(String filePath, List<Medication> medications) {
+    @Override
+    public void writeMedicationData(String filePath, List<Medication> medications) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
             // Write the header
             writer.write("name,initialStock,lowStockLevel");
@@ -211,7 +218,8 @@ public class FileHelper {
         }
     }
 
-    public static void getDoctorAvailability(String filePath, List<Doctor> doctors) {
+    @Override
+    public void getDoctorAvailability(String filePath) {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
             String line;
             reader.readLine(); // Skip the header
@@ -242,7 +250,8 @@ public class FileHelper {
         }
     }
 
-    public static void writeDoctorAvailability(String filePath, List<Doctor> doctors) {
+    @Override
+    public void writeDoctorAvailability(String filePath, List<Doctor> doctors) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
             // Write the header
             writer.write("doctorId,date,availableSlots");

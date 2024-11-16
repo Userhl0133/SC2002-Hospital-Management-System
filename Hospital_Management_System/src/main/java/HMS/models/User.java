@@ -9,6 +9,9 @@ import java.util.Scanner;
 import HMS.enums.Gender;
 import HMS.enums.Role;
 
+import HMS.service.IUserService;
+import HMS.utils.UserHelper;
+
 // Hashing and Login System
 public abstract class User {
 
@@ -18,11 +21,11 @@ public abstract class User {
     private String name;
     private Role role;
 
-    private static final String SALT = "ThisIsATopScret";
     private static final String DEFAULT_PASSWORD = "password";
+    private static final IUserService userService = UserHelper.getInstance();
+
 
     public User() {
-
     }
 
     // Constructor
@@ -36,10 +39,10 @@ public abstract class User {
 
     // Method to change password
     public void changePassword(String newPassword) {
-        this.hashedPassword = passwordHashing(newPassword);
+        this.hashedPassword = userService.hashPassword(newPassword);
     }
 
-    public static User login(List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators) {
+    public static User login(List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators, IUserService userService) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter Hospital ID: ");
@@ -55,7 +58,7 @@ public abstract class User {
         }
 
         // Check if it's a first-time login (default password)
-        if (foundUser.hashedPassword.equals(passwordHashing(DEFAULT_PASSWORD))) {
+        if (foundUser.hashedPassword.equals(userService.hashPassword(DEFAULT_PASSWORD))) {
             System.out.println("First-time login detected. Please change your password.");
             System.out.print("Enter New Password: ");
             String newPassword = scanner.nextLine();
@@ -67,12 +70,7 @@ public abstract class User {
         while (true) {
             System.out.print("Enter Password: ");
             String inputPassword = scanner.nextLine().trim();
-            String hashedInputPassword = passwordHashing(inputPassword);
-
-            System.out.println("DEBUG: User ID = " + foundUser.getName());
-            
-            System.out.println("DEBUG: Stored Hash = " + foundUser.getHashedPassword());
-            System.out.println("DEBUG: Input Hash  = " + hashedInputPassword);
+            String hashedInputPassword = userService.hashPassword(inputPassword);
 
             if (foundUser.hashedPassword.equals(hashedInputPassword)) {
                 System.out.println("\nWelcome " + foundUser.getName() + " [" + foundUser.getRole() + "]");
@@ -111,26 +109,6 @@ public abstract class User {
     // Method to logout
     public void logout() {
         System.out.println("User logged out.");
-    }
-
-    // Method to display password without hashing (as per your request)
-    private static String passwordHashing(String password) {
-        try {
-            // Create SHA-256 MessageDigest instance
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            // Combine the password with the hardcoded salt
-            String saltedPassword = password + SALT;
-
-            // Perform the hashing on the password and store the result as bytes
-            byte[] hashBytes = digest.digest(saltedPassword.getBytes());
-
-            // Convert the hash bytes to a Base64 encoded string for easier storage and display
-            return Base64.getEncoder().encodeToString(hashBytes);
-        } catch (NoSuchAlgorithmException e) {
-            // If SHA-256 is not available, handle the exception
-            System.out.println("Hashing algorithm not available.");
-            return null;
-        }
     }
 
     public abstract void showMenu();

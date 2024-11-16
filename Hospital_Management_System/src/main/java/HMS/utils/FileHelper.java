@@ -62,11 +62,11 @@ public class FileHelper implements IFileService {
     }
 
     @Override
-    public void writePatientsData(String filePath, List<Patient> patients) {
+    public void writePatientsData(String filePath) {
         List<String> lines = new ArrayList<>();
         lines.add("ID,Name,DOB,Gender,BloodType,ContactInfo,Password"); // Header
 
-        for (Patient patient : patients) {
+        for (Patient patient : HMS.MainApp.patients) {
             String line = String.join(",",
                     patient.getUserId(),
                     patient.getName(),
@@ -127,12 +127,15 @@ public class FileHelper implements IFileService {
     }
 
     @Override
-    public void writeStaffData(String filePath, List<Object> staff) {
+    public void writeStaffData(String filePath) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
             // Write the header
             writer.write("id,name,role,gender,age,password");
             writer.newLine();
-
+            List<Object> staff = new ArrayList<>();
+            staff.addAll(HMS.MainApp.doctors);
+            staff.addAll(HMS.MainApp.administrators);
+            staff.addAll(HMS.MainApp.pharmacists);
             // Write each staff member's details
             for (Object obj : staff) {
                 if (obj instanceof Doctor) {
@@ -198,14 +201,14 @@ public class FileHelper implements IFileService {
     }
 
     @Override
-    public void writeMedicationData(String filePath, List<Medication> medications) {
+    public void writeMedicationData(String filePath) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
             // Write the header
             writer.write("name,initialStock,lowStockLevel");
             writer.newLine();
 
             // Write each medication's details
-            for (Medication medication : medications) {
+            for (Medication medication : HMS.MainApp.medications) {
                 writer.write(String.format("%s,%d,%d",
                         medication.getMedicationName(),
                         medication.getStockLevel(),
@@ -251,14 +254,14 @@ public class FileHelper implements IFileService {
     }
 
     @Override
-    public void writeDoctorAvailability(String filePath, List<Doctor> doctors) {
+    public void writeDoctorAvailability(String filePath) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
             // Write the header
             writer.write("doctorId,date,availableSlots");
             writer.newLine();
 
             // Iterate through each doctor and their availability map
-            for (Doctor doctor : doctors) {
+            for (Doctor doctor : HMS.MainApp.doctors) {
                 Map<Integer, List<Integer>> availability = doctor.getAvailability();
                 for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
                     int dateKey = entry.getKey();

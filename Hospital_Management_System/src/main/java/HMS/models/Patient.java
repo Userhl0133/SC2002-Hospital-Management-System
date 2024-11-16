@@ -649,6 +649,7 @@ public class Patient extends User {
             if (appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED
                     || appointment.getAppointmentStatus() == AppointmentStatus.CANCELLED) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                System.out.println("\n---- Notification System ----");
                 System.out.println("Upcoming Appointment"
                         + " with Dr. " + new Doctor().getDoctorById(appointment.getDoctorID()).getName()
                         + " on " + appointment.getAppointmentDateTime().format(formatter)

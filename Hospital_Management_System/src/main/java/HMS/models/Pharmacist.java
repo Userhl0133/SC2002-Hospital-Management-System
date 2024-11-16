@@ -1,5 +1,6 @@
 package HMS.models;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -113,14 +114,14 @@ public class Pharmacist extends User {
             // Show the list of medications before dispensing
             System.out.println("\nList of prescribed medications for Appointment ID " + selectedAppointment.getAppointmentID() + ":");
             prescribedMedications.forEach(prescription -> {
-                System.out.println("- " + prescription.getMedication().getMedicationName() + " (Status: " + prescription.getStatus() + ")");
+                System.out.println("- " + prescription.getMedication().getMedicationName() + " (Status: " + prescription.getStatus().getDisplayName() + ")");
             });
     
             // Ask if the pharmacist wants to dispense all medications at once
-            System.out.print("\nDo you want to dispense all pending medications for appointment ID " + selectedAppointment.getAppointmentID() + "? (yes/no): ");
+            System.out.print("\nDo you want to dispense all pending medications for appointment ID " + selectedAppointment.getAppointmentID() + "? (Y/N): ");
             String dispenseAllChoice = sc.nextLine().trim().toLowerCase();
     
-            if (dispenseAllChoice.equals("yes")) {
+            if (dispenseAllChoice.equalsIgnoreCase("Y")) {
                 boolean allDispensed = true;
                 for (Prescription prescription : prescribedMedications) {
                     // Only update if the status is PENDING
@@ -128,6 +129,8 @@ public class Pharmacist extends User {
                         prescription.setStatus(PrescriptionStatus.DISPENSED);  // Change status to DISPENSED
                         System.out.println("Prescription status updated to DISPENSED for Medication: " +
                                 prescription.getMedication().getMedicationName());
+                        // Dispense the medication and update stock levels
+                        prescription.getMedication().dispenseMedication(prescription.getQuantity());
                     } else {
                         allDispensed = false;
                         System.out.println("Prescription " + prescription.getMedication().getMedicationName() +
@@ -146,7 +149,7 @@ public class Pharmacist extends User {
                 for (int i = 0; i < prescribedMedications.size(); i++) {
                     Prescription prescription = prescribedMedications.get(i);
                     System.out.println((i + 1) + ". " + prescription.getMedication().getMedicationName() +
-                            " (Status: " + prescription.getStatus() + ")");
+                            " (Status: " + prescription.getStatus().getDisplayName() + ")");
                 }
     
                 // Ask the pharmacist to select the medication number
@@ -172,6 +175,8 @@ public class Pharmacist extends User {
                     selectedPrescription.setStatus(PrescriptionStatus.DISPENSED);  // Change status to DISPENSED
                     System.out.println("Prescription status updated to DISPENSED for Medication: " +
                             selectedPrescription.getMedication().getMedicationName());
+                    // Dispense the medication and update stock levels
+                    selectedPrescription.getMedication().dispenseMedication(selectedPrescription.getQuantity());
                 } else {
                     System.out.println("Prescription status is not 'PENDING', cannot update to DISPENSED.");
                 }
@@ -243,6 +248,48 @@ public class Pharmacist extends User {
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
+        // Flag to track if low stock notification has been displayed
+    boolean lowStockNotificationDisplayed = false; 
+
+    for (Appointment appointment : getAppointments()) {
+        if (appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED) {
+            AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
+            
+            // If outcome record exists and contains prescribed medications
+            if (outcomeRecord != null && !outcomeRecord.getPrescribedMedications().isEmpty()) {
+                List<Prescription> prescribedMedications = outcomeRecord.getPrescribedMedications();
+                
+                // Check for any PENDING prescriptions and notify the pharmacist
+                prescribedMedications.forEach(prescription -> {
+                    if (prescription.getStatus() == PrescriptionStatus.PENDING) {
+                        // Create and display notification for the pharmacist
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                        System.out.println("\n---- Notification System ----");
+                        System.out.println("Pending Medication to be Dispense");
+                        System.out.println("Appointment ID: " + appointment.getAppointmentID());
+                        System.out.println("Patient: " + new Patient().getPatientById(appointment.getPatientID()).getName());
+                        System.out.println("Medication: " + prescription.getMedication().getMedicationName());
+                        System.out.println("Appointment Date & Time: " + appointment.getAppointmentDateTime().format(formatter));
+                    }
+                });
+            }
+        }
+    }
+    
+        // Notification for low stock levels of medications, only displayed once
+        if (!lowStockNotificationDisplayed) {  // Check if notification was displayed
+            System.out.println("\n---- Low Stock Medication Level Alert ----");
+            for (Medication medication : MainApp.medications) {
+                if (medication.getStockLevel() <= medication.getLowStockLevel()) {
+                    System.out.println("Medication " + medication.getMedicationName() + " is running low.");
+                    System.out.println("Current stock level: " + medication.getStockLevel() +
+                                    " (Low stock alert: " + medication.getLowStockLevel() + ")");
+                    System.out.println("Please consider submitting a replenishment request.");
+                    lowStockNotificationDisplayed = true;  // Set the flag to true after displaying
+                }
+            }
+        }
+
         while (choice != 5) { // Option 5 will be the logout option
             System.out.println();
             System.out.println("=============================");

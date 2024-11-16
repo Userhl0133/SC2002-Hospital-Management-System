@@ -337,10 +337,10 @@ public class Administrator extends User {
             .anyMatch(request -> request.getStatus() == ReplenishmentStatus.PENDING);
 
         if (hasPendingRequests) {
-            System.out.println("\n---- There are pending replenishment requests ----");
+            System.out.println("\n---- Notification System ----");
             for (ReplenishmentRequest request : replenishmentRequests) {
                 if (request.getStatus() == ReplenishmentStatus.PENDING) {
-                    System.out.println("Request ID: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());
+                    System.out.println("Request Medication ID: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());
                 }
             }
         }

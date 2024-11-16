@@ -27,8 +27,30 @@ public class Medication {
         this.lowStockLevel = newLowStockLevel;
     }
 
+    // Update stock level after dispensing medication
+    public void dispenseMedication(int quantity) {
+        if (this.stockLevel >= quantity) {
+            this.stockLevel -= quantity;
+            System.out.println(quantity + " units of " + medicationName + " have been dispensed.");
+            checkLowStock(); // After dispensing, check if the stock is low
+        } else {
+            System.out.println("Not enough stock to dispense " + quantity + " units of " + medicationName);
+        }
+    }
+
+    // Check if medication stock is low after dispensing
+    private void checkLowStock() {
+        if (this.stockLevel <= this.lowStockLevel) {
+            System.out.println("ALERT: " + medicationName + " stock is low (" + stockLevel + " units left). Please replenish.");
+            this.replenishmentStatus = "pending"; // Replenishment status is set to pending
+        }
+    }
+
+    // Update the stock level manually (e.g., when new stock is received)
     public void updateStock(int newStockLevel) {
         this.stockLevel = newStockLevel;
+        System.out.println("Stock level of " + medicationName + " updated to " + stockLevel);
+        checkLowStock(); // Check if the stock is low after updating
     }
 
     // Getter and Setter for Replenishment Status

@@ -2,7 +2,6 @@ package HMS.models;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -16,13 +15,12 @@ import java.util.Scanner;
 import static HMS.MainApp.doctors;
 import static HMS.MainApp.medications;
 import static HMS.MainApp.patients;
-import static HMS.models.Appointment.getAppointments;
-
 import HMS.enums.AppointmentStatus;
 import HMS.enums.Gender;
 import HMS.enums.PrescriptionStatus;
 import HMS.enums.Role;
 import HMS.enums.ServiceType;
+import static HMS.models.Appointment.getAppointments;
 
 public class Doctor extends User{
 
@@ -202,6 +200,7 @@ public class Doctor extends User{
         for (Appointment appointment : getAppointments()) {
             if (appointment.getAppointmentStatus() == AppointmentStatus.PENDING && Objects.equals(appointment.getDoctorID(), super.getUserId())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                System.out.println("\n---- Notification System ----");
                 System.out.println("Pending Appointment"
                         + " with Patient " + new Patient().getPatientById(appointment.getPatientID()).getName()
                         + " on " + appointment.getAppointmentDateTime().format(formatter));
@@ -525,7 +524,7 @@ public class Doctor extends User{
                                         for (ServiceType service : ServiceType.values()) {
                                             System.out.println("[" + i++ + "] " + service);
                                         }
-                                        System.out.println("Enter service type [1/2/3]:  ");
+                                        System.out.println("\nEnter one service type [1/2/3]:  ");
                                         int serviceTypeIndex = sc.nextInt();
                                         try {
                                             if(serviceTypeIndex == 1 || serviceTypeIndex == 2 || serviceTypeIndex == 3){
@@ -544,7 +543,7 @@ public class Doctor extends User{
                                         System.out.println("[" + i++ + "] " + medication.getMedicationName());
                                     }
 
-                                    System.out.println("Enter prescribed medication(s), separated by comma [eg. 1,2,3]:  ");
+                                    System.out.println("\nEnter prescribed medication(s), separated by comma [eg. 1,2,3]:  ");
                                     sc.nextLine();
                                     String inputMedications = sc.nextLine();
                                     String[] medicationsIndex = inputMedications.split(",");

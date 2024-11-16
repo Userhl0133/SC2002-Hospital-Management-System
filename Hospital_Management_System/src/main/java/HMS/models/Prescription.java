@@ -8,6 +8,7 @@ public class Prescription {
     private Integer quantity;
     private String frequency;
 
+    // Constructor
     public Prescription(Medication medication, PrescriptionStatus status, int quantity, String frequency) {
         this.medication = medication;
         this.status = status;
@@ -15,7 +16,7 @@ public class Prescription {
         this.frequency = frequency;
     }
 
-
+    // Getters and Setters
     public Medication getMedication() {
         return medication;
     }

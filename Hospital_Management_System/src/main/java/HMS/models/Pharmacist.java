@@ -37,10 +37,10 @@ public class Pharmacist extends User {
 
     public void viewCompletedAppointmentOutcomeRecords() {
         System.out.println("\n--- All Appointment Outcome Records ---");
-    
+
         // Show all appointments (filtering only by the completed status is removed)
         List<Appointment> allAppointments = getAppointments(); // Get all appointments, no filtering by status
-        
+
         if (allAppointments.isEmpty()) {
             System.out.println("No appointments found.\n");
         } else {
@@ -57,71 +57,71 @@ public class Pharmacist extends User {
                 System.out.println("-----------------------------------");
             });
         }
-    
+
         // Return to the menu after displaying records
         return;
     }
-    
+
 
     public void updatePrescriptionStatus() {
         System.out.println("\n--- Update Prescription Status ---");
         Scanner sc = new Scanner(System.in);
-    
+
         // Get the completed appointments
         List<Appointment> completedAppointments = getAppointments().stream()
                 .filter(a -> a.getAppointmentStatus() == AppointmentStatus.COMPLETED)
                 .collect(Collectors.toList());
-    
+
         if (completedAppointments.isEmpty()) {
             System.out.println("No completed appointments found.\n");
             return; // No completed appointments to process
         }
-    
+
         // Display completed appointments and ask for the Appointment ID
         System.out.println("Completed appointments available to update the prescription status:");
         completedAppointments.forEach(appointment -> {
             System.out.println("Appointment ID: " + appointment.getAppointmentID());
         });
-    
+
         // Ask for the Appointment ID to update prescription status
         System.out.print("\nEnter the Appointment ID to update prescription status (or -1 to cancel): ");
         int appointmentIDToUpdate = sc.nextInt();
         sc.nextLine();  // Clear the buffer
-    
+
         if (appointmentIDToUpdate == -1) {
             System.out.println("Action canceled.");
             return;
         }
-    
+
         // Find the selected appointment by ID
         Appointment selectedAppointment = completedAppointments.stream()
                 .filter(a -> a.getAppointmentID() == appointmentIDToUpdate)
                 .findFirst()
                 .orElse(null);
-    
+
         if (selectedAppointment == null) {
             System.out.println("Invalid Appointment ID. Please try again.");
             return;  // No such appointment found
         }
-    
+
         // Get the AppointmentOutcomeRecord from the selected appointment=
         AppointmentOutcomeRecord selectedOutcomeRecord = selectedAppointment.getAppointmentOutcomeRecord();
-    
+
         if (selectedOutcomeRecord != null && !selectedOutcomeRecord.getPrescribedMedications().isEmpty()) {
             // Get the prescribed medications
             List<Prescription> prescribedMedications = selectedOutcomeRecord.getPrescribedMedications();
-    
+
             // Show the list of medications before dispensing
             System.out.println("\nList of prescribed medications for Appointment ID " + selectedAppointment.getAppointmentID() + ":");
             prescribedMedications.forEach(prescription -> {
                 System.out.println("- " + prescription.getMedication().getMedicationName() + " (Status: " + prescription.getStatus().getDisplayName() + ")");
             });
-    
+
             boolean validChoice = false;
             while (!validChoice) {
                 System.out.print("\nDo you want to dispense all pending medications for appointment ID " + selectedAppointment.getAppointmentID() + "? (Y/N): ");
                 String dispenseAllChoice = sc.nextLine().trim().toLowerCase();
-    
+
                 if (dispenseAllChoice.equals("y")) {
                     validChoice = true;
                     boolean allDispensed = true;
@@ -137,7 +137,7 @@ public class Pharmacist extends User {
                                     " is already dispensed or not in PENDING status.");
                         }
                     }
-    
+
                     if (allDispensed) {
                         System.out.println("\nAll medications dispensed successfully.");
                     } else {
@@ -151,24 +151,24 @@ public class Pharmacist extends User {
                         System.out.println((i + 1) + ". " + prescription.getMedication().getMedicationName() +
                                 " (Status: " + prescription.getStatus().getDisplayName() + ")");
                     }
-    
+
                     System.out.print("\nEnter the number to dispense medication (or -1 to cancel): ");
                     int medChoice = sc.nextInt();
                     sc.nextLine();
-    
-                if (medChoice == -1) {
-                    System.out.println("Action canceled.");
-                    return;
-                }
-    
-                // Get the selected prescription
-                if (medChoice < 1 || medChoice > prescribedMedications.size()) {
-                    System.out.println("Invalid selection. Please try again.");
-                    return;
-                }
-    
-                Prescription selectedPrescription = prescribedMedications.get(medChoice - 1);
-    
+
+                    if (medChoice == -1) {
+                        System.out.println("Action canceled.");
+                        return;
+                    }
+
+                    // Get the selected prescription
+                    if (medChoice < 1 || medChoice > prescribedMedications.size()) {
+                        System.out.println("Invalid selection. Please try again.");
+                        return;
+                    }
+
+                    Prescription selectedPrescription = prescribedMedications.get(medChoice - 1);
+
                     if (selectedPrescription.getStatus() == PrescriptionStatus.PENDING) {
                         selectedPrescription.setStatus(PrescriptionStatus.DISPENSED);
                         System.out.println("Prescription status updated to DISPENSED for Medication: " +
@@ -185,7 +185,7 @@ public class Pharmacist extends User {
             System.out.println("No prescribed medications available for this appointment.");
         }
     }
-    
+
 
     // Method to submit replenishment request
     public void submitReplenishmentRequest() {
@@ -227,20 +227,20 @@ public class Pharmacist extends User {
 
         // Create a new ReplenishmentRequest with all required parameters
         ReplenishmentRequest request = new ReplenishmentRequest(
-            requestID,                 // Generated requestID
-            pharmacistId,              // Pharmacist ID
-            medication.getMedicationName(),  // Medication Name
-            quantity,                  // Requested Quantity
-            currentStock,              // Current Stock Level
-            ReplenishmentStatus.PENDING // Set the status as PENDING
+                requestID,                 // Generated requestID
+                pharmacistId,              // Pharmacist ID
+                medication.getMedicationName(),  // Medication Name
+                quantity,                  // Requested Quantity
+                currentStock,              // Current Stock Level
+                ReplenishmentStatus.PENDING // Set the status as PENDING
         );
 
         MainApp.replenishmentRequests.add(request);
 
         medication.setReplenishmentStatus("PENDING");
 
-        System.out.println("Replenishment request submitted for " + medication.getMedicationName() + 
-                        " by Pharmacist: " + pharmacistId + " with quantity " + quantity + ".");
+        System.out.println("Replenishment request submitted for " + medication.getMedicationName() +
+                " by Pharmacist: " + pharmacistId + " with quantity " + quantity + ".");
     }
 
 
@@ -253,10 +253,10 @@ public class Pharmacist extends User {
         for (Appointment appointment : getAppointments()) {
             if (appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED) {
                 AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
-                
+
                 if (outcomeRecord != null && !outcomeRecord.getPrescribedMedications().isEmpty()) {
                     List<Prescription> prescribedMedications = outcomeRecord.getPrescribedMedications();
-                    
+
                     prescribedMedications.forEach(prescription -> {
                         if (prescription.getStatus() == PrescriptionStatus.PENDING) {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -289,86 +289,87 @@ public class Pharmacist extends User {
         // If no low stock medications, do not print the "Low Stock Medication Level Alert" header
         if (lowStockNotificationDisplayed) {
             // Add any other logic here if needed, but nothing will print if no low stock is detected
-        // Flag to track if low stock notification has been displayed
-        boolean notFound = true;
-        System.out.println("\n---- Notifications ----");
-        for (Appointment appointment : getAppointments()) {
-            if (appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED) {
-                AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
+            // Flag to track if low stock notification has been displayed
+            boolean notFound = true;
+            System.out.println("\n---- Notifications ----");
+            for (Appointment appointment : getAppointments()) {
+                if (appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED) {
+                    AppointmentOutcomeRecord outcomeRecord = appointment.getAppointmentOutcomeRecord();
 
-                // If outcome record exists and contains prescribed medications
-                if (outcomeRecord != null && !outcomeRecord.getPrescribedMedications().isEmpty()) {
-                    List<Prescription> prescribedMedications = outcomeRecord.getPrescribedMedications();
-                    System.out.println("Pending Medication to be dispensed");
-                    System.out.println("Appointment ID: " + appointment.getAppointmentID());
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                    System.out.println("Appointment Date & Time: " + appointment.getAppointmentDateTime().format(formatter));
-                    System.out.println("Patient: " + new Patient().getPatientById(appointment.getPatientID()).getName());
-                    System.out.println("Medications: ");
-                    // Check for any PENDING prescriptions and notify the pharmacist
-                    prescribedMedications.forEach(prescription -> {
-                        if (prescription.getStatus() == PrescriptionStatus.PENDING) {
-                            // Create and display notification for the pharmacist
-                            System.out.println("    -" + prescription.getMedication().getMedicationName() + " (Quantity: " + prescription.getQuantity() + ")");
-                        }
-                    });
+                    // If outcome record exists and contains prescribed medications
+                    if (outcomeRecord != null && !outcomeRecord.getPrescribedMedications().isEmpty()) {
+                        List<Prescription> prescribedMedications = outcomeRecord.getPrescribedMedications();
+                        System.out.println("Pending Medication to be dispensed");
+                        System.out.println("Appointment ID: " + appointment.getAppointmentID());
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                        System.out.println("Appointment Date & Time: " + appointment.getAppointmentDateTime().format(formatter));
+                        System.out.println("Patient: " + new Patient().getPatientById(appointment.getPatientID()).getName());
+                        System.out.println("Medications: ");
+                        // Check for any PENDING prescriptions and notify the pharmacist
+                        prescribedMedications.forEach(prescription -> {
+                            if (prescription.getStatus() == PrescriptionStatus.PENDING) {
+                                // Create and display notification for the pharmacist
+                                System.out.println("    -" + prescription.getMedication().getMedicationName() + " (Quantity: " + prescription.getQuantity() + ")");
+                            }
+                        });
+                        notFound = false;
+                    }
+                }
+            }
+
+            // Notification for low stock levels of medications
+            for (Medication medication : MainApp.medications) {
+                if (medication.getStockLevel() <= medication.getLowStockLevel()) {
+                    System.out.println("\nMedication " + medication.getMedicationName() + " is running low.");
+                    System.out.println("Current stock level: " + medication.getStockLevel() +
+                            " (Low stock alert: " + medication.getLowStockLevel() + ")");
+                    System.out.println("Please consider submitting a replenishment request.");
                     notFound = false;
                 }
             }
-        }
 
-        // Notification for low stock levels of medications
-        for (Medication medication : MainApp.medications) {
-            if (medication.getStockLevel() <= medication.getLowStockLevel()) {
-                System.out.println("\nMedication " + medication.getMedicationName() + " is running low.");
-                System.out.println("Current stock level: " + medication.getStockLevel() +
-                                " (Low stock alert: " + medication.getLowStockLevel() + ")");
-                System.out.println("Please consider submitting a replenishment request.");
-                notFound = false;
+            if (notFound) {
+                System.out.println("No notifications");
             }
-        }
 
-        if (notFound) {
-            System.out.println("No notifications");
-        }
+            while (choice != 5) {
+                System.out.println();
+                System.out.println("=============================");
+                System.out.println("----- Pharmacist Menu -------");
+                System.out.println("=============================");
+                System.out.println("1. View Appointment Outcome Record");
+                System.out.println("2. Update Prescription Status");
+                System.out.println("3. View Medication Inventory");
+                System.out.println("4. Submit Replenishment Request");
+                System.out.println("5. Logout");
+                System.out.print("Please select an option: ");
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice) {
+                    case 1:
+                        viewCompletedAppointmentOutcomeRecords();
+                        break;
 
-        while (choice != 5) {
-            System.out.println();
-            System.out.println("=============================");
-            System.out.println("----- Pharmacist Menu -------");
-            System.out.println("=============================");
-            System.out.println("1. View Appointment Outcome Record");
-            System.out.println("2. Update Prescription Status");
-            System.out.println("3. View Medication Inventory");
-            System.out.println("4. Submit Replenishment Request");
-            System.out.println("5. Logout");
-            System.out.print("Please select an option: ");
-            choice = sc.nextInt();
-            sc.nextLine();
-            switch (choice) {
-                case 1:
-                    viewCompletedAppointmentOutcomeRecords();
-                    break;
+                    case 2:
+                        updatePrescriptionStatus();
+                        break;
 
-                case 2:
-                    updatePrescriptionStatus();
-                    break;
+                    case 3:
+                        Medication.viewInventory();
+                        break;
 
-                case 3:
-                    Medication.viewInventory();
-                    break;
+                    case 4:
+                        submitReplenishmentRequest();
+                        break;
 
-                case 4:
-                    submitReplenishmentRequest();
-                    break;
+                    case 5:
+                        // Logout
+                        System.out.println("Logging out... Returning to main login page...");
+                        break;
 
-                case 5:
-                    // Logout
-                    System.out.println("Logging out... Returning to main login page...");
-                    break;
-
-                default:
-                    System.out.println("Invalid Option, please try again.");
+                    default:
+                        System.out.println("Invalid Option, please try again.");
+                }
             }
         }
     }

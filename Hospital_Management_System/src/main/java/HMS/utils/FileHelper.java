@@ -44,10 +44,6 @@ public class FileHelper implements IFileService {
                 BloodType bloodType = BloodType.fromDisplayName(values[4].toUpperCase());
                 String contactInfo = values[5];
                 String password = values[6].trim();;
-
-                System.out.println("DEBUG: Reading password for user " + name + ": " + password);
-
-                // Set a default role, such as 'PATIENT'
                 Role role = Role.PATIENT;
 
                 // Create Patient object
@@ -188,8 +184,8 @@ public class FileHelper implements IFileService {
 
                 int id = i - 1;
                 String name = values[0];
-                int initialStock = Integer.parseInt(values[1]);
-                int lowStockLevel = Integer.parseInt(values[2]);
+                int initialStock = Integer.parseInt(values[2]);
+                int lowStockLevel = Integer.parseInt(values[1]);
 
                 Medication medication = new Medication(id, initialStock, lowStockLevel, name);
                 medications.add(medication);

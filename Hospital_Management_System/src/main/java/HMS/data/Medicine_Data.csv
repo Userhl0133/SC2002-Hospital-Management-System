@@ -1,5 +1,5 @@
 name,initialStock,lowStockLevel
-Paracetamol,20,100
-Ibuprofen,10,50
-Amoxicillin,15,75
-Cough Syrup,50,10
+Paracetamol,100,20
+Ibuprofen,50,10
+Amoxicillin,75,15
+Cough Syrup,10,50

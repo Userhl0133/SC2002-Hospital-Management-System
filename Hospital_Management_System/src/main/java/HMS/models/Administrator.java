@@ -59,7 +59,6 @@ public class Administrator extends User {
 
     private void updateStaff(User staff) {
         Scanner scanner = new Scanner(System.in);
-
         // Update the staff member's name
         System.out.print("Enter new name (-1 to cancel): ");
         String newName = scanner.nextLine();
@@ -71,11 +70,21 @@ public class Administrator extends User {
             staff.setName(newName);
         }
 
-        System.out.print("Do you want to update the password? (Y/N): ");
-        String changePassword = scanner.nextLine().toLowerCase();
+        boolean validInput = false;
+        String changePassword = "";
+
+        while (!validInput) {
+            System.out.print("Do you want to update the password? (Y/N): ");
+            changePassword = scanner.nextLine().toLowerCase();
+
+            if (changePassword.equals("y") || changePassword.equals("n")) {
+                validInput = true;
+            } else {
+                System.out.println("Invalid input. Please enter 'Y' or 'N' only.");
+            }
+        }
 
         if (changePassword.equalsIgnoreCase("Y")) {
-
             System.out.print("Enter new password: ");
             String newPassword = scanner.nextLine();
             staff.changePassword(newPassword);

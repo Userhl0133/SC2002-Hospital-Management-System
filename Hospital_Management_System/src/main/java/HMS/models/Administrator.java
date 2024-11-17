@@ -59,24 +59,24 @@ public class Administrator extends User {
 
     private void updateStaff(User staff) {
         Scanner scanner = new Scanner(System.in);
-    
+
         // Update the staff member's name
         System.out.print("Enter new name: ");
         String newName = scanner.nextLine();
         if (!newName.isEmpty()) {
             staff.setName(newName);
         }
-    
+
         System.out.print("Do you want to update the password? (Y/N): ");
         String changePassword = scanner.nextLine().toLowerCase();
-        
+
         if (changePassword.equalsIgnoreCase("Y")) {
-            
+
             System.out.print("Enter new password: ");
             String newPassword = scanner.nextLine();
             staff.changePassword(newPassword);
         }
-    
+
         System.out.println("---- Staff updated successfully! ----");
         System.out.println("Updated Details:");
         System.out.println("Hospital ID: " + staff.getUserId());
@@ -113,7 +113,7 @@ public class Administrator extends User {
         for (Appointment appointment : getAppointments()) {
             System.out.println(appointment);
 
-            
+
             if (appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED && appointment.getAppointmentOutcomeRecord() != null) {
                 System.out.println("-----------------------------------");
             }
@@ -121,13 +121,13 @@ public class Administrator extends User {
                 System.out.println("Appointment is not completed yet.");
                 System.out.println("-----------------------------------");
             }
-            
+
         }
     }
 
     public void addMedication(String name, int stockLevel, int lowStockLevel) {
         Scanner scanner = new Scanner(System.in);
-    
+
         while (true) {
             boolean exists = false;
             for (Medication medication : medications) {
@@ -143,7 +143,7 @@ public class Administrator extends User {
                 break;
             }
         }
-    
+
         int medicationId = medications.size();
         Medication newMedication = new Medication(medicationId, lowStockLevel, stockLevel, name);
         medications.add(newMedication);
@@ -152,11 +152,11 @@ public class Administrator extends User {
 
     public void removeMedication() {
         Scanner scanner = new Scanner(System.in);
-    
+
         while (true) {
             System.out.print("\nEnter Medication ID to remove: ");
             int medicationId = scanner.nextInt();
-    
+
             boolean found = medications.removeIf(med -> med.getMedicationId() == medicationId);
             if (found) {
                 System.out.println("Medication with ID " + medicationId + " removed successfully.");
@@ -169,7 +169,7 @@ public class Administrator extends User {
 
     public void updateLowStockLevel() {
         Scanner scanner = new Scanner(System.in);
-    
+
         while (true) {
             System.out.print("\nEnter Medication ID to update low stock level: ");
             int medicationId = scanner.nextInt();
@@ -208,7 +208,7 @@ public class Administrator extends User {
             System.out.println("\n---- No Replenishment Requests Available ---- ");
             return;
         }
-    
+
         System.out.println("\n---- Replenishment Requests (Pending) ----");
         boolean hasPendingRequests = false;
         for (ReplenishmentRequest request : replenishmentRequests) {
@@ -217,18 +217,18 @@ public class Administrator extends User {
                 hasPendingRequests = true;
             }
         }
-    
+
         if (!hasPendingRequests) {
             System.out.println("---- No Pending Replenishment Requests Available ---- ");
             return;
         }
-    
+
         Scanner sc = new Scanner(System.in);
         System.out.print("\nEnter Request ID to process the request: ");
         int RequestID = sc.nextInt();
 
         ReplenishmentRequest selectedRequest = findRequestByRequestId(RequestID);
-    
+
         if (selectedRequest == null) {
             System.out.println("No pending request found for the given Request ID.");
             return;
@@ -236,7 +236,7 @@ public class Administrator extends User {
 
         System.out.print("Do you want to approve this request? (Y/N): ");
         String decision = sc.next().toLowerCase();
-    
+
         if (decision.equalsIgnoreCase("Y")) {
             approveRequest(selectedRequest);
         } else {
@@ -244,7 +244,7 @@ public class Administrator extends User {
             System.out.println("Replenishment request for " + selectedRequest.getMedicationName() + " rejected.");
         }
     }
-    
+
     private ReplenishmentRequest findRequestByRequestId(int requestID) {
         for (ReplenishmentRequest request : replenishmentRequests) {
             if (request.getRequestID()==requestID && request.getStatus() == ReplenishmentStatus.PENDING) {
@@ -253,13 +253,13 @@ public class Administrator extends User {
         }
         return null;
     }
-    
+
     private void approveRequest(ReplenishmentRequest request) {
         Medication medication = MainApp.medications.stream()
                 .filter(med -> med.getMedicationName().equalsIgnoreCase(request.getMedicationName()))
                 .findFirst()
                 .orElse(null);
-    
+
         if (medication != null) {
             // Update stock level if approved
             medication.updateStock(medication.getStockLevel() + request.getQuantity());
@@ -286,10 +286,10 @@ public class Administrator extends User {
         Scanner sc = new Scanner(System.in);
 
         boolean hasPendingRequests = replenishmentRequests.stream()
-            .anyMatch(request -> request.getStatus() == ReplenishmentStatus.PENDING);
+                .anyMatch(request -> request.getStatus() == ReplenishmentStatus.PENDING);
 
         if (hasPendingRequests) {
-            System.out.println("\n---- Notifications ----");
+            System.out.println("\n---- Notification System ----");
             for (ReplenishmentRequest request : replenishmentRequests) {
                 if (request.getStatus() == ReplenishmentStatus.PENDING) {
                     System.out.println("Request Medication ID: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());
@@ -366,14 +366,14 @@ public class Administrator extends User {
                     viewStaff();
                     break;
 
-                    case 3:
+                case 3:
                     viewStaff();
                     String userIdToUpdate = "";
                     while (true) {
                         System.out.print("\nEnter the Hospital ID of the staff member to update: ");
                         userIdToUpdate = sc.nextLine();
                         User staffToUpdate = User.findUserById(userIdToUpdate, patients, doctors, pharmacists, administrators);
-                        
+
                         if (staffToUpdate != null) {
                             System.out.println("\nStaff member found:");
                             System.out.println("Name: " + staffToUpdate.getName() + ", Role: " + staffToUpdate.getRole());
@@ -421,7 +421,7 @@ public class Administrator extends User {
                             sc.next(); // Clear invalid input
                         }
                     }
-                    
+
                     // Prompt and validate Low Stock Level Alert
                     int lowStockLevel;
                     while (true) {

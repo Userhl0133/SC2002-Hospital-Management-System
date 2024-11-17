@@ -25,8 +25,10 @@ import HMS.enums.Role;
 
 import HMS.service.IFileService;
 
+// Helper class to read and write data to/from CSV files
 public class FileHelper implements IFileService {
 
+     // Method to read patient data from a CSV file
     @Override
     public List<Patient> getPatientsData(String filePath) {
         List<Patient> patients = new ArrayList<>();
@@ -56,7 +58,7 @@ public class FileHelper implements IFileService {
 
         return patients;
     }
-
+    // Method to write patient data to a CSV file
     @Override
     public void writePatientsData(String filePath) {
         List<String> lines = new ArrayList<>();
@@ -81,6 +83,7 @@ public class FileHelper implements IFileService {
         }
     }
 
+// Method to read staff data from a CSV file
     @Override
     public List<Object> getStaffData(String filePath) {
         List<Object> staff = new ArrayList<>();
@@ -122,6 +125,7 @@ public class FileHelper implements IFileService {
         return staff;
     }
 
+    // Method to write staff data to a CSV file
     @Override
     public void writeStaffData(String filePath) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
@@ -172,6 +176,7 @@ public class FileHelper implements IFileService {
         }
     }
 
+    // Method to read medication data from a CSV file
     @Override
     public List<Medication> getMedicationsData(String filePath) {
         List<Medication> medications = new ArrayList<>();
@@ -196,6 +201,7 @@ public class FileHelper implements IFileService {
         return medications;
     }
 
+    // Method to write medication data to a CSV file
     @Override
     public void writeMedicationData(String filePath) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
@@ -217,6 +223,7 @@ public class FileHelper implements IFileService {
         }
     }
 
+    // Method to read doctor availability data from a CSV file
     @Override
     public void getDoctorAvailability(String filePath) {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
@@ -249,6 +256,7 @@ public class FileHelper implements IFileService {
         }
     }
 
+    // Method to write doctor availability data to a CSV file
     @Override
     public void writeDoctorAvailability(String filePath) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {

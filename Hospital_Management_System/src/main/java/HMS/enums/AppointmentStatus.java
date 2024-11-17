@@ -1,5 +1,6 @@
 package HMS.enums;
 
+// Enum for Appointment Status
 public enum AppointmentStatus {
     PENDING("Pending"),
     CONFIRMED("Confirmed"),
@@ -8,14 +9,17 @@ public enum AppointmentStatus {
 
     private final String displayName;
 
+// Constructor for AppointmentStatus
     AppointmentStatus(String displayName) {
         this.displayName = displayName;
     }
 
+// Getter for displayName
     public String getDisplayName() {
         return displayName;
     }
 
+// Override toString method
     @Override
     public String toString() {
         return displayName;

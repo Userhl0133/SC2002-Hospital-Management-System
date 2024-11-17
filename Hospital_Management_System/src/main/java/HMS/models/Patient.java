@@ -17,6 +17,7 @@ import HMS.enums.BloodType;
 import HMS.enums.Gender;
 import HMS.enums.Role;
 
+// Patient class inherits from User
 public class Patient extends User {
 
     private LocalDate DOB;
@@ -37,6 +38,7 @@ public class Patient extends User {
         this.appointments = new ArrayList<>();
     }
 
+    // Method to update patient details
     public void updateParticular(Scanner sc) {
         System.out.println("Updating patient details for: " + getName());
 
@@ -91,6 +93,7 @@ public class Patient extends User {
         System.out.println("");
     }
 
+    // Method to display doctor availability
     public String showDoctorAvailability() {
         StringBuilder availability = new StringBuilder();
 
@@ -145,6 +148,7 @@ public class Patient extends User {
         return availability.toString();
     }
 
+    // Method to schedule an appointment
     public void scheduleAppointment(Scanner sc) {
         System.out.println("Scheduling appointment for patient: " + getName());
 
@@ -175,6 +179,7 @@ public class Patient extends User {
         }
     }
 
+    // Method to check doctor availability and schedule an appointment
     public Map.Entry<Doctor, Appointment> checkAvaiDoctor(Scanner sc) {
         Doctor selectedDoctor = selectDoctor(sc);
         if (selectedDoctor == null) {
@@ -224,6 +229,7 @@ public class Patient extends User {
         }
     }
 
+    // Method to select a doctor from the list
     public Doctor selectDoctor(Scanner sc) {
         while (true) {
             System.out.println("Available Doctors:");
@@ -282,6 +288,7 @@ public class Patient extends User {
         }
     }
 
+    // Method to display available dates for a doctor
     public int displayAvailabeDates(Doctor doctor, Scanner sc) {
         Map<Integer, List<Integer>> availability = doctor.getAvailability();
 
@@ -331,6 +338,7 @@ public class Patient extends User {
         }
     }
 
+    // Method to display available time slots for a selected date
     public int displayAvailableSlots(List<Integer> slots, Scanner sc) {
         if (slots.isEmpty()) {
             System.out.println("No available time slots.");
@@ -365,6 +373,7 @@ public class Patient extends User {
         }
     }
 
+    // Method to view all appointments
     public void viewAllAppointments() {
         if (appointments == null) {
             System.out.println("No appointments scheduled.");
@@ -379,6 +388,7 @@ public class Patient extends User {
         }
     }
 
+    // Method to view completed appointments
     public void viewCompletedAppointments() {
         System.out.println("Completed Appointments for " + getName() + ":");
         System.out.println("-------------------------------");
@@ -406,6 +416,7 @@ public class Patient extends User {
         System.out.println("");
     }
 
+    // Method to view scheduled appointments
     public int viewScheduledAppointments() {
         System.out.println("Scheduled Appointments for " + getName() + ":");
         System.out.println("-------------------------------");
@@ -435,6 +446,7 @@ public class Patient extends User {
         return counter;
     }
 
+    // Method to reschedule an appointment
     public void rescheduleAppointment(Scanner sc) {
         // This would contain logic to reschedule an appointment
         System.out.println("Rescheduling appointment for patient: " + getName());
@@ -484,6 +496,7 @@ public class Patient extends User {
         System.out.println("Appointment rescheduled successfully.");
     }
 
+    // Method to cancel an appointment
     public int cancelAppointment(Scanner sc) {
         System.out.println("Cancelling appointment for patient: " + getName());
 

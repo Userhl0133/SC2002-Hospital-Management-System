@@ -15,6 +15,7 @@ import HMS.enums.ReplenishmentStatus;
 import HMS.enums.Role;
 import static HMS.models.Appointment.getAppointments;
 
+// Administrator class that extends User
 public class Administrator extends User {
 
     private int age;
@@ -24,6 +25,7 @@ public class Administrator extends User {
         this.age = age;
     }
 
+    // View all staff members
     public void viewStaff() {
         System.out.println("\n------------------------------ List of Staff -------------------------------");
         for (Administrator administrator : administrators) {
@@ -38,6 +40,7 @@ public class Administrator extends User {
         System.out.println("------------------------------------------------------------------------------");
     }
 
+    // Add staff member
     public void addStaff(Gender gender, String name, Role role, int age) {
         String userId;
         String password = "password";
@@ -57,6 +60,7 @@ public class Administrator extends User {
         }
     }
 
+    // Update staff member's details
     private void updateStaff(User staff) {
         Scanner scanner = new Scanner(System.in);
 
@@ -88,6 +92,7 @@ public class Administrator extends User {
         System.out.println("Role: " + staff.getRole());
     }
 
+    // Remove staff member
     public void removeStaff(String userId) {
         if (userId.startsWith("D")) {
             if (doctors.removeIf(doctor -> doctor.getUserId().equals(userId))) {
@@ -104,6 +109,7 @@ public class Administrator extends User {
         System.out.println("Staff member with Hospital ID " + userId + " not found.");
     }
 
+    // View all appointments
     public void viewAppointments() {
         if (getAppointments() == null || getAppointments().isEmpty()) {
             System.out.println("\n---- No appointments found ----");
@@ -123,6 +129,8 @@ public class Administrator extends User {
         }
     }
 
+
+    // Add medication to the inventory
     public void addMedication(String name, int stockLevel, int lowStockLevel) {
         Scanner scanner = new Scanner(System.in);
 
@@ -148,6 +156,7 @@ public class Administrator extends User {
         System.out.println("Medication Name: " + name + " added successfully.");
     }
 
+    // Remove medication from the inventory
     public void removeMedication() {
         Scanner scanner = new Scanner(System.in);
 
@@ -169,6 +178,7 @@ public class Administrator extends User {
         }
     }
 
+    // Update low stock level alert for a medication
     public void updateLowStockLevel() {
         Scanner scanner = new Scanner(System.in);
 
@@ -212,6 +222,7 @@ public class Administrator extends User {
         }
     }
 
+// View all replenishment requests
     public void viewAllReplenishmentRequests() {
         if (replenishmentRequests == null || replenishmentRequests.isEmpty()) {
             System.out.println("\n---- No Replenishment Requests Available ---- ");
@@ -269,6 +280,7 @@ public class Administrator extends User {
         }
     }
 
+// Find a replenishment request by request ID
     private ReplenishmentRequest findRequestByRequestId(int requestID) {
         for (ReplenishmentRequest request : replenishmentRequests) {
             if (request.getRequestID() == requestID && request.getStatus() == ReplenishmentStatus.PENDING) {
@@ -278,6 +290,7 @@ public class Administrator extends User {
         return null;
     }
 
+// Approve a replenishment request
     private void approveRequest(ReplenishmentRequest request) {
         Medication medication = MainApp.medications.stream()
                 .filter(med -> med.getMedicationName().equalsIgnoreCase(request.getMedicationName()))
@@ -305,6 +318,7 @@ public class Administrator extends User {
                 super.getUserId(), super.getName(), super.getGender(), super.getRole(), age);
     }
 
+// Show the administrator menu
     public void showMenu() {
         int choice = 0;
         Scanner sc = new Scanner(System.in);

@@ -16,6 +16,7 @@ import HMS.utils.FileHelper;
 import HMS.utils.UserHelper;
 
 public class MainApp {
+    // Dependency Injection
     private final IFileService fileService;
     private final IUserService userService;
 
@@ -32,6 +33,7 @@ public class MainApp {
         this.userService = userService;
     }
 
+    // Main method to run the application
     public void run() {
         initialiseData();
 
@@ -80,6 +82,7 @@ public class MainApp {
         fileService.writeDoctorAvailability(System.getProperty("user.dir") + "/Hospital_Management_System/src/main/java/HMS/data/Doctor_Availability.csv");
     }
 
+    // Main method to start the application
     public static void main(String[] args) {
         // Injecting dependencies
         IFileService fileService = new FileHelper();

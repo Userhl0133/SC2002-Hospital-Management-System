@@ -325,7 +325,7 @@ public class Administrator extends User {
             System.out.println("\n---- Notification System ----");
             for (ReplenishmentRequest request : replenishmentRequests) {
                 if (request.getStatus() == ReplenishmentStatus.PENDING) {
-                    System.out.println("Request Medication ID: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());
+                    System.out.println("Request ID no.: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());
                 }
             }
         }

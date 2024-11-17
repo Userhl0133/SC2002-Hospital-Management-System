@@ -41,25 +41,6 @@ public class Doctor extends User{
         this.age = age;
     }
 
-    public Map<Integer, List<Integer>> generateAvailability(){
-        // Populate availability for next 10 days
-        Calendar calendar = Calendar.getInstance();
-        Map<Integer, List<Integer>> result = new HashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-        // Populate timeslots from 1 to 9
-        List<Integer> timeslots = new ArrayList<>();
-        for (int i = 1; i <= 9; i++) {
-            timeslots.add(i);
-        }
-        // Populate the next 10 dates
-        for (int i = 0; i < 10; i++) {
-            int dateKey = Integer.parseInt(sdf.format(calendar.getTime()));
-            result.put(dateKey, new ArrayList<>(timeslots));
-            calendar.add(Calendar.DATE, 1); // Move to the next day
-        }
-        return result;
-    }
-
     public Doctor getDoctorById(String doctorId) {
         for (Doctor doctor : doctors) {
             if (doctor.getUserId().equals(doctorId)) {
@@ -69,8 +50,8 @@ public class Doctor extends User{
         return null;
     }
 
-    public String getName() {
-        return super.getName();
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public int getAge() {
@@ -87,6 +68,123 @@ public class Doctor extends User{
 
 
     // Methods
+    public void viewPatientMedicalRecords() {
+        boolean notFound = true;
+        for (Patient patient : patients) {
+            for (Appointment appointment : patient.getAppointments()) {
+                if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
+                    patient.viewParticular();
+                    patient.viewCompletedAppointments();
+                    System.out.println();
+                    notFound = false;
+                    break;
+                }
+            }
+        }
+        if(notFound){
+            System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
+        }
+    }
+
+    public void updatePatientMedicalRecords() {
+        boolean notFound = true;
+        Scanner sc = new Scanner(System.in);
+        try {
+            // View patients
+            notFound = true;
+            for (Patient patient : patients) {
+                for (Appointment appointment : patient.getAppointments()) {
+                    if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
+                        System.out.println(patient.getPatientID() + "    " + patient.getName());
+                        System.out.println();
+                        notFound = false;
+                        break;
+                    }
+                }
+            }
+            if (notFound) {
+                System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
+                return;
+            }
+
+            Patient patient;
+            while(true) {
+                System.out.println("Enter Patient ID: ");
+                String inputPatientId = sc.nextLine();
+                patient = new Patient().getPatientById(inputPatientId);
+                if (patient != null) {
+                    break;
+                }
+                System.out.println("Invalid Patient ID, please try again");
+            }
+
+            System.out.println();
+            System.out.println(patient.getPatientID() + " " + patient.getName());
+            notFound = true;
+            for(Appointment appointment : patient.getAppointments()) {
+                System.out.println("\nAppoointment ID: " + appointment.getAppointmentID());
+                System.out.println("Diagnosis: " + appointment.getAppointmentOutcomeRecord().getDiagnosis());
+                System.out.println("Treatment plan: " + appointment.getAppointmentOutcomeRecord().getTreatmentPlan());
+                notFound = false;
+            }
+            if(notFound){
+                System.out.println("There are no appointments under " + patient.getPatientID() + " " + patient.getName());
+            }
+
+            Appointment appointment = null;
+            notFound = true;
+            while(true) {
+                System.out.println("Enter Appointment ID to update: ");
+                int inputAppointmentId = sc.nextInt();
+                for (Appointment x : patient.getAppointments()) {
+                    if (Objects.equals(x.getAppointmentID(), inputAppointmentId)) {
+                        appointment = x;
+                        notFound = false;
+                        break;
+                    }
+                }
+                if(notFound){
+                    System.out.println("Invalid Appointment ID, please try again");
+                    continue;
+                }
+                break;
+            }
+
+            System.out.println("[1] Update diagnosis");
+            System.out.println("[2] Update treatment plan");
+            System.out.println("Select an option: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
+            switch(choice) {
+                case 1:
+                    System.out.println("Enter updated diagnosis: ");
+                    String diagnosis = sc.nextLine();
+                    appointment.getAppointmentOutcomeRecord().setDiagnosis(diagnosis);
+                    break;
+
+                case 2:
+                    System.out.println("Enter updated treatment plan: ");
+                    String treatmentPlan = sc.nextLine();
+                    appointment.getAppointmentOutcomeRecord().setDiagnosis(treatmentPlan);
+                    break;
+
+                default:
+                    System.out.println("Invalid option");
+            }
+
+            System.out.println("Updated medical record successfully");
+            for(Appointment appointment1 : patient.getAppointments()) {
+                System.out.println("\nAppoointment ID: " + appointment1.getAppointmentID());
+                System.out.println("Diagnosis: " + appointment1.getAppointmentOutcomeRecord().getDiagnosis());
+                System.out.println("Treatment plan: " + appointment1.getAppointmentOutcomeRecord().getTreatmentPlan());
+            }
+        }
+
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
     public void viewPersonalSchedule() {
         // Viewing upcoming appointments
         boolean notFound = true;
@@ -166,6 +264,105 @@ public class Doctor extends User{
         }
     }
 
+    public void setAppointmentOutcome() {
+        boolean notFound = true;
+        List<Integer> validIds = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Appointments:");
+        for (Patient patient : patients){
+            for (Appointment appointment : patient.getAppointments()) {
+                if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
+                    System.out.println(appointment);
+                    System.out.println();
+                    validIds.add(appointment.getAppointmentID());
+                    notFound = false;
+                }
+            }
+        }
+        if (notFound) {
+            System.out.println("No Appointments found");
+            return;
+        }
+
+        notFound = true;
+        while (notFound) {
+            System.out.println("\nEnter appointment ID: ");
+            int id = sc.nextInt();
+            if (!validIds.contains(id)) {
+                System.out.println("Invalid appointment ID");
+                continue;
+            }
+            for (Patient patient : patients) {
+                for (Appointment appointment : patient.getAppointments()) {
+                    if (appointment.getAppointmentID() == id) {
+                        // Service type
+                        ServiceType serviceType;
+                        while(true){
+                            int i = 1;
+                            for (ServiceType service : ServiceType.values()) {
+                                System.out.println("[" + i++ + "] " + service);
+                            }
+                            System.out.println("\nEnter one service type [1/2/3]:  ");
+                            int serviceTypeIndex = sc.nextInt();
+                            try {
+                                if(serviceTypeIndex == 1 || serviceTypeIndex == 2 || serviceTypeIndex == 3){
+                                    serviceType = ServiceType.values()[serviceTypeIndex-1];
+                                    break;
+                                }
+                            }
+                            catch(Exception e){
+                                System.out.println("Invalid input. Please try again");
+                            }
+                        }
+
+                        // Prescribed medications
+                        int i = 1;
+                        for (Medication medication : medications) {
+                            System.out.println("[" + i++ + "] " + medication.getMedicationName());
+                        }
+
+                        System.out.println("\nEnter prescribed medication(s), separated by comma [eg. 1,2,3]:  ");
+                        sc.nextLine();
+                        String inputMedications = sc.nextLine();
+                        String[] medicationsIndex = inputMedications.split(",");
+                        List<Prescription> prescriptionList = new ArrayList<>();
+                        for (String index : medicationsIndex) {
+                            System.out.println("\nEnter quantity for " + medications.get(Integer.parseInt(index)-1).getMedicationName() + ": ");
+                            int inputQuantity = sc.nextInt();
+                            System.out.println("Frequency: To be taken <frequency> times every <period>");
+                            System.out.println("Enter frequency: ");
+                            sc.nextLine();
+                            String inputFrequency = sc.nextLine();
+                            System.out.println("Frequency: To be taken " + inputFrequency + " times every <period>");
+                            System.out.println("Enter period: ");
+                            String inputPeriod = sc.nextLine();
+                            String frequency = "To be taken " + inputFrequency + " times every " + inputPeriod;
+                            Prescription prescription = new Prescription(medications.get(Integer.parseInt(index)-1), PrescriptionStatus.PENDING, inputQuantity, frequency);
+                            prescriptionList.add(prescription);
+                        }
+
+                        // Consultation Notes
+                        System.out.println("\n\nEnter Diagnosis: ");
+                        String inputDiagnosis = sc.nextLine();
+                        System.out.println("\nEnter Treatment plan: ");
+                        String inputTreatmentPlan = sc.nextLine();
+                        System.out.println("\nEnter consultation notes: ");
+                        String inputConsultationNotes = sc.nextLine();
+                        AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, inputDiagnosis, inputTreatmentPlan, prescriptionList,inputConsultationNotes);
+                        appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
+                        appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
+                        notFound = false;
+                        System.out.println("\nOutcome record for appointment " + id + " added successfully\n");
+                        System.out.println(appointmentOutcomeRecord);
+                    }
+                }
+            }
+            if (notFound) {
+                System.out.println("Invalid input. Please try again");
+            }
+        }
+    }
+
     private String convertDateFormat(String dateStr) {
         try {
             // Define the input format: DDMMYYYY
@@ -200,7 +397,10 @@ public class Doctor extends User{
         for (Appointment appointment : getAppointments()) {
             if (appointment.getAppointmentStatus() == AppointmentStatus.PENDING && Objects.equals(appointment.getDoctorID(), super.getUserId())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                System.out.println("\n---- Notification System ----");
+                if(notFound){
+                    System.out.println("\n---- Notifications ----");
+                    notFound = false;
+                }
                 System.out.println("Pending Appointment"
                         + " with Patient " + new Patient().getPatientById(appointment.getPatientID()).getName()
                         + " on " + appointment.getAppointmentDateTime().format(formatter));
@@ -227,120 +427,12 @@ public class Doctor extends User{
             switch(choice) {
                 case 1 :
                     // View Patient Medical Records
-                    notFound = true;
-                    for (Patient patient : patients) {
-                        for (Appointment appointment : patient.getAppointments()) {
-                            if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
-                                patient.viewParticular();
-                                patient.viewCompletedAppointments();
-                                System.out.println();
-                                notFound = false;
-                                break;
-                            }
-                        }
-                    }
-                    if(notFound){
-                        System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
-                    }
+                    viewPatientMedicalRecords();
                     break;
 
                 case 2 :
                     // Update Patient Medical Records
-
-                    try {
-                        // View patients
-                        notFound = true;
-                        for (Patient patient : patients) {
-                            for (Appointment appointment : patient.getAppointments()) {
-                                if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
-                                    System.out.println(patient.getPatientID() + "    " + patient.getName());
-                                    System.out.println();
-                                    notFound = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (notFound) {
-                            System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
-                            break;
-                        }
-
-                        Patient patient;
-                        while(true) {
-                            System.out.println("Enter Patient ID: ");
-                            String inputPatientId = sc.nextLine();
-                            patient = new Patient().getPatientById(inputPatientId);
-                            if (patient != null) {
-                                break;
-                            }
-                            System.out.println("Invalid Patient ID, please try again");
-                        }
-
-                        System.out.println();
-                        System.out.println(patient.getPatientID() + " " + patient.getName());
-                        notFound = true;
-                        for(Appointment appointment : patient.getAppointments()) {
-                            System.out.println("\nAppoointment ID: " + appointment.getAppointmentID());
-                            System.out.println("Diagnosis: " + appointment.getAppointmentOutcomeRecord().getDiagnosis());
-                            System.out.println("Treatment plan: " + appointment.getAppointmentOutcomeRecord().getTreatmentPlan());
-                            notFound = false;
-                        }
-                        if(notFound){
-                            System.out.println("There are no appointments under " + patient.getPatientID() + " " + patient.getName());
-                        }
-
-                        Appointment appointment = null;
-                        notFound = true;
-                        while(true) {
-                            System.out.println("Enter Appointment ID to update: ");
-                            int inputAppointmentId = sc.nextInt();
-                            for (Appointment x : patient.getAppointments()) {
-                                if (Objects.equals(x.getAppointmentID(), inputAppointmentId)) {
-                                    appointment = x;
-                                    notFound = false;
-                                    break;
-                                }
-                            }
-                            if(notFound){
-                                System.out.println("Invalid Appointment ID, please try again");
-                                continue;
-                            }
-                            break;
-                        }
-
-                        System.out.println("[1] Update diagnosis");
-                        System.out.println("[2] Update treatment plan");
-                        System.out.println("Select an option: ");
-                        choice = sc.nextInt();
-                        sc.nextLine();
-                        switch(choice) {
-                            case 1:
-                                System.out.println("Enter updated diagnosis: ");
-                                String diagnosis = sc.nextLine();
-                                appointment.getAppointmentOutcomeRecord().setDiagnosis(diagnosis);
-                                break;
-
-                            case 2:
-                                System.out.println("Enter updated treatment plan: ");
-                                String treatmentPlan = sc.nextLine();
-                                appointment.getAppointmentOutcomeRecord().setDiagnosis(treatmentPlan);
-                                break;
-
-                            default:
-                                System.out.println("Invalid option");
-                        }
-
-                        System.out.println("Updated medical record successfully");
-                        for(Appointment appointment1 : patient.getAppointments()) {
-                            System.out.println("\nAppoointment ID: " + appointment1.getAppointmentID());
-                            System.out.println("Diagnosis: " + appointment1.getAppointmentOutcomeRecord().getDiagnosis());
-                            System.out.println("Treatment plan: " + appointment1.getAppointmentOutcomeRecord().getTreatmentPlan());
-                        }
-                    }
-
-                    catch (Exception e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
+                    updatePatientMedicalRecords();
                     break;
 
 
@@ -441,8 +533,14 @@ public class Doctor extends User{
                     notFound = true;
                     while (notFound) {
                         System.out.println("Enter appointment ID: ");
-                        int id = sc.nextInt();
-                        if(!validIds.contains(id)){
+                        int id = 0;
+                        try{
+                            id = sc.nextInt();
+                            if(!validIds.contains(id)){
+                                System.out.println("Invalid appointment ID");
+                                continue;
+                            }
+                        } catch (Exception e) {
                             System.out.println("Invalid appointment ID");
                             continue;
                         }
@@ -488,101 +586,7 @@ public class Doctor extends User{
 
                 case 7 :
                     // Record Appointment Outcome
-                    notFound = true;
-                    validIds = new ArrayList<>();
-                    System.out.println("Appointments:");
-                    for (Patient patient : patients){
-                        for (Appointment appointment : patient.getAppointments()) {
-                            if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
-                                System.out.println(appointment);
-                                System.out.println();
-                                validIds.add(appointment.getAppointmentID());
-                                notFound = false;
-                            }
-                        }
-                    }
-                    if (notFound) {
-                        System.out.println("No Appointments found");
-                        break;
-                    }
-
-                    notFound = true;
-                    while (notFound) {
-                        System.out.println("\nEnter appointment ID: ");
-                        int id = sc.nextInt();
-                        if (!validIds.contains(id)) {
-                            System.out.println("Invalid appointment ID");
-                            continue;
-                        }
-                        for (Patient patient : patients) {
-                            for (Appointment appointment : patient.getAppointments()) {
-                                if (appointment.getAppointmentID() == id) {
-                                    // Service type
-                                    ServiceType serviceType;
-                                    while(true){
-                                        int i = 1;
-                                        for (ServiceType service : ServiceType.values()) {
-                                            System.out.println("[" + i++ + "] " + service);
-                                        }
-                                        System.out.println("\nEnter one service type [1/2/3]:  ");
-                                        int serviceTypeIndex = sc.nextInt();
-                                        try {
-                                            if(serviceTypeIndex == 1 || serviceTypeIndex == 2 || serviceTypeIndex == 3){
-                                                serviceType = ServiceType.values()[serviceTypeIndex-1];
-                                                break;
-                                            }
-                                        }
-                                        catch(Exception e){
-                                            System.out.println("Invalid input. Please try again");
-                                        }
-                                    }
-
-                                    // Prescribed medications
-                                    int i = 1;
-                                    for (Medication medication : medications) {
-                                        System.out.println("[" + i++ + "] " + medication.getMedicationName());
-                                    }
-
-                                    System.out.println("\nEnter prescribed medication(s), separated by comma [eg. 1,2,3]:  ");
-                                    sc.nextLine();
-                                    String inputMedications = sc.nextLine();
-                                    String[] medicationsIndex = inputMedications.split(",");
-                                    List<Prescription> prescriptionList = new ArrayList<>();
-                                    for (String index : medicationsIndex) {
-                                        System.out.println("\nEnter quantity for " + medications.get(Integer.parseInt(index)-1).getMedicationName() + ": ");
-                                        int inputQuantity = sc.nextInt();
-                                        System.out.println("Frequency: To be taken <frequency> times every <period>");
-                                        System.out.println("Enter frequency: ");
-                                        sc.nextLine();
-                                        String inputFrequency = sc.nextLine();
-                                        System.out.println("Frequency: To be taken " + inputFrequency + " times every <period>");
-                                        System.out.println("Enter period: ");
-                                        String inputPeriod = sc.nextLine();
-                                        String frequency = "To be taken " + inputFrequency + " times every " + inputPeriod;
-                                        Prescription prescription = new Prescription(medications.get(Integer.parseInt(index)-1), PrescriptionStatus.PENDING, inputQuantity, frequency);
-                                        prescriptionList.add(prescription);
-                                    }
-
-                                    // Consultation Notes
-                                    System.out.println("\n\nEnter Diagnosis: ");
-                                    String inputDiagnosis = sc.nextLine();
-                                    System.out.println("\nEnter Treatment plan: ");
-                                    String inputTreatmentPlan = sc.nextLine();
-                                    System.out.println("\nEnter consultation notes: ");
-                                    String inputConsultationNotes = sc.nextLine();
-                                    AppointmentOutcomeRecord appointmentOutcomeRecord = new AppointmentOutcomeRecord(1, serviceType, inputDiagnosis, inputTreatmentPlan, prescriptionList,inputConsultationNotes);
-                                    appointment.setAppointmentOutcomeRecord(appointmentOutcomeRecord);
-                                    appointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
-                                    notFound = false;
-                                    System.out.println("\nOutcome record for appointment " + id + " added successfully\n");
-                                    System.out.println(appointmentOutcomeRecord);
-                                }
-                            }
-                        }
-                        if (notFound) {
-                            System.out.println("Invalid input. Please try again");
-                        }
-                    }
+                    setAppointmentOutcome();
                     break;
 
                 case 8 :

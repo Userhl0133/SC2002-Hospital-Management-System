@@ -337,7 +337,7 @@ public class Administrator extends User {
             .anyMatch(request -> request.getStatus() == ReplenishmentStatus.PENDING);
 
         if (hasPendingRequests) {
-            System.out.println("\n---- Notification System ----");
+            System.out.println("\n---- Notifications ----");
             for (ReplenishmentRequest request : replenishmentRequests) {
                 if (request.getStatus() == ReplenishmentStatus.PENDING) {
                     System.out.println("Request Medication ID: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());

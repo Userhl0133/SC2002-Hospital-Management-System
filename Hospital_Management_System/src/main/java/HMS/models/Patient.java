@@ -645,11 +645,15 @@ public class Patient extends User {
         int choice = 0;
         Scanner sc = new Scanner(System.in);
         // Check and display appointments that are confirmed or rejected
+        boolean notFound = true;
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED
                     || appointment.getAppointmentStatus() == AppointmentStatus.CANCELLED) {
+                if(notFound) {
+                    System.out.println("\n---- Notifications ----");
+                    notFound = false;
+                }
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                System.out.println("\n---- Notification System ----");
                 System.out.println("Upcoming Appointment"
                         + " with Dr. " + new Doctor().getDoctorById(appointment.getDoctorID()).getName()
                         + " on " + appointment.getAppointmentDateTime().format(formatter)

@@ -7,8 +7,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+// Helper class to handle user authentication and password hashing
 public class UserHelper implements IUserService {
 
+    // Salt value to add to the password before hashing
     private static final String SALT = "ThisIsATopScret";
     private static UserHelper instance;
 
@@ -16,6 +18,7 @@ public class UserHelper implements IUserService {
     private UserHelper() {
     }
 
+    // Singleton pattern to ensure only one instance of UserHelper is created
     public static UserHelper getInstance() {
         if (instance == null) {
             instance = new UserHelper();
@@ -23,11 +26,13 @@ public class UserHelper implements IUserService {
         return instance;
     }
 
+    // Authenticate the user by comparing the input password with the stored hashed password
     @Override
     public boolean authenticate(User user, String inputPassword) {
         return verifyPassword(inputPassword, user.getHashedPassword());
     }
 
+// Hash the password using the SHA-256 algorithm
     @Override
     public String hashPassword(String password) {
         try {
@@ -48,6 +53,7 @@ public class UserHelper implements IUserService {
         }
     }
 
+    // Verify the password by hashing the input password and comparing it with the stored hashed password
     @Override
     public boolean verifyPassword(String password, String hashedPassword) {
         return hashPassword(password).equals(hashedPassword);

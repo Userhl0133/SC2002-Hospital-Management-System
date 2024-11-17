@@ -22,6 +22,7 @@ import HMS.enums.Role;
 import HMS.enums.ServiceType;
 import static HMS.models.Appointment.getAppointments;
 
+// Doctor class, subclass of User
 public class Doctor extends User{
 
     // Attributes

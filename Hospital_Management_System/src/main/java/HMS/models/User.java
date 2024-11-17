@@ -12,7 +12,7 @@ import HMS.enums.Role;
 import HMS.service.IUserService;
 import HMS.utils.UserHelper;
 
-// Hashing and Login System
+// Abstract class for User
 public abstract class User {
 
     private String userId;

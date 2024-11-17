@@ -26,6 +26,7 @@ public abstract class User {
 
 
     public User() {
+
     }
 
     // Constructor
@@ -106,11 +107,6 @@ public abstract class User {
         return null; // User not found
     }
 
-    // Method to logout
-    public void logout() {
-        System.out.println("User logged out.");
-    }
-
     public abstract void showMenu();
 
     // Getters and Setters (optional, depending on need)
@@ -148,5 +144,14 @@ public abstract class User {
 
     public String getHashedPassword() {
         return hashedPassword;
+    }
+
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", gender=" + gender +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

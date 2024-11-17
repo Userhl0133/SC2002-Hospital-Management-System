@@ -235,7 +235,6 @@ public class Patient extends User {
                 return null;
             }
 
-            // Validate the user input
             try {
                 int choice = Integer.parseInt(input);
                 if (choice >= 1 && choice <= availableDoctors.size()) {

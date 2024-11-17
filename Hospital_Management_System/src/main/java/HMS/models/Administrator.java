@@ -237,7 +237,7 @@ public class Administrator extends User {
             System.out.println("\n---- No Replenishment Requests Available ---- ");
             return;
         }
-
+    
         System.out.println("\n---- Replenishment Requests (Pending) ----");
         boolean hasPendingRequests = false;
         for (ReplenishmentRequest request : replenishmentRequests) {
@@ -246,35 +246,37 @@ public class Administrator extends User {
                 hasPendingRequests = true;
             }
         }
-
+    
         if (!hasPendingRequests) {
             System.out.println("---- No Pending Replenishment Requests Available ---- ");
             return;
         }
-
+    
         Scanner sc = new Scanner(System.in);
-        System.out.print("\nEnter Request ID to process the request (-1 to cancel): ");
+        System.out.print("\nEnter Request ID to process the request: ");
         int RequestID = sc.nextInt();
-        if (RequestID == -1) {
-            System.out.println("Operation cancelled.");
-            return;
-        }
-
+    
         ReplenishmentRequest selectedRequest = findRequestByRequestId(RequestID);
-
+    
         if (selectedRequest == null) {
             System.out.println("No pending request found for the given Request ID.");
             return;
         }
-
-        System.out.print("Do you want to approve this request? (Y/N): ");
-        String decision = sc.next().toLowerCase();
-
-        if (decision.equalsIgnoreCase("Y")) {
-            approveRequest(selectedRequest);
-        } else {
-            selectedRequest.setStatus(ReplenishmentStatus.REJECTED);
-            System.out.println("Replenishment request for " + selectedRequest.getMedicationName() + " rejected.");
+    
+        String decision;
+        while (true) {
+            System.out.print("Do you want to approve this request? (Y/N): ");
+            decision = sc.next().toLowerCase();
+            if (decision.equalsIgnoreCase("Y")) {
+                approveRequest(selectedRequest);
+                break;
+            } else if (decision.equalsIgnoreCase("N")) {
+                selectedRequest.setStatus(ReplenishmentStatus.REJECTED);
+                System.out.println("Replenishment request for " + selectedRequest.getMedicationName() + " rejected.");
+                break;
+            } else {
+                System.out.println("Invalid input. Please enter 'Y' or 'N'.");
+            }
         }
     }
 

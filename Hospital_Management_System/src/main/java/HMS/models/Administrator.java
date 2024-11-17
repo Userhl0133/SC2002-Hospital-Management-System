@@ -406,10 +406,38 @@ public class Administrator extends User {
                 case 7:
                     System.out.print("\nEnter Medication Name: ");
                     String medName = sc.nextLine();
-                    System.out.print("Enter Stock Level: ");
-                    int stockLevel = sc.nextInt();
-                    System.out.print("Enter Low Stock Level Alert: ");
-                    int lowStockLevel = sc.nextInt();
+                    int stockLevel;
+                    while (true) {
+                        System.out.print("Enter Stock Level (positive integer): ");
+                        if (sc.hasNextInt()) {
+                            stockLevel = sc.nextInt();
+                            if (stockLevel > 0) {
+                                break;
+                            } else {
+                                System.out.println("Error: Stock level must be a positive integer. Please try again.");
+                            }
+                        } else {
+                            System.out.println("Invalid input. Please enter a positive integer.");
+                            sc.next(); // Clear invalid input
+                        }
+                    }
+                    
+                    // Prompt and validate Low Stock Level Alert
+                    int lowStockLevel;
+                    while (true) {
+                        System.out.print("Enter Low Stock Level Alert (positive integer): ");
+                        if (sc.hasNextInt()) {
+                            lowStockLevel = sc.nextInt();
+                            if (lowStockLevel > 0) {
+                                break;
+                            } else {
+                                System.out.println("Error: Low stock level alert must be a positive integer. Please try again.");
+                            }
+                        } else {
+                            System.out.println("Invalid input. Please enter a positive integer.");
+                            sc.next(); // Clear invalid input
+                        }
+                    }
                     addMedication(medName, stockLevel, lowStockLevel);
                     Medication.viewInventory();
                     break;

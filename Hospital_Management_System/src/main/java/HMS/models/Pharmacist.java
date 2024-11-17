@@ -191,6 +191,10 @@ public class Pharmacist extends User {
     // Method to submit replenishment request
     public void submitReplenishmentRequest() {
         Scanner sc = new Scanner(System.in);
+        System.out.println("\n--- Available Medications ---");
+        for (Medication medication : MainApp.medications) {
+            System.out.println("Medication ID: " + medication.getMedicationId() + " | " + medication.getMedicationName());
+        }
 
         // Ask for the medication ID
         System.out.print("Enter Medication ID to request replenishment: ");

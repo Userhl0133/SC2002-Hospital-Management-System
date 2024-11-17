@@ -70,7 +70,7 @@ public class Administrator extends User {
         System.out.print("Do you want to update the password? (Y/N): ");
         String changePassword = scanner.nextLine().toLowerCase();
         
-        if (changePassword.equalsIgnoreCase("yes")) {
+        if (changePassword.equalsIgnoreCase("Y")) {
             
             System.out.print("Enter new password: ");
             String newPassword = scanner.nextLine();
@@ -234,10 +234,10 @@ public class Administrator extends User {
             return;
         }
 
-        System.out.print("Do you want to approve this request? (yes/no): ");
+        System.out.print("Do you want to approve this request? (Y/N): ");
         String decision = sc.next().toLowerCase();
     
-        if (decision.equals("yes")) {
+        if (decision.equalsIgnoreCase("Y")) {
             approveRequest(selectedRequest);
         } else {
             selectedRequest.setStatus(ReplenishmentStatus.REJECTED);
@@ -349,6 +349,18 @@ public class Administrator extends User {
 
                     System.out.print("Enter Age: ");
                     int age = scanner.nextInt();
+                    while (true) {
+                        try {
+                            age = Integer.parseInt(scanner.nextLine());
+                            if (age <= 0) {
+                                System.out.println("Age must be a positive number. Please try again.");
+                                continue;
+                            }
+                            break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number for age.");
+                        }
+                    }
 
                     addStaff(gender, name, role, age);
                     viewStaff();
@@ -356,21 +368,23 @@ public class Administrator extends User {
 
                     case 3:
                     viewStaff();
-                    System.out.print("\nEnter the Hospital ID of the staff member to update: ");
-                    String userIdToUpdate = sc.nextLine();
-                
-                    User staffToUpdate = User.findUserById(userIdToUpdate, patients, doctors, pharmacists, administrators);
-                
-                    if (staffToUpdate != null) {
-                        System.out.println("\nStaff member found:");
-                        System.out.println("Name: " + staffToUpdate.getName() + ", Role: " + staffToUpdate.getRole());
-                
-                        updateStaff(staffToUpdate);
-                    } else {
-                        System.out.println("Staff member with Hospital ID " + userIdToUpdate + " not found.");
+                    String userIdToUpdate = "";
+                    while (true) {
+                        System.out.print("\nEnter the Hospital ID of the staff member to update: ");
+                        userIdToUpdate = sc.nextLine();
+                        User staffToUpdate = User.findUserById(userIdToUpdate, patients, doctors, pharmacists, administrators);
+                        
+                        if (staffToUpdate != null) {
+                            System.out.println("\nStaff member found:");
+                            System.out.println("Name: " + staffToUpdate.getName() + ", Role: " + staffToUpdate.getRole());
+                            updateStaff(staffToUpdate);
+                            break;
+                        } else {
+                            System.out.println("Staff member with Hospital ID " + userIdToUpdate + " not found. Please try again.");
+                        }
                     }
+
                     viewStaff();
-                    
                     break;
 
                 case 4:

@@ -225,7 +225,7 @@ public class Doctor extends User{
                         }
                     }
                     if(notFound){
-                        System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
+                        System.out.println("Currently there are no patients under " + super.getUserId() + " " + super.getName());
                     }
                     break;
 
@@ -244,7 +244,7 @@ public class Doctor extends User{
                             }
                         }
                         if (notFound) {
-                            System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
+                            System.out.println("Currently there are no patients under " + super.getUserId() + " " + super.getName());
                             break;
                         }
 
@@ -269,7 +269,7 @@ public class Doctor extends User{
                             notFound = false;
                         }
                         if(notFound){
-                            System.out.println("There are no appointments under " + patient.getPatientID() + " " + patient.getName());
+                            System.out.println("Currently there are no appointments under " + patient.getPatientID() + " " + patient.getName());
                         }
 
                         Appointment appointment = null;

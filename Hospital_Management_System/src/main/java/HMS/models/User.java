@@ -12,7 +12,7 @@ import HMS.enums.Role;
 import HMS.service.IUserService;
 import HMS.utils.UserHelper;
 
-// Hashing and Login System
+// Abstract class for User
 public abstract class User {
 
     private String userId;
@@ -43,6 +43,7 @@ public abstract class User {
         this.hashedPassword = userService.hashPassword(newPassword);
     }
 
+    // Method to login
     public static User login(List<Patient> patients, List<Doctor> doctors, List<Pharmacist> pharmacists, List<Administrator> administrators, IUserService userService) {
         Scanner scanner = new Scanner(System.in);
 

@@ -1,5 +1,6 @@
 package HMS.enums;
 
+// Enum for Prescription Status
 public enum PrescriptionStatus {
     PENDING("Pending"),
     DISPENSED("Dispensed");

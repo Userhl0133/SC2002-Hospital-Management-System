@@ -237,7 +237,7 @@ public class Administrator extends User {
             System.out.println("\n---- No Replenishment Requests Available ---- ");
             return;
         }
-    
+
         System.out.println("\n---- Replenishment Requests (Pending) ----");
         boolean hasPendingRequests = false;
         for (ReplenishmentRequest request : replenishmentRequests) {
@@ -246,23 +246,23 @@ public class Administrator extends User {
                 hasPendingRequests = true;
             }
         }
-    
+
         if (!hasPendingRequests) {
             System.out.println("---- No Pending Replenishment Requests Available ---- ");
             return;
         }
-    
+
         Scanner sc = new Scanner(System.in);
         System.out.print("\nEnter Request ID to process the request: ");
         int RequestID = sc.nextInt();
-    
+
         ReplenishmentRequest selectedRequest = findRequestByRequestId(RequestID);
-    
+
         if (selectedRequest == null) {
             System.out.println("No pending request found for the given Request ID.");
             return;
         }
-    
+
         String decision;
         while (true) {
             System.out.print("Do you want to approve this request? (Y/N): ");
@@ -358,11 +358,13 @@ public class Administrator extends User {
 
                 case 2:
                     Scanner scanner = new Scanner(System.in);
+                    boolean isCancelled = false; // Flag to check if operation is cancelled
 
                     System.out.print("Enter Name (-1 to cancel): ");
                     String name = scanner.nextLine();
                     if (name.equals("-1")) {
                         System.out.println("Operation cancelled.");
+                        isCancelled = true;
                         break;
                     }
 
@@ -371,15 +373,24 @@ public class Administrator extends User {
                     String genderInput = scanner.nextLine().toUpperCase();
                     if (genderInput.equals("-1")) {
                         System.out.println("Operation cancelled.");
+                        isCancelled = true;
                         break;
                     }
-                    while (gender == null) {
-
+                    while (gender == null && !isCancelled) {
                         try {
                             gender = Gender.valueOf(genderInput);
                         } catch (IllegalArgumentException e) {
                             System.out.print("Invalid gender. Please enter Male or Female: ");
+                            genderInput = scanner.nextLine().toUpperCase();
+                            if (genderInput.equals("-1")) {
+                                System.out.println("Operation cancelled.");
+                                isCancelled = true;
+                                break;
+                            }
                         }
+                    }
+                    if (isCancelled) {
+                        break;
                     }
 
                     System.out.print("Enter Role (Doctor/Pharmacist) (-1 to cancel): ");
@@ -387,26 +398,37 @@ public class Administrator extends User {
                     String roleInput = scanner.nextLine().toUpperCase();
                     if (roleInput.equals("-1")) {
                         System.out.println("Operation cancelled.");
+                        isCancelled = true;
                         break;
                     }
-                    while (role == null) {
+                    while (role == null && !isCancelled) {
                         try {
                             role = Role.valueOf(roleInput);
                         } catch (IllegalArgumentException e) {
                             System.out.print("Invalid role. Please enter Doctor or Pharmacist: ");
+                            roleInput = scanner.nextLine().toUpperCase();
+                            if (roleInput.equals("-1")) {
+                                System.out.println("Operation cancelled.");
+                                isCancelled = true;
+                                break;
+                            }
                         }
+                    }
+                    if (isCancelled) {
+                        break;
                     }
 
                     System.out.print("Enter Age (-1 to cancel): ");
                     int inputAge = -1;
 
-                    while (true) {
+                    while (!isCancelled) {
                         try {
                             String input = scanner.nextLine(); // Read input as a string
                             inputAge = Integer.parseInt(input); // Convert to integer
 
                             if (inputAge == -1) {
                                 System.out.println("Operation cancelled.");
+                                isCancelled = true;
                                 break;
                             }
 
@@ -419,7 +441,11 @@ public class Administrator extends User {
                             System.out.println("Invalid input. Please enter a valid number for age.");
                         }
                     }
+                    if (isCancelled) {
+                        break;
+                    }
 
+                    // If not cancelled, proceed to add the staff and view the list
                     addStaff(gender, name, role, inputAge);
                     viewStaff();
                     break;

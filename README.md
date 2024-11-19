@@ -20,31 +20,31 @@ The goal of the assignment is to :
 
 
 ## User role and capabilties 
-# Administrator
+### Administrator
 View, add, update, and remove staff.
 Manage appointments and medications.
 Approve replenishment requests.
 
-#Doctor
+### Doctor
 View and update patient medical records.
 Record appointment outcomes.
 Manage personal availability for appointments.
 
-#Pharmacist
+### Pharmacist
 View appointment outcomes and dispense medications
 Submit and manage replenishment requests
 
-#Patient
+### Patient
 Schedule, view, and manage appointments.
 View personal medical history and records.
 
 
 ## Additional Features
-# Password encryption 
+### Password encryption 
 Using MessageDigest.getInstance("SHA-256") with added salt at the system level.
 This enhances security by securely hashing passwords, ensuring sensitive user information remains protected even if data files are compromised.
 
-# Notification System
+### Notification System
 Introduced a notification system to alert users of pending tasks or updates relevant to their roles.
 - Pharmacists are notified to dispense medication prescribed by doctors.
 - Pharmacists are reminded to submit replenishment requests for low stock.
@@ -52,7 +52,7 @@ Introduced a notification system to alert users of pending tasks or updates rele
 - Doctors are notified of new appointments scheduled by patients.
 - Patients are notified when doctors accept or reject their appointments.
 
-# Data persistence
+### Data persistence
 Implemented a function to automatically save data to CSV files on user logout.
 
 

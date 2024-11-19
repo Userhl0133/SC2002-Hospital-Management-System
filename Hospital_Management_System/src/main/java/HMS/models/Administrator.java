@@ -324,7 +324,7 @@ public class Administrator extends User {
                 .anyMatch(request -> request.getStatus() == ReplenishmentStatus.PENDING);
 
         if (hasPendingRequests) {
-            System.out.println("\n---- Notification System ----");
+            System.out.println("\n---- Notifications ----");
             for (ReplenishmentRequest request : replenishmentRequests) {
                 if (request.getStatus() == ReplenishmentStatus.PENDING) {
                     System.out.println("Request ID no.: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());
@@ -349,7 +349,10 @@ public class Administrator extends User {
             System.out.println("11.Approve Replenishment Request"); // change
             System.out.println("12.Logout");
             System.out.print("Please select an option: ");
-            choice = sc.nextInt();
+            try {
+                choice = sc.nextInt();
+            }
+            catch(Exception e) {}
             sc.nextLine();
             switch (choice) {
                 case 1:

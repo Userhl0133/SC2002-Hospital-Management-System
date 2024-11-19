@@ -644,7 +644,6 @@ public class Patient extends User {
     public void showMenu() {
         int choice = 0;
         boolean notFound = true;
-        System.out.println("\n---- Notifications ----");
         Scanner sc = new Scanner(System.in);
         // Check and display appointments that are confirmed or rejected
         for (Appointment appointment : appointments) {
@@ -676,7 +675,10 @@ public class Patient extends User {
             System.out.println("8.View Past Appointment Outcome Records");
             System.out.println("9.Logout");
             System.out.print("Please select an option: ");
-            choice = sc.nextInt();
+            try {
+                choice = sc.nextInt();
+            }
+            catch(Exception e) {}
             sc.nextLine(); // Consume newline character
 
             switch (choice) {

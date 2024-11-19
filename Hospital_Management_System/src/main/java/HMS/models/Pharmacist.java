@@ -251,7 +251,7 @@ public class Pharmacist extends User {
         boolean pendingMedicationNotificationDisplayed = false;
 
         // Start the notification section
-        System.out.println("\n---- Notifications System ----");
+        System.out.println("\n---- Notifications ----");
 
         // Check for pending medications
         for (Appointment appointment : getAppointments()) {
@@ -312,7 +312,10 @@ public class Pharmacist extends User {
                 System.out.println("4. Submit Replenishment Request");
                 System.out.println("5. Logout");
                 System.out.print("Please select an option: ");
-                choice = sc.nextInt();
+                try {
+                    choice = sc.nextInt();
+                }
+                catch(Exception e) {}
                 sc.nextLine();
                 switch (choice) {
                     case 1:

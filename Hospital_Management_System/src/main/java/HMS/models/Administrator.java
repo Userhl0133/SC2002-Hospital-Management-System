@@ -183,40 +183,45 @@ public class Administrator extends User {
 
         while (true) {
             System.out.print("\nEnter Medication ID to update low stock level (-1 to cancel): ");
-            int medicationId = scanner.nextInt();
-            if (medicationId == -1) {
-                System.out.println("Operation cancelled.");
-                return;
-            }
-
-            boolean found = false;
-            for (Medication medication : medications) {
-                if (medication.getMedicationId() == medicationId) {
-                    int newStockLevel;
-                    while (true) {
-                        System.out.print("Enter new low stock level (positive integer): ");
-                        if (scanner.hasNextInt()) {
-                            newStockLevel = scanner.nextInt();
-                            if (newStockLevel > 0) {
-                                break;
-                            } else {
-                                System.out.println("Error: Low stock level must be a positive integer. Please try again.");
-                            }
-                        } else {
-                            System.out.println("Invalid input. Please enter a positive integer.");
-                            scanner.next(); // Clear invalid input
-                        }
-                    }
-                    medication.updateLowStockLevel(newStockLevel);
-                    System.out.println("Low stock alert level for " + medication.getMedicationName() + " updated to " + newStockLevel);
-                    found = true;
-                    break;
+            if (scanner.hasNextInt()) {
+                int medicationId = scanner.nextInt();
+                if (medicationId == -1) {
+                    System.out.println("Operation cancelled.");
+                    return;
                 }
-            }
-            if (found) {
-                break;
+
+                boolean found = false;
+                for (Medication medication : medications) {
+                    if (medication.getMedicationId() == medicationId) {
+                        int newStockLevel;
+                        while (true) {
+                            System.out.print("Enter new low stock level (positive integer): ");
+                            if (scanner.hasNextInt()) {
+                                newStockLevel = scanner.nextInt();
+                                if (newStockLevel > 0) {
+                                    break;
+                                } else {
+                                    System.out.println("Error: Low stock level must be a positive integer. Please try again.");
+                                }
+                            } else {
+                                System.out.println("Invalid input. Please enter a positive integer.");
+                                scanner.next(); // Clear invalid input
+                            }
+                        }
+                        medication.updateLowStockLevel(newStockLevel);
+                        System.out.println("Low stock alert level for " + medication.getMedicationName() + " updated to " + newStockLevel);
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    break;
+                } else {
+                    System.out.println("Medication with ID " + medicationId + " not found. Please try again.");
+                }
             } else {
-                System.out.println("Medication with ID " + medicationId + " not found. Please try again.");
+                System.out.println("Invalid input. Please enter a valid Medication ID as an integer.");
+                scanner.next(); // Clear invalid input
             }
         }
     }
@@ -351,8 +356,8 @@ public class Administrator extends User {
             System.out.print("Please select an option: ");
             try {
                 choice = sc.nextInt();
+            } catch (Exception e) {
             }
-            catch(Exception e) {}
             sc.nextLine();
             switch (choice) {
                 case 1:

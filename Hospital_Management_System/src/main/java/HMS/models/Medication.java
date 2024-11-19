@@ -3,6 +3,7 @@ package HMS.models;
 import java.util.List;
 
 import HMS.MainApp;
+import HMS.enums.ReplenishmentStatus;
 
 public class Medication {
 
@@ -11,7 +12,7 @@ public class Medication {
     private int lowStockLevel;
     private int stockLevel;
     private String medicationName;
-    private String replenishmentStatus; // Replenishment status (e.g., "pending", "replenished", "in-progress")
+    private ReplenishmentStatus replenishmentStatus; // Replenishment status (e.g., "pending", "replenished", "in-progress")
 
     // Constructor
     public Medication(int medicationId, int lowStockLevel, int stockLevel, String medicationName) {
@@ -19,7 +20,7 @@ public class Medication {
         this.lowStockLevel = lowStockLevel;
         this.stockLevel = stockLevel;
         this.medicationName = medicationName;
-        this.replenishmentStatus = "pending"; // Default status is "pending" when a medication is created
+        this.replenishmentStatus = ReplenishmentStatus.PENDING; // Default status is "pending" when a medication is created
     }
 
     // Methods to update stock and low stock level
@@ -42,7 +43,7 @@ public class Medication {
     private void checkLowStock() {
         if (this.stockLevel <= this.lowStockLevel) {
             System.out.println("ALERT: " + medicationName + " stock is low (" + stockLevel + " units left). Please replenish.");
-            this.replenishmentStatus = "pending"; // Replenishment status is set to pending
+            this.replenishmentStatus = ReplenishmentStatus.PENDING; // Replenishment status is set to pending
         }
     }
 
@@ -54,11 +55,11 @@ public class Medication {
     }
 
     // Getter and Setter for Replenishment Status
-    public String getReplenishmentStatus() {
+    public ReplenishmentStatus getReplenishmentStatus() {
         return replenishmentStatus;
     }
 
-    public void setReplenishmentStatus(String replenishmentStatus) {
+    public void setReplenishmentStatus(ReplenishmentStatus replenishmentStatus) {
         this.replenishmentStatus = replenishmentStatus;
     }
 

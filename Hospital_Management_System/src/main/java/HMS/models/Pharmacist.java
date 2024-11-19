@@ -257,7 +257,7 @@ public class Pharmacist extends User {
 
         MainApp.replenishmentRequests.add(request);
 
-        medication.setReplenishmentStatus("PENDING");
+        medication.setReplenishmentStatus(ReplenishmentStatus.PENDING);
 
         System.out.println("Replenishment request submitted for " + medication.getMedicationName() +
                 " by Pharmacist: " + pharmacistId + " with quantity " + quantity + ".");

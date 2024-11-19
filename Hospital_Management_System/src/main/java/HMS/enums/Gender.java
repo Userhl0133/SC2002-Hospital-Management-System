@@ -1,5 +1,6 @@
 package HMS.enums;
 
+// Enum for Gender
 public enum Gender {
     MALE("Male"),
     FEMALE("Female");

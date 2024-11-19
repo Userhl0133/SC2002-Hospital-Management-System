@@ -25,11 +25,11 @@ import static HMS.models.Appointment.getAppointments;
 public class Doctor extends User{
 
     // Attributes
-    // availability hashmap contains time slots where the doctor is available, in 1 hour blocks
-    // Key: Date in (DDMMYYYY) format, Value: Timeslot from int 1-9 (0900-1700)
+    // availability hashmap contains time slots where the doctor is available, in 1 hour blocks. Key: Date in (DDMMYYYY) format, Value: List of timeslots from int 1-9 (0900-1700)
     private Map<Integer, List<Integer>> availability;
     private int age;
 
+    // Empty constructor
     public Doctor() {
 
     }
@@ -41,6 +41,7 @@ public class Doctor extends User{
         this.age = age;
     }
 
+    // Returns doctor with input ID
     public Doctor getDoctorById(String doctorId) {
         for (Doctor doctor : doctors) {
             if (doctor.getUserId().equals(doctorId)) {
@@ -50,14 +51,17 @@ public class Doctor extends User{
         return null;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
+    // Getter for Age
     public int getAge() {
         return age;
     }
 
+    // Setter for Age
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    // Getter for availability
     public Map<Integer, List<Integer>> getAvailability() {
         Map<Integer, List<Integer>> copy = new HashMap<>();
         for (Map.Entry<Integer, List<Integer>> entry : availability.entrySet()) {
@@ -68,6 +72,7 @@ public class Doctor extends User{
 
 
     // Methods
+    // View patient medical records
     public void viewPatientMedicalRecords() {
         boolean notFound = true;
         for (Patient patient : patients) {
@@ -86,6 +91,7 @@ public class Doctor extends User{
         }
     }
 
+    // Update patient medical records
     public void updatePatientMedicalRecords() {
         boolean notFound = true;
         Scanner sc = new Scanner(System.in);
@@ -185,6 +191,7 @@ public class Doctor extends User{
         }
     }
 
+    // View personal schedule
     public void viewPersonalSchedule() {
         // Viewing upcoming appointments
         boolean notFound = true;
@@ -206,7 +213,8 @@ public class Doctor extends User{
             System.out.println("No appointments found");
         }
 
-        System.out.println("\nUnavailable timeslots:");
+        // View available timeslots
+        System.out.println("\nAvailable timeslots:");
         List<Integer> timeslots = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
             timeslots.add(i);
@@ -222,12 +230,13 @@ public class Doctor extends User{
                 }
             }
         }
-        if(notFound){
-            System.out.println("All timeslots available");
+        if(notFound) {
+            System.out.println("No timeslots available");
         }
         System.out.println();
     }
 
+    // View upcoming appointments
     public void viewUpcomingAppointment() {
         // Implementation for viewing upcoming appointments
         boolean notFound = true;
@@ -246,7 +255,7 @@ public class Doctor extends User{
         }
     }
 
-    // Returns false if time slot removed, true if added
+    // Set availability : Returns false if time slot removed, true if added
     public boolean setAvailability(int date, int time) {
         // Initialize the list if the date does not exist in the map
         if (!this.availability.containsKey(date)) {
@@ -264,6 +273,7 @@ public class Doctor extends User{
         }
     }
 
+    // Record appointment outcome
     public void setAppointmentOutcome() {
         boolean notFound = true;
         List<Integer> validIds = new ArrayList<>();
@@ -363,6 +373,7 @@ public class Doctor extends User{
         }
     }
 
+    // Convert DDMMYYY to YYYY-MM-DD
     private String convertDateFormat(String dateStr) {
         try {
             // Define the input format: DDMMYYYY
@@ -383,11 +394,13 @@ public class Doctor extends User{
     }
 
     @Override
+    // Print doctor object
     public String toString() {
         return String.format("User ID: %s, Name: %s, Gender: %s, Role: %s, Age: %s",
                 super.getUserId(), super.getName(), super.getGender(), super.getRole(), age);
     }
 
+    // Show doctor menu
     public void showMenu() {
         int choice = 0;
         boolean notFound = true;
@@ -421,7 +434,10 @@ public class Doctor extends User{
             System.out.println("7.Record Appointment Outcome");
             System.out.println("8.Logout");
             System.out.print("Please select an option: ");
-            choice = sc.nextInt();
+            try {
+                choice = sc.nextInt();
+            }
+            catch(Exception e) {}
             sc.nextLine();
             System.out.print("\n");
             switch(choice) {
@@ -443,15 +459,15 @@ public class Doctor extends User{
 
                 case 4 :
                     int date, time;
-                    System.out.println("Set timeslot availability");
                     LocalDate dateTime;
+                    System.out.println("Set timeslot availability");
                     while (true){
                         System.out.println("Enter date (DDMMYYYY): ");
-                        date = sc.nextInt();
-                        // Check if valid date
-                        String dateStr = String.format("%08d", date);
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
                         try {
+                            date = sc.nextInt();
+                            // Check if valid date
+                            String dateStr = String.format("%08d", date);
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
                             dateTime = LocalDate.parse(dateStr, formatter);
                             break;
                         } catch (DateTimeParseException e) {

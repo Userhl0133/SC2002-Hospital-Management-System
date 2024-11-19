@@ -1,5 +1,6 @@
 package HMS.enums;
 
+// Enum for Blood Type
 public enum BloodType {
     OPLUS("O+"),
     OMINUS("O-"),

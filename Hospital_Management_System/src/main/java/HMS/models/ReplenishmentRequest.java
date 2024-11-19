@@ -84,6 +84,7 @@ public class ReplenishmentRequest {
         "\nMedication: " + this.getMedicationName() +
         "\nRequested Quantity: " + this.getQuantity() +
         "\nCurrent Stock Level: " + this.getStockLevel() +
-        "\nStatus: " + this.getStatus() +'\n';
+        "\nStatus: " + this.getStatus() +
+        "\n-----------------------------------";   
     }
 }

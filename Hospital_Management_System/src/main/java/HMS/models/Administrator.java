@@ -63,7 +63,7 @@ public class Administrator extends User {
         System.out.print("Enter new name (-1 to cancel): ");
         String newName = scanner.nextLine();
         if (newName.equals("-1")) {
-            System.out.println("Operation cancelled.");
+            System.out.println("Updating staff has cancelled.");
             return;
         }
         if (!newName.isEmpty()) {
@@ -164,7 +164,7 @@ public class Administrator extends User {
             System.out.print("\nEnter Medication ID to remove (-1 to cancel): ");
             int medicationId = scanner.nextInt();
             if (medicationId == -1) {
-                System.out.println("Operation cancelled.");
+                System.out.println("Removing medication has cancelled.");
                 return;
             }
 
@@ -186,7 +186,7 @@ public class Administrator extends User {
             if (scanner.hasNextInt()) {
                 int medicationId = scanner.nextInt();
                 if (medicationId == -1) {
-                    System.out.println("Operation cancelled.");
+                    System.out.println("Updating the low stock level has cancelled.");
                     return;
                 }
 
@@ -201,7 +201,7 @@ public class Administrator extends User {
                                 if (newStockLevel > 0) {
                                     break;
                                 } else {
-                                    System.out.println("Error: Low stock level must be a positive integer. Please try again.");
+                                    System.out.println("Invalid input. Low stock level must be a positive integer. Please try again.");
                                 }
                             } else {
                                 System.out.println("Invalid input. Please enter a positive integer.");
@@ -220,7 +220,7 @@ public class Administrator extends User {
                     System.out.println("Medication with ID " + medicationId + " not found. Please try again.");
                 }
             } else {
-                System.out.println("Invalid input. Please enter a valid Medication ID as an integer.");
+                System.out.println("Invalid input. Please enter a valid Medication ID.");
                 scanner.next(); // Clear invalid input
             }
         }
@@ -236,13 +236,13 @@ public class Administrator extends User {
             System.out.print(request);
         }
     }
-
+    
     public void approveReplenishmentRequests() {
         if (replenishmentRequests == null || replenishmentRequests.isEmpty()) {
             System.out.println("\n---- No Replenishment Requests Available ---- ");
             return;
         }
-
+    
         System.out.println("\n---- Replenishment Requests (Pending) ----");
         boolean hasPendingRequests = false;
         for (ReplenishmentRequest request : replenishmentRequests) {
@@ -251,39 +251,58 @@ public class Administrator extends User {
                 hasPendingRequests = true;
             }
         }
-
+    
         if (!hasPendingRequests) {
             System.out.println("---- No Pending Replenishment Requests Available ---- ");
             return;
         }
-
+    
         Scanner sc = new Scanner(System.in);
-        System.out.print("\nEnter Request ID to process the request: ");
-        int RequestID = sc.nextInt();
-
-        ReplenishmentRequest selectedRequest = findRequestByRequestId(RequestID);
-
-        if (selectedRequest == null) {
-            System.out.println("No pending request found for the given Request ID.");
-            return;
-        }
-
-        String decision;
+    
         while (true) {
-            System.out.print("Do you want to approve this request? (Y/N): ");
-            decision = sc.next().toLowerCase();
-            if (decision.equalsIgnoreCase("Y")) {
-                approveRequest(selectedRequest);
-                break;
-            } else if (decision.equalsIgnoreCase("N")) {
-                selectedRequest.setStatus(ReplenishmentStatus.REJECTED);
-                System.out.println("Replenishment request for " + selectedRequest.getMedicationName() + " rejected.");
-                break;
-            } else {
-                System.out.println("Invalid input. Please enter 'Y' or 'N'.");
+            try {
+                System.out.print("\nEnter Request ID to process the request (-1 to cancel): ");
+                String input = sc.next();
+    
+                // Check if input is -1 for canceling
+                if (input.equals("-1")) {
+                    System.out.println("Approving replenishment requests has cancelled.");
+                    return;
+                }
+    
+                // Parse input to integer
+                int RequestID = Integer.parseInt(input);
+    
+                // Find the request by ID
+                ReplenishmentRequest selectedRequest = findRequestByRequestId(RequestID);
+    
+                if (selectedRequest == null) {
+                    System.out.println("No pending request found for the given Request ID.");
+                } else {
+                    String decision;
+                    while (true) {
+                        System.out.print("Do you want to approve this request? (Y/N): ");
+                        decision = sc.next().toLowerCase();
+                        if (decision.equalsIgnoreCase("Y")) {
+                            approveRequest(selectedRequest);
+                            System.out.println("Replenishment request approved.");
+                            return;
+                        } else if (decision.equalsIgnoreCase("N")) {
+                            selectedRequest.setStatus(ReplenishmentStatus.REJECTED);
+                            System.out.println("Replenishment request for " + selectedRequest.getMedicationName() + " rejected.");
+                            return;
+                        } else {
+                            System.out.println("Invalid input. Please enter 'Y' or 'N'.");
+                        }
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid Request ID or -1 to cancel.");
             }
         }
     }
+    
+    
 
     private ReplenishmentRequest findRequestByRequestId(int requestID) {
         for (ReplenishmentRequest request : replenishmentRequests) {
@@ -304,8 +323,7 @@ public class Administrator extends User {
             // Update stock level if approved
             medication.updateStock(medication.getStockLevel() + request.getQuantity());
             request.setStatus(ReplenishmentStatus.APPROVED);
-            System.out.println("Replenishment approved for " + request.getMedicationName());
-            System.out.println("Stock updated for " + request.getMedicationName() + " to " + medication.getStockLevel());
+            System.out.println("Replenishment approved for " + request.getMedicationName() + "Stock updated to " + medication.getStockLevel());
         } else {
             System.out.println("---- Medication not found in inventory ---- ");
         }
@@ -356,9 +374,11 @@ public class Administrator extends User {
             System.out.print("Please select an option: ");
             try {
                 choice = sc.nextInt();
-            } catch (Exception e) {
+            } 
+            catch (Exception e) {
             }
             sc.nextLine();
+
             switch (choice) {
                 case 1:
                     viewStaff();
@@ -371,7 +391,7 @@ public class Administrator extends User {
                     System.out.print("Enter Name (-1 to cancel): ");
                     String name = scanner.nextLine();
                     if (name.equals("-1")) {
-                        System.out.println("Operation cancelled.");
+                        System.out.println("Adding staff has cancelled.");
                         isCancelled = true;
                         break;
                     }
@@ -380,7 +400,7 @@ public class Administrator extends User {
                     Gender gender = null;
                     String genderInput = scanner.nextLine().toUpperCase();
                     if (genderInput.equals("-1")) {
-                        System.out.println("Operation cancelled.");
+                        System.out.println("Adding staff has cancelled.");
                         isCancelled = true;
                         break;
                     }
@@ -391,7 +411,7 @@ public class Administrator extends User {
                             System.out.print("Invalid gender. Please enter Male or Female: ");
                             genderInput = scanner.nextLine().toUpperCase();
                             if (genderInput.equals("-1")) {
-                                System.out.println("Operation cancelled.");
+                                System.out.println("Adding staff has cancelled.");
                                 isCancelled = true;
                                 break;
                             }
@@ -405,7 +425,7 @@ public class Administrator extends User {
                     Role role = null;
                     String roleInput = scanner.nextLine().toUpperCase();
                     if (roleInput.equals("-1")) {
-                        System.out.println("Operation cancelled.");
+                        System.out.println("Adding staff has cancelled.");
                         isCancelled = true;
                         break;
                     }
@@ -416,7 +436,7 @@ public class Administrator extends User {
                             System.out.print("Invalid role. Please enter Doctor or Pharmacist: ");
                             roleInput = scanner.nextLine().toUpperCase();
                             if (roleInput.equals("-1")) {
-                                System.out.println("Operation cancelled.");
+                                System.out.println("Adding staff has cancelled.");
                                 isCancelled = true;
                                 break;
                             }
@@ -435,7 +455,7 @@ public class Administrator extends User {
                             inputAge = Integer.parseInt(input); // Convert to integer
 
                             if (inputAge == -1) {
-                                System.out.println("Operation cancelled.");
+                                System.out.println("Adding staff has cancelled.");
                                 isCancelled = true;
                                 break;
                             }
@@ -465,7 +485,7 @@ public class Administrator extends User {
                         System.out.print("\nEnter the Hospital ID of the staff member to update (-1 to cancel): ");
                         userIdToUpdate = sc.nextLine();
                         if (userIdToUpdate.equals("-1")) {
-                            System.out.println("Operation cancelled.");
+                            System.out.println("Viewing staff has cancelled.");
                             break;
                         }
                         User staffToUpdate = User.findUserById(userIdToUpdate, patients, doctors, pharmacists, administrators);
@@ -488,7 +508,7 @@ public class Administrator extends User {
                     System.out.print("\nEnter Hospital ID to remove (-1 to cancel): ");
                     String removeUserId = sc.nextLine();
                     if (removeUserId.equals("-1")) {
-                        System.out.println("Operation cancelled.");
+                        System.out.println("Removing staff has cancelled.");
                         break;
                     }
                     removeStaff(removeUserId);
@@ -510,7 +530,7 @@ public class Administrator extends User {
                     System.out.print("\nEnter Medication Name (-1 to cancel): ");
                     String medName = sc.nextLine().trim();
                     if (medName.equals("-1")) {
-                        System.out.println("Operation cancelled.");
+                        System.out.println("Adding Medication has cancelled.");
                         break; // Exit case 7
                     }
 
@@ -522,7 +542,7 @@ public class Administrator extends User {
 
                         // Handle cancellation
                         if (input.equals("-1")) {
-                            System.out.println("Operation cancelled.");
+                            System.out.println("Adding Medication has cancelled.");
                             canceled = true;
                             break; // Exit stock level prompt
                         }
@@ -533,7 +553,7 @@ public class Administrator extends User {
                             if (stockLevel > 0) {
                                 break; // Valid stock level entered
                             } else {
-                                System.out.println("Error: Stock level must be a positive integer. Please try again.");
+                                System.out.println("Invalid input. Stock level must be a positive integer. Please try again.");
                             }
                         } catch (NumberFormatException e) {
                             System.out.println("Invalid input. Please enter a positive integer.");
@@ -553,7 +573,7 @@ public class Administrator extends User {
 
                         // Handle cancellation
                         if (input.equals("-1")) {
-                            System.out.println("Operation cancelled.");
+                            System.out.println("Adding Medication has cancelled.");
                             canceled = true;
                             break; // Exit low stock level prompt
                         }
@@ -564,7 +584,7 @@ public class Administrator extends User {
                             if (lowStockLevel > 0) {
                                 break; // Valid low stock level entered
                             } else {
-                                System.out.println("Error: Low stock level alert must be a positive integer. Please try again.");
+                                System.out.println("Invalid input. Low stock level alert must be a positive integer. Please try again.");
                             }
                         } catch (NumberFormatException e) {
                             System.out.println("Invalid input. Please enter a positive integer.");

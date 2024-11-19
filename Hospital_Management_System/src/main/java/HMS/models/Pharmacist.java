@@ -281,7 +281,7 @@ public class Pharmacist extends User {
                     for (Prescription prescription : prescribedMedications) {
                         if (prescription.getStatus() == PrescriptionStatus.PENDING) {
                             if (!pendingMedicationNotificationDisplayed) {
-                                System.out.println("\n---- Pending Medication Notification ----");
+                                System.out.println("\n---- Pending Medication to dispense Notification ----");
                                 pendingMedicationNotificationDisplayed = true;
                             }
 
@@ -308,7 +308,7 @@ public class Pharmacist extends User {
                 // Print low stock details
                 System.out.println("Medication: " + medication.getMedicationName());
                 System.out.println("Current stock level: " + medication.getStockLevel() +
-                        " (Low stock alert threshold: " + medication.getLowStockLevel() + ")");
+                        " (Low stock alert: " + medication.getLowStockLevel() + ")");
                 System.out.println("Please consider submitting a replenishment request.");
             }
         }

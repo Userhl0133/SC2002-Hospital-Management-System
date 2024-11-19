@@ -211,9 +211,27 @@ public class Pharmacist extends User {
             return; // Exit if medication is not found
         }
 
-        // Ask for the replenishment quantity
-        System.out.print("Enter quantity to request: ");
-        int quantity = sc.nextInt();
+        // Ask for the replenishment quantity with validation
+        int quantity = 0;
+        boolean validQuantity = false;
+        while (!validQuantity) {
+            System.out.print("Enter quantity to request: ");
+            String input = sc.nextLine();  // Read input as a String
+
+            try {
+                quantity = Integer.parseInt(input);
+
+                // Check if quantity is positive
+                if (quantity <= 0) {
+                    System.out.println("Invalid input. Please enter a valid quantity.");
+                } else {
+                    validQuantity = true;
+                }
+            } catch (NumberFormatException e) {
+                // If the input is not a valid integer, print an error message
+                System.out.println("Invalid input. Please enter a valid quantity.");
+            }
+        }
 
         // Get current stock level of the medication
         int currentStock = medication.getStockLevel();
@@ -223,7 +241,7 @@ public class Pharmacist extends User {
         int requestID = MainApp.replenishmentRequests.size() + 1;
 
         // Assuming Pharmacist has a getUserId() method to get the pharmacist's ID
-        String pharmacistId = this.getUserId();  // or use `getPharmacistId()` if such method exists
+        String pharmacistId = this.getUserId();
 
         // Create a new ReplenishmentRequest with all required parameters
         ReplenishmentRequest request = new ReplenishmentRequest(

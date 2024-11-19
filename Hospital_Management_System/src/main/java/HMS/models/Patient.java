@@ -821,26 +821,33 @@ public class Patient extends User {
                 + '}';
     }
 
-    @Override
-    public void showMenu() {
-        int choice = 0;
+    public void showNotifications() {
         boolean notFound = true;
-        Scanner sc = new Scanner(System.in);
         // Check and display appointments that are confirmed or rejected
+        System.out.println("\n---- Notifications ----");
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED
                     || appointment.getAppointmentStatus() == AppointmentStatus.CANCELLED) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                if (notFound) {
-                    System.out.println("\n---- Notifications ----");
-                    notFound = false;
-                }
                 System.out.println("Upcoming Appointment"
                         + " with Dr. " + new Doctor().getDoctorById(appointment.getDoctorID()).getName()
                         + " on " + appointment.getAppointmentDateTime().format(formatter)
                         + " is " + appointment.getAppointmentStatus() + "!");
+                notFound = false;
             }
         }
+        if(notFound){
+            System.out.println("No new notifications");
+        }
+    }
+
+
+    public void showMenu() {
+        int choice = 0;
+        Scanner sc = new Scanner(System.in);
+
+        showNotifications();
+
         while (choice != 9) {
             System.out.println();
             System.out.println("======================");

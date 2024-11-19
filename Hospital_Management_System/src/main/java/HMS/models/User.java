@@ -110,6 +110,8 @@ public abstract class User {
 
     public abstract void showMenu();
 
+    public abstract void showNotifications();
+
     // Getters and Setters (optional, depending on need)
     public String getUserId() {
         return userId;

@@ -261,10 +261,7 @@ public class Pharmacist extends User {
                 " by Pharmacist: " + pharmacistId + " with quantity " + quantity + ".");
     }
 
-
-    public void showMenu() {
-        int choice = 0;
-        Scanner sc = new Scanner(System.in);
+    public void showNotifications() {
         boolean lowStockNotificationDisplayed = false;
         boolean pendingMedicationNotificationDisplayed = false;
 
@@ -302,7 +299,7 @@ public class Pharmacist extends User {
         for (Medication medication : MainApp.medications) {
             if (medication.getStockLevel() <= medication.getLowStockLevel()) {
                 if (!lowStockNotificationDisplayed) {
-                    System.out.println("\n---- Low Stock Medication Level Alert ----");
+                    System.out.println("\n---- Low Medication Stock Level Alert ----");
                     lowStockNotificationDisplayed = true;
                 }
 
@@ -313,53 +310,56 @@ public class Pharmacist extends User {
                 System.out.println("Please consider submitting a replenishment request.");
             }
         }
+    }
 
-        // If no notifications were found, print a default message
-        if (!lowStockNotificationDisplayed && !pendingMedicationNotificationDisplayed) {
-            System.out.println("No pending medications or low stock alerts at the moment.");
-        }
 
-            while (choice != 5) {
-                System.out.println();
-                System.out.println("=============================");
-                System.out.println("----- Pharmacist Menu -------");
-                System.out.println("=============================");
-                System.out.println("1. View Appointment Outcome Record");
-                System.out.println("2. Update Prescription Status");
-                System.out.println("3. View Medication Inventory");
-                System.out.println("4. Submit Replenishment Request");
-                System.out.println("5. Logout");
-                System.out.print("Please select an option: ");
-                try {
-                    choice = sc.nextInt();
-                }
-                catch(Exception e) {}
-                sc.nextLine();
-                switch (choice) {
-                    case 1:
-                        viewCompletedAppointmentOutcomeRecords();
-                        break;
+    public void showMenu() {
+        int choice = 0;
+        Scanner sc = new Scanner(System.in);
 
-                    case 2:
-                        updatePrescriptionStatus();
-                        break;
+        showNotifications();
 
-                    case 3:
-                        Medication.viewInventory();
-                        break;
+        while (choice != 5) {
+            System.out.println();
+            System.out.println("=============================");
+            System.out.println("----- Pharmacist Menu -------");
+            System.out.println("=============================");
+            System.out.println("1. View Appointment Outcome Record");
+            System.out.println("2. Update Prescription Status");
+            System.out.println("3. View Medication Inventory");
+            System.out.println("4. Submit Replenishment Request");
+            System.out.println("5. Logout");
+            System.out.print("Please select an option: ");
+            try {
+                choice = sc.nextInt();
+            }
+            catch(Exception e) {}
+            sc.nextLine();
+            switch (choice) {
+                case 1:
+                    viewCompletedAppointmentOutcomeRecords();
+                    break;
 
-                    case 4:
-                        submitReplenishmentRequest();
-                        break;
+                case 2:
+                    updatePrescriptionStatus();
+                    break;
 
-                    case 5:
-                        // Logout
-                        System.out.println("Logging out... Returning to main login page...");
-                        break;
+                case 3:
+                    Medication.viewInventory();
+                    break;
 
-                    default:
-                        System.out.println("Invalid Option, please try again.");
-                }
+                case 4:
+                    submitReplenishmentRequest();
+                    break;
+
+                case 5:
+                    // Logout
+                    System.out.println("Logging out... Returning to main login page...");
+                    break;
+
+                default:
+                    System.out.println("Invalid Option, please try again.");
             }
         }
     }
+}

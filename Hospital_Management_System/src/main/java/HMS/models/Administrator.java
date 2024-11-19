@@ -339,21 +339,29 @@ public class Administrator extends User {
                 super.getUserId(), super.getName(), super.getGender(), super.getRole(), age);
     }
 
-    public void showMenu() {
-        int choice = 0;
-        Scanner sc = new Scanner(System.in);
-
+    public void showNotifications(){
         boolean hasPendingRequests = replenishmentRequests.stream()
                 .anyMatch(request -> request.getStatus() == ReplenishmentStatus.PENDING);
 
+        System.out.println("\n---- Notifications ----");
         if (hasPendingRequests) {
-            System.out.println("\n---- Notifications ----");
             for (ReplenishmentRequest request : replenishmentRequests) {
                 if (request.getStatus() == ReplenishmentStatus.PENDING) {
                     System.out.println("Request ID no.: " + request.getRequestID() + ", Medication: " + request.getMedicationName() + ", Requested by: " + request.getPharmacistID());
                 }
             }
         }
+        else{
+            System.out.println("No new notifications");
+        }
+    }
+
+    public void showMenu() {
+        int choice = 0;
+        Scanner sc = new Scanner(System.in);
+
+        showNotifications();
+
         while (choice != 12) {
             System.out.println();
             System.out.println("============================");

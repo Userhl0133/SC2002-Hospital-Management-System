@@ -1,11 +1,9 @@
 package HMS.models;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,10 +95,9 @@ public class Doctor extends User{
         Scanner sc = new Scanner(System.in);
         try {
             // View patients
-            notFound = true;
             for (Patient patient : patients) {
                 for (Appointment appointment : patient.getAppointments()) {
-                    if (Objects.equals(appointment.getDoctorID(), super.getUserId())) {
+                    if (Objects.equals(appointment.getDoctorID(), super.getUserId()) && appointment.getAppointmentStatus()==AppointmentStatus.COMPLETED) {
                         System.out.println(patient.getPatientID() + "    " + patient.getName());
                         System.out.println();
                         notFound = false;
@@ -109,7 +106,7 @@ public class Doctor extends User{
                 }
             }
             if (notFound) {
-                System.out.println("There are no patients under " + super.getUserId() + " " + super.getName());
+                System.out.println("There are no completed appointments for patients under " + super.getUserId() + " " + super.getName());
                 return;
             }
 
@@ -281,7 +278,7 @@ public class Doctor extends User{
         System.out.println("Appointments:");
         for (Patient patient : patients){
             for (Appointment appointment : patient.getAppointments()) {
-                if(Objects.equals(appointment.getDoctorID(), super.getUserId())){
+                if(Objects.equals(appointment.getDoctorID(), super.getUserId()) && appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED){
                     System.out.println(appointment);
                     System.out.println();
                     validIds.add(appointment.getAppointmentID());
@@ -290,7 +287,7 @@ public class Doctor extends User{
             }
         }
         if (notFound) {
-            System.out.println("No Appointments found");
+            System.out.println("No completed appointments found");
             return;
         }
 
@@ -400,25 +397,32 @@ public class Doctor extends User{
                 super.getUserId(), super.getName(), super.getGender(), super.getRole(), age);
     }
 
-    // Show doctor menu
-    public void showMenu() {
-        int choice = 0;
+    // Check and display pending appointments
+    public void showNotifications(){
+        System.out.println("\n---- Notifications ----");
         boolean notFound = true;
-        ArrayList<Integer> validIds = new ArrayList<>();
-        Scanner sc = new Scanner(System.in);
-        // Check and display pending appointments
         for (Appointment appointment : getAppointments()) {
             if (appointment.getAppointmentStatus() == AppointmentStatus.PENDING && Objects.equals(appointment.getDoctorID(), super.getUserId())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                if(notFound){
-                    System.out.println("\n---- Notifications ----");
-                    notFound = false;
-                }
                 System.out.println("Pending Appointment"
                         + " with Patient " + new Patient().getPatientById(appointment.getPatientID()).getName()
                         + " on " + appointment.getAppointmentDateTime().format(formatter));
+                notFound = false;
             }
         }
+        if(notFound){
+            System.out.println("No new notifications");
+        }
+    }
+
+    // Show doctor menu
+    public void showMenu() {
+        int choice = 0;
+        Scanner sc = new Scanner(System.in);
+        boolean notFound;
+        ArrayList<Integer> validIds;
+
+        showNotifications();
 
         while (choice != 8) {
             System.out.println();
@@ -549,14 +553,8 @@ public class Doctor extends User{
                     notFound = true;
                     while (notFound) {
                         System.out.println("Enter appointment ID: ");
-                        int id = 0;
-                        try{
-                            id = sc.nextInt();
-                            if(!validIds.contains(id)){
-                                System.out.println("Invalid appointment ID");
-                                continue;
-                            }
-                        } catch (Exception e) {
+                        int id = sc.nextInt();
+                        if(!validIds.contains(id)){
                             System.out.println("Invalid appointment ID");
                             continue;
                         }

@@ -98,6 +98,57 @@ public class Patient extends User {
             Map<Integer, List<Integer>> doctorAvailability = doctor.getAvailability();
 
             // Check if the doctor has any available dates
+            boolean hasAvailableSlots = doctorAvailability.values().stream().anyMatch(slots -> !slots.isEmpty());
+
+            // If no slots are available, mark the doctor as unavailable
+            if (!hasAvailableSlots) {
+                availability.append("Doctor: ").append(doctor.getName()).append(" - Unavailable\n");
+                continue;
+            }
+
+            // Display doctor's name
+            availability.append("Doctor: ").append(doctor.getName()).append("\n");
+
+            // Sort dates (keys) in ascending order
+            doctorAvailability.keySet().stream()
+                    .sorted()
+                    .forEach(dateKey -> {
+                        List<Integer> slots = doctorAvailability.get(dateKey);
+
+                        // Convert DDMMYYYY to yyyy-MM-dd format
+                        String formattedDate = convertDateFormat(String.valueOf(dateKey));
+
+                        // Display the date
+                        availability.append("  Date: ").append(formattedDate).append("\n");
+
+                        // Display each available slot as a time (e.g., 0900, 1000) in ascending order
+                        if (slots.isEmpty()) {
+                            availability.append("    No available slots\n");
+                        } else {
+                            availability.append("    Slots: ");
+                            slots.stream()
+                                    .sorted()
+                                    .forEach(slot -> {
+                                        String timeSlot = convertSlotToTime(slot);
+                                        availability.append(timeSlot).append(" ");
+                                    });
+                            availability.append("\n");
+                        }
+                    });
+            availability.append("\n");
+        }
+
+        System.out.println(availability.toString());
+        return availability.toString();
+    }
+
+    public String showDoctorAvailability2() {
+        StringBuilder availability = new StringBuilder();
+
+        for (Doctor doctor : MainApp.doctors) {
+            Map<Integer, List<Integer>> doctorAvailability = doctor.getAvailability();
+
+            // Check if the doctor has any available dates
             boolean hasAvailableSlots = false;
             for (List<Integer> slots : doctorAvailability.values()) {
                 if (!slots.isEmpty()) {
@@ -176,6 +227,133 @@ public class Patient extends User {
     }
 
     public Map.Entry<Doctor, Appointment> checkAvaiDoctor(Scanner sc) {
+        Doctor selectedDoctor = selectDoctor(sc);
+        if (selectedDoctor == null) {
+            return null; // User chose to exit
+        }
+
+        while (true) {
+            // Display the availability of the selected doctor (dates sorted)
+            Integer selectedDateKey = displayAvailableDatesSorted(selectedDoctor, sc);
+            if (selectedDateKey == -1) {
+                System.out.println("Scheduling canceled.");
+                return null;
+            }
+
+            // Fetch available slots using the sorted date key
+            List<Integer> availableSlots = selectedDoctor.getAvailability().get(selectedDateKey);
+            if (availableSlots == null || availableSlots.isEmpty()) {
+                System.out.println("No available slots for the selected date. Please choose another date.");
+                continue;
+            }
+
+            // Display available slots in sorted order
+            int selectedSlot = displayAvailableSlotsSorted(availableSlots, sc);
+            if (selectedSlot == -1) {
+                System.out.println("Scheduling canceled.");
+                return null; // Exit if user chooses -1
+            }
+
+            LocalDate selectedDate = convertToLocalDate(selectedDateKey);
+            if (selectedDate == null) {
+                System.out.println("Error converting date. Please try again.");
+                continue;
+            }
+
+            LocalDateTime appointmentDateTime = LocalDateTime.of(selectedDate, LocalTime.of(9 + (selectedSlot - 1), 0));
+
+            // Create new appointment
+            Appointment newAppointment = new Appointment(
+                    this.getUserId(),
+                    selectedDoctor.getUserId(),
+                    appointmentDateTime,
+                    AppointmentStatus.PENDING,
+                    null
+            );
+
+            // Remove the selected slot from doctor availability
+            selectedDoctor.setAvailability(selectedDateKey, selectedSlot);
+
+            System.out.println("Appointment booked successfully!");
+            System.out.println("");
+
+            return Map.entry(selectedDoctor, newAppointment);
+        }
+    }
+
+    private Integer displayAvailableDatesSorted(Doctor doctor, Scanner sc) {
+        Map<Integer, List<Integer>> availability = doctor.getAvailability();
+
+        // Sort the keys (dates) in ascending order
+        List<Integer> sortedDates = new ArrayList<>(availability.keySet());
+        sortedDates.sort(Integer::compareTo);
+
+        // Display available dates
+        System.out.println("Available Dates for " + doctor.getName() + ":");
+        for (int i = 0; i < sortedDates.size(); i++) {
+            Integer dateKey = sortedDates.get(i);
+            System.out.println("[" + (i + 1) + "] " + convertToLocalDate(dateKey));
+        }
+        System.out.print("Select a date by entering the corresponding number (-1 to cancel): ");
+
+        int choice;
+        try {
+            choice = sc.nextInt();
+            sc.nextLine(); // Clear buffer
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.nextLine();
+            return -1;
+        }
+
+        if (choice == -1) {
+            return -1;
+        }
+
+        if (choice < 1 || choice > sortedDates.size()) {
+            System.out.println("Invalid choice. Please try again.");
+            return -1;
+        }
+
+        return sortedDates.get(choice - 1);
+    }
+
+    private int displayAvailableSlotsSorted(List<Integer> availableSlots, Scanner sc) {
+        // Sort available slots in ascending order
+        List<Integer> sortedSlots = new ArrayList<>(availableSlots);
+        sortedSlots.sort(Integer::compareTo);
+
+        // Display available slots
+        System.out.println("Available Slots:");
+        for (int i = 0; i < sortedSlots.size(); i++) {
+            int slot = sortedSlots.get(i);
+            System.out.println("[" + (i + 1) + "] " + convertSlotToTime(slot));
+        }
+        System.out.print("Select a slot by entering the corresponding number (-1 to cancel): ");
+
+        int choice;
+        try {
+            choice = sc.nextInt();
+            sc.nextLine(); // Clear buffer
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            sc.nextLine();
+            return -1;
+        }
+
+        if (choice == -1) {
+            return -1;
+        }
+
+        if (choice < 1 || choice > sortedSlots.size()) {
+            System.out.println("Invalid choice. Please try again.");
+            return -1;
+        }
+
+        return sortedSlots.get(choice - 1);
+    }
+
+    public Map.Entry<Doctor, Appointment> checkAvaiDoctor2(Scanner sc) {
         Doctor selectedDoctor = selectDoctor(sc);
         if (selectedDoctor == null) {
             return null; // User chose to exit
@@ -485,9 +663,12 @@ public class Patient extends User {
     }
 
     public int cancelAppointment(Scanner sc) {
-        System.out.println("Cancelling appointment for patient: " + getName());
 
-        viewScheduledAppointments();
+        System.out.println("Cancelling appointment for patient: " + getName());
+        if (viewScheduledAppointments() == 0) {
+            System.out.println("\nNo appointments to cancel.");
+            return -1;
+        }
 
         System.out.print("Enter the appointment ID to cancel or -1 to exit: ");
         int appointmentID;
@@ -640,26 +821,33 @@ public class Patient extends User {
                 + '}';
     }
 
-    @Override
-    public void showMenu() {
-        int choice = 0;
+    public void showNotifications() {
         boolean notFound = true;
-        Scanner sc = new Scanner(System.in);
         // Check and display appointments that are confirmed or rejected
+        System.out.println("\n---- Notifications ----");
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED
                     || appointment.getAppointmentStatus() == AppointmentStatus.CANCELLED) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                if(notFound){
-                    System.out.println("\n---- Notifications ----");
-                    notFound = false;
-                }
                 System.out.println("Upcoming Appointment"
                         + " with Dr. " + new Doctor().getDoctorById(appointment.getDoctorID()).getName()
                         + " on " + appointment.getAppointmentDateTime().format(formatter)
                         + " is " + appointment.getAppointmentStatus() + "!");
+                notFound = false;
             }
         }
+        if(notFound){
+            System.out.println("No new notifications");
+        }
+    }
+
+
+    public void showMenu() {
+        int choice = 0;
+        Scanner sc = new Scanner(System.in);
+
+        showNotifications();
+
         while (choice != 9) {
             System.out.println();
             System.out.println("======================");
@@ -677,8 +865,8 @@ public class Patient extends User {
             System.out.print("Please select an option: ");
             try {
                 choice = sc.nextInt();
+            } catch (Exception e) {
             }
-            catch(Exception e) {}
             sc.nextLine(); // Consume newline character
 
             switch (choice) {
@@ -727,9 +915,6 @@ public class Patient extends User {
                     // Logout
                     System.out.println("Logging out... Returning to main login page...");
                     break;
-
-                case 10:
-                    System.err.println("Hashed Password = "+ this.getHashedPassword());
 
                 default:
                     System.out.println("Invalid Option");

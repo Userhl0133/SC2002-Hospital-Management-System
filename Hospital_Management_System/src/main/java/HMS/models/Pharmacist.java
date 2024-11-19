@@ -161,11 +161,13 @@ public class Pharmacist extends User {
                         return;
                     }
 
-                    // Get the selected prescription
-                    if (medChoice < 1 || medChoice > prescribedMedications.size()) {
+                    while (medChoice < 1 || medChoice > prescribedMedications.size()) {
                         System.out.println("Invalid selection. Please try again.");
-                        return;
+                        System.out.print("\nEnter the number to dispense medication (or -1 to cancel): ");
+                        medChoice = sc.nextInt();
+                        sc.nextLine(); // Clear buffer after reading the integer
                     }
+
 
                     Prescription selectedPrescription = prescribedMedications.get(medChoice - 1);
 
@@ -358,7 +360,7 @@ public class Pharmacist extends User {
                     break;
 
                 default:
-                    System.out.println("Invalid Option, please try again.");
+                    System.out.println("Invalid Option");
             }
         }
     }

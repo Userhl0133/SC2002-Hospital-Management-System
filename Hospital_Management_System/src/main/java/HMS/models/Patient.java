@@ -485,6 +485,10 @@ public class Patient extends User {
     }
 
     public int cancelAppointment(Scanner sc) {
+        if (viewScheduledAppointments() == 0) {
+            System.out.println("\nNo appointments to cancel.");
+            return -1;
+        }
         System.out.println("Cancelling appointment for patient: " + getName());
 
         viewScheduledAppointments();
@@ -728,9 +732,7 @@ public class Patient extends User {
                     System.out.println("Logging out... Returning to main login page...");
                     break;
 
-                case 10:
-                    System.err.println("Hashed Password = "+ this.getHashedPassword());
-
+                
                 default:
                     System.out.println("Invalid Option");
             }

@@ -125,10 +125,12 @@ public class Doctor extends User{
             System.out.println(patient.getPatientID() + " " + patient.getName());
             notFound = true;
             for(Appointment appointment : patient.getAppointments()) {
-                System.out.println("\nAppoointment ID: " + appointment.getAppointmentID());
-                System.out.println("Diagnosis: " + appointment.getAppointmentOutcomeRecord().getDiagnosis());
-                System.out.println("Treatment plan: " + appointment.getAppointmentOutcomeRecord().getTreatmentPlan());
-                notFound = false;
+                if(appointment.getAppointmentStatus() == AppointmentStatus.COMPLETED) {
+                    System.out.println("\nAppoointment ID: " + appointment.getAppointmentID());
+                    System.out.println("Diagnosis: " + appointment.getAppointmentOutcomeRecord().getDiagnosis());
+                    System.out.println("Treatment plan: " + appointment.getAppointmentOutcomeRecord().getTreatmentPlan());
+                    notFound = false;
+                }
             }
             if(notFound){
                 System.out.println("There are no appointments under " + patient.getPatientID() + " " + patient.getName());
